@@ -11,14 +11,14 @@ import "swiper/css/pagination";
 // import required modules
 import { Pagination, Navigation } from "swiper";
 
-const modules2: any = [Pagination, Navigation];
+const modules3: any = [Pagination, Navigation];
 </script>
 
 <template>
   <swiper
-    :slidesPerView="2"
+    :slidesPerView="8"
     :centeredSlides="false"
-    :spaceBetween="30"
+    :spaceBetween="10"
     :pagination="{
       clickable: true,
     }"
@@ -26,8 +26,8 @@ const modules2: any = [Pagination, Navigation];
       crossFade: true,
     }"
     :navigation="true"
-    :modules="modules2"
-    class="mySwiper2"
+    :modules="modules3"
+    class="mySwiper3"
   >
     <swiper-slide>Slide 1</swiper-slide><swiper-slide>Slide 2</swiper-slide
     ><swiper-slide>Slide 3</swiper-slide><swiper-slide>Slide 4</swiper-slide
@@ -38,12 +38,12 @@ const modules2: any = [Pagination, Navigation];
 </template>
 
 <style scoped>
-.mySwiper2.swiper {
+.mySwiper3.swiper {
   width: 90%;
-  height: 230px;
+  height: 200px;
 }
 
-.mySwiper2 .swiper-slide {
+.mySwiper3 .swiper-slide {
   text-align: center;
   font-size: 18px;
   background: #fff;
@@ -63,22 +63,22 @@ const modules2: any = [Pagination, Navigation];
   align-items: center;
 }
 
-.mySwiper2 .swiper-slide img {
+.mySwiper3 .swiper-slide img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.mySwiper2 .swiper-slide {
+.mySwiper3 .swiper-slide {
   width: 50%;
 }
 
-.mySwiper2 .swiper-slide:nth-child(2n) {
+.mySwiper3 .swiper-slide:nth-child(2n) {
   width: 50%;
 }
 
-.mySwiper2 .swiper-slide:nth-child(3n) {
+.mySwiper3 .swiper-slide:nth-child(3n) {
   width: 50%;
 }
 </style>

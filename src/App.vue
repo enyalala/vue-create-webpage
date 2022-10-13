@@ -1,7 +1,5 @@
 <script setup lang="ts">
-// import { RouterLink, RouterView } from "vue-router";
-import TopSwiper from "./components/TopSwiper.vue";
-import SecSwiper from "./components/SecSwiper.vue";
+import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
@@ -10,36 +8,44 @@ import SecSwiper from "./components/SecSwiper.vue";
       <div class="navbar_content">
         <ul class="left">
           <li>
-            <a href="">
+            <router-link to="/">
               <img
                 class="navbar_logo"
                 src="./assets/img_kktv_logo.svg"
                 alt="logo"
-            /></a>
+            /></router-link>
           </li>
-          <li><a class="navbar_link" href="">精選</a></li>
-          <li><a class="navbar_link" href="">戲劇</a></li>
-          <li><a class="navbar_link" href="">動畫</a></li>
-          <li><a class="navbar_link" href="">娛樂</a></li>
-          <li><a class="navbar_link" href="">更多</a></li>
-          <li><a class="navbar_link" ßhref="">我的收藏</a></li>
+          <li>
+            <router-link to="/" class="navbar_link">精選</router-link>
+          </li>
+          <li>
+            <router-link to="/" class="navbar_link" href="">戲劇</router-link>
+          </li>
+          <li>
+            <router-link to="/" class="navbar_link" href="">動畫</router-link>
+          </li>
+          <li>
+            <router-link to="/" class="navbar_link" href="">娛樂</router-link>
+          </li>
+          <li>
+            <router-link to="/" class="navbar_link" href="">更多</router-link>
+          </li>
+          <li>
+            <router-link to="/" class="navbar_link" ßhref=""
+              >我的收藏</router-link
+            >
+          </li>
         </ul>
       </div>
     </div>
-    <div>
-      <TopSwiper />
-    </div>
-    <div class="swiper2">
-      <p class="title_text">新劇跟播中</p>
-      <SecSwiper />
-    </div>
+    <router-view />
   </div>
 </template>
 
 <style scoped>
 .container {
   width: 100%;
-  height: 100vh;
+  height: auto;
   margin: 0px auto;
   background-color: #222;
 }
@@ -68,7 +74,6 @@ import SecSwiper from "./components/SecSwiper.vue";
 }
 .navbar_link {
   margin: 0 10px;
-  box-sizing: border-box;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -83,13 +88,5 @@ ul {
 }
 li {
   list-style: none;
-}
-.swiper2 {
-  margin: 80px 0;
-}
-
-.title_text {
-  color: white;
-  font-size: 22px;
 }
 </style>

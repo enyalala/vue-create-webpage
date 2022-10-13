@@ -15,6 +15,11 @@ a,
   transition: 0.4s;
 }
 
+/* 讓所有元素計算大小的標準以包含框線的大小為基準 */
+* {
+  box-sizing: border-box;
+}
+
 /* @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
