@@ -1,29 +1,26 @@
 <script setup lang="ts">
 // Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from "swiper/vue";
+import { Swiper, SwiperSlide } from 'swiper/vue'
 
 // Import Swiper styles
-import "swiper/css";
+import 'swiper/css'
 
-import "swiper/css/pagination";
-// import "../assets/swiper.css";
+import 'swiper/css/pagination'
 
 // import required modules
-import { Pagination, Navigation } from "swiper";
+import { Pagination, Navigation } from 'swiper'
 
-const modules2: any = [Pagination, Navigation];
+const modules2: any = [Pagination, Navigation]
 </script>
 
 <template>
   <swiper
-    :slidesPerView="2"
-    :centeredSlides="false"
+    :slidesPerView="'auto'"
+    :centeredSlidesBounds="true"
     :spaceBetween="30"
+    :slidesPerGroup="2"
     :pagination="{
       clickable: true,
-    }"
-    :fadeEffect="{
-      crossFade: true,
     }"
     :navigation="true"
     :modules="modules2"
@@ -32,15 +29,15 @@ const modules2: any = [Pagination, Navigation];
     <swiper-slide>Slide 1</swiper-slide><swiper-slide>Slide 2</swiper-slide
     ><swiper-slide>Slide 3</swiper-slide><swiper-slide>Slide 4</swiper-slide
     ><swiper-slide>Slide 5</swiper-slide><swiper-slide>Slide 6</swiper-slide
-    ><swiper-slide>Slide 7</swiper-slide><swiper-slide>Slide 8</swiper-slide
-    ><swiper-slide>Slide 9</swiper-slide>
+    ><swiper-slide>Slide 7</swiper-slide><swiper-slide>Slide 8</swiper-slide>
   </swiper>
 </template>
 
 <style scoped>
 .mySwiper2.swiper {
-  width: 90%;
+  width: 100%;
   height: 230px;
+  padding: 0px 75px;
 }
 
 .mySwiper2 .swiper-slide {
@@ -71,14 +68,14 @@ const modules2: any = [Pagination, Navigation];
 }
 
 .mySwiper2 .swiper-slide {
-  width: 50%;
+  width: 47%;
 }
 
 .mySwiper2 .swiper-slide:nth-child(2n) {
-  width: 50%;
+  width: 47%;
 }
 
 .mySwiper2 .swiper-slide:nth-child(3n) {
-  width: 50%;
+  width: 47%;
 }
 </style>

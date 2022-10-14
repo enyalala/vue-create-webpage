@@ -46,6 +46,9 @@
 </template>
 
 <style scoped>
+.bigger {
+  width: 180%;
+}
 .container {
   width: 100%;
   height: 100vh;
@@ -65,6 +68,8 @@
 .col {
   width: calc(100% / 7);
   padding: 5px;
+  justify-content: left;
+  border: 1px solid white;
 }
 
 /* 一張卡片 */
@@ -77,6 +82,7 @@
 
 .card:hover {
   transform: scale(2, 1);
+  position: relative;
 }
 
 .img_size {

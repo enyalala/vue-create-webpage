@@ -1,17 +1,16 @@
 <script setup lang="ts">
 // Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from "swiper/vue";
+import { Swiper, SwiperSlide } from 'swiper/vue'
 
 // Import Swiper styles
-import "swiper/css";
+import 'swiper/css'
 
-import "swiper/css/pagination";
-// import "../assets/swiper.css";
+import 'swiper/css/pagination'
 
 // import required modules
-import { Pagination, Navigation } from "swiper";
+import { Pagination, Navigation } from 'swiper'
 
-const modules3: any = [Pagination, Navigation];
+const modules3: any = [Pagination, Navigation]
 </script>
 
 <template>
@@ -39,8 +38,9 @@ const modules3: any = [Pagination, Navigation];
 
 <style scoped>
 .mySwiper3.swiper {
-  width: 90%;
+  width: 100%;
   height: 200px;
+  padding: 0px 75px;
 }
 
 .mySwiper3 .swiper-slide {

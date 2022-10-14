@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
@@ -38,6 +38,7 @@ import { RouterLink, RouterView } from "vue-router";
         </ul>
       </div>
     </div>
+    <div class="nav_box"></div>
     <router-view />
   </div>
 </template>
@@ -49,12 +50,18 @@ import { RouterLink, RouterView } from "vue-router";
   margin: 0px auto;
   background-color: #222;
 }
+
+.nav_box {
+  width: 100%;
+  height: 56px;
+}
 .navbar {
   width: 100%;
   color: #fff;
   background-color: #551127;
-  z-index: 1000;
   top: 0;
+  position: fixed;
+  z-index: 1000;
 }
 .navbar_content {
   width: 100%;

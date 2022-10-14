@@ -1,29 +1,30 @@
 <script setup lang="ts">
-import TopSwiper from "../components/TopSwiper.vue";
-import SecSwiper from "../components/SecSwiper.vue";
-import TrdSwiper from "../components/TrdSwiper.vue";
-import { RouterLink } from "vue-router";
-import { ref } from "vue";
+import TopSwiper from '../components/TopSwiper.vue'
+import SecSwiper from '../components/SecSwiper.vue'
+import TrdSwiper from '../components/TrdSwiper.vue'
+import { RouterLink } from 'vue-router'
+import { ref } from 'vue'
 
-const subtitle1Show = ref(false);
+const subtitle1Show = ref(false)
+const subtitle2Show = ref(false)
+
 const title1Over = () => {
-  subtitle1Show.value = true;
-};
+  subtitle1Show.value = true
+}
 const title1Leave = () => {
-  subtitle1Show.value = false;
-};
-const subtitle2Show = ref(false);
+  subtitle1Show.value = false
+}
 
 const title2Over = () => {
-  subtitle2Show.value = true;
-};
+  subtitle2Show.value = true
+}
 const title2Leave = () => {
-  subtitle2Show.value = false;
-};
+  subtitle2Show.value = false
+}
 </script>
 
 <template>
-  <div>
+  <div class="swiper1">
     <TopSwiper />
   </div>
   <div class="swiper2">
@@ -53,6 +54,10 @@ const title2Leave = () => {
 </template>
 
 <style scoped>
+.swiper1 {
+  width: 100%;
+  height: auto;
+}
 .swiper2 {
   width: 100%;
   height: auto;
