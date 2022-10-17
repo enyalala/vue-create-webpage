@@ -1,54 +1,60 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from 'swiper/vue'
+
+// Import Swiper styles
+import 'swiper/css'
+
+import 'swiper/css/pagination'
+
+// import required modules
+import { Pagination, Navigation } from 'swiper'
+import { ref } from 'vue'
+
+const modulesNew: any = [Pagination, Navigation]
+const slideMoveNew = ref(false)
+
+const lastSlideShowNew = () => {
+  slideMoveNew.value = true
+}
+const lastSlideHideNew = () => {
+  slideMoveNew.value = false
+}
+</script>
 
 <template>
   <main>
     <div class="container">
-      <div class="title_text">新劇跟播中</div>
+      <div class="new_title_text">新劇跟播中</div>
       <div class="row">
-        <div class="col">
-          <div class="card">
-            <img class="img_size" src="../assets/img/newphoto1_1.jpg" alt="" />
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img class="img_size" src="../assets/img/newphoto1_1.jpg" alt="" />
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img class="img_size" src="../assets/img/newphoto1_1.jpg" alt="" />
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img class="img_size" src="../assets/img/newphoto1_1.jpg" alt="" />
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img class="img_size" src="../assets/img/newphoto1_1.jpg" alt="" />
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img class="img_size" src="../assets/img/newphoto1_1.jpg" alt="" />
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img class="img_size" src="../assets/img/newphoto1_1.jpg" alt="" />
-          </div>
+        <div>
+          <swiper
+            :slidesPerView="'auto'"
+            :spaceBetween="10"
+            :fadeEffect="{ crossFade: true }"
+            :modules="modulesNew"
+            class="mySwiperNew"
+          >
+            <swiper-slide :class="{ move: slideMoveNew }">Slide 1</swiper-slide
+            ><swiper-slide :class="{ move: slideMoveNew }">Slide 2</swiper-slide
+            ><swiper-slide :class="{ move: slideMoveNew }">Slide 3</swiper-slide
+            ><swiper-slide :class="{ move: slideMoveNew }">Slide 4</swiper-slide
+            ><swiper-slide :class="{ move: slideMoveNew }">Slide 5</swiper-slide
+            ><swiper-slide :class="{ move: slideMoveNew }">Slide 6</swiper-slide
+            ><swiper-slide
+              @mouseover="lastSlideShowNew"
+              @mouseleave="lastSlideHideNew"
+              :class="{ move: slideMoveNew }"
+              >Slide 7</swiper-slide
+            >
+          </swiper>
         </div>
       </div>
     </div>
   </main>
 </template>
 
-<style scoped>
-.bigger {
-  width: 180%;
-}
+<style>
 .container {
   width: 100%;
   height: 100vh;
@@ -56,43 +62,87 @@
   background-color: #222;
 }
 .row {
-  max-width: 1350px;
+  width: 1350px;
   /* 讓此元素裡的第一層元素橫向排版 */
   display: flex;
-  /* 取消自動縮放，空間不夠就換行 */
-  flex-wrap: wrap;
   margin: 0px auto;
+  flex-wrap: wrap;
+  border: 1px solid red;
 }
 
-/* 一張卡片所在的容器 */
-.col {
-  width: calc(100% / 7);
-  padding: 5px;
-  justify-content: left;
-  border: 1px solid white;
-}
-
-/* 一張卡片 */
-.card {
-  /* 將超出此區域的內容隱藏 */
-  overflow: hidden;
-  transform: scale(1, 1);
-  transition: all 0.2s ease;
-}
-
-.card:hover {
-  transform: scale(2, 1);
-  position: relative;
+.new_title_text {
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  padding: 30px 0px 80px 75px;
 }
 
 .img_size {
   width: 100%;
 }
 
-.title_text {
-  color: white;
-  font-size: 30px;
-  font-weight: bold;
-  padding: 30px 0px 80px 75px;
+.mySwiperNew.swiper {
+  width: 100%;
+  height: 200px;
+}
+
+.mySwiperNew .swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.mySwiperNew .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mySwiperNew .swiper-slide {
+  width: 184px;
+  transition: all 0.3s ease-out;
+}
+
+.mySwiperNew .swiper-slide:nth-child(2n) {
+  width: 184px;
+}
+
+.mySwiperNew .swiper-slide:nth-child(3n) {
+  width: 184px;
+}
+
+.mySwiperNew .swiper-slide:hover {
+  width: 368px;
+}
+
+.mySwiperNew .swiper-slide:nth-child(2n):hover {
+  width: 368px;
+}
+
+.mySwiperNew .swiper-slide:nth-child(3n):hover {
+  width: 368px;
+}
+
+.mySwiperNew .swiper-slide:last-child:hover {
+  width: 368px;
+}
+
+.mySwiperNew .swiper-slide.move {
+  transform: translateX(-180px);
 }
 </style>

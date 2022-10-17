@@ -9,18 +9,24 @@ import 'swiper/css/pagination'
 
 // import required modules
 import { Pagination, Navigation } from 'swiper'
+import { ref } from 'vue'
 
 const modules3: any = [Pagination, Navigation]
+const slideMove = ref(false)
+
+const lastSlideShow = () => {
+  slideMove.value = true
+}
+const lastSlideHide = () => {
+  slideMove.value = false
+}
 </script>
 
 <template>
   <swiper
-    :slidesPerView="8"
+    :slidesPerView="'auto'"
     :centeredSlides="false"
     :spaceBetween="10"
-    :pagination="{
-      clickable: true,
-    }"
     :fadeEffect="{
       crossFade: true,
     }"
@@ -28,15 +34,43 @@ const modules3: any = [Pagination, Navigation]
     :modules="modules3"
     class="mySwiper3"
   >
-    <swiper-slide>Slide 1</swiper-slide><swiper-slide>Slide 2</swiper-slide
-    ><swiper-slide>Slide 3</swiper-slide><swiper-slide>Slide 4</swiper-slide
-    ><swiper-slide>Slide 5</swiper-slide><swiper-slide>Slide 6</swiper-slide
-    ><swiper-slide>Slide 7</swiper-slide><swiper-slide>Slide 8</swiper-slide
-    ><swiper-slide>Slide 9</swiper-slide>
+    <swiper-slide :class="{ move: slideMove }"
+      ><a href=""
+        ><img src="../assets/img/homeS3P1.jpg" alt="img" /></a></swiper-slide
+    ><swiper-slide :class="{ move: slideMove }"
+      ><a href=""
+        ><img src="../assets/img/homeS3P2.jpg" alt="img" /></a></swiper-slide
+    ><swiper-slide :class="{ move: slideMove }"
+      ><a href=""
+        ><img src="../assets/img/homeS3P3.jpg" alt="img" /></a></swiper-slide
+    ><swiper-slide :class="{ move: slideMove }"
+      ><a href=""
+        ><img src="../assets/img/homeS3P4.jpg" alt="img" /></a></swiper-slide
+    ><swiper-slide :class="{ move: slideMove }"
+      ><a href=""
+        ><img src="../assets/img/homeS3P5.jpg" alt="img" /></a></swiper-slide
+    ><swiper-slide :class="{ move: slideMove }"
+      ><a href=""
+        ><img src="../assets/img/homeS3P6.jpg" alt="img" /></a></swiper-slide
+    ><swiper-slide :class="{ move: slideMove }"
+      ><a href=""
+        ><img src="../assets/img/homeS3P7.jpg" alt="img" /></a></swiper-slide
+    ><swiper-slide :class="{ move: slideMove }"
+      ><a href=""
+        ><img src="../assets/img/homeS3P8.jpg" alt="img" /></a></swiper-slide
+    ><swiper-slide :class="{ move: slideMove }"
+      ><a href=""
+        ><img src="../assets/img/homeS3P9.jpg" alt="img" /></a></swiper-slide
+    ><swiper-slide
+      @mouseover="lastSlideShow"
+      @mouseleave="lastSlideHide"
+      :class="{ move: slideMove }"
+      ><a href=""><img src="../assets/img/homeS3P10.jpg" alt="img" /></a
+    ></swiper-slide>
   </swiper>
 </template>
 
-<style scoped>
+<style>
 .mySwiper3.swiper {
   width: 100%;
   height: 200px;
@@ -71,14 +105,35 @@ const modules3: any = [Pagination, Navigation]
 }
 
 .mySwiper3 .swiper-slide {
-  width: 50%;
+  width: 160px;
+  transition: all 0.3s ease-out;
 }
 
 .mySwiper3 .swiper-slide:nth-child(2n) {
-  width: 50%;
+  width: 160px;
 }
 
 .mySwiper3 .swiper-slide:nth-child(3n) {
-  width: 50%;
+  width: 160px;
+}
+
+.mySwiper3 .swiper-slide:hover {
+  width: 320px;
+}
+
+.mySwiper3 .swiper-slide:nth-child(2n):hover {
+  width: 320px;
+}
+
+.mySwiper3 .swiper-slide:nth-child(3n):hover {
+  width: 320px;
+}
+
+.mySwiper3 .swiper-slide:last-child:hover {
+  width: 320px;
+}
+
+.mySwiper3 .swiper-slide.move {
+  transform: translateX(-150px);
 }
 </style>

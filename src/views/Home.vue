@@ -32,8 +32,8 @@ const title2Leave = () => {
       to="/newdrama"
       @mouseover="title1Over"
       @mouseleave="title1Leave"
-      ><span class="title_text">新劇跟播中</span
-      ><span class="subtitle_text" v-show="subtitle1Show"
+      ><span class="home_title_text">新劇跟播中</span
+      ><span class="home_subtitle_text" v-show="subtitle1Show"
         >更多 ＞</span
       ></router-link
     >
@@ -44,8 +44,8 @@ const title2Leave = () => {
       to="/hotdrama"
       @mouseover="title2Over"
       @mouseleave="title2Leave"
-      ><span class="title_text">熱播排行榜</span
-      ><span class="subtitle_text" v-show="subtitle2Show"
+      ><span class="home_title_text">熱播排行榜</span
+      ><span class="home_subtitle_text" v-show="subtitle2Show"
         >更多 ＞</span
       ></router-link
     >
@@ -70,7 +70,7 @@ const title2Leave = () => {
   padding: 20px 0px 40px 0px;
 }
 
-.title_text {
+.home_title_text {
   color: white;
   font-size: 20px;
   font-weight: bold;
@@ -78,14 +78,14 @@ const title2Leave = () => {
   display: inline-block;
 }
 
-.subtitle_text {
+.home_subtitle_text {
   color: white;
   font-size: 15px;
   font-weight: bold;
   margin: 0px 20px;
 }
 
-.subtitle_text:hover {
+.home_subtitle_text:hover {
   color: #df396e;
 }
 </style>

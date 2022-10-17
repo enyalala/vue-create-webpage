@@ -19,9 +19,6 @@ const modules2: any = [Pagination, Navigation]
     :centeredSlidesBounds="true"
     :spaceBetween="30"
     :slidesPerGroup="2"
-    :pagination="{
-      clickable: true,
-    }"
     :navigation="true"
     :modules="modules2"
     class="mySwiper2"
@@ -33,7 +30,7 @@ const modules2: any = [Pagination, Navigation]
   </swiper>
 </template>
 
-<style scoped>
+<style>
 .mySwiper2.swiper {
   width: 100%;
   height: 230px;
