@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
+import { RouterLink } from 'vue-router'
 
 // Import Swiper styles
 import 'swiper/css'
@@ -23,16 +24,16 @@ const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
     :pagination="{
       clickable: true,
     }"
+    :autoplay="{
+      delay: 5000,
+      disableOnInteraction: false,
+    }"
     :navigation="true"
     :modules="modules1"
     class="mySwiper1"
   >
-    <!-- :autoplay="{
-      delay: 5000,
-      disableOnInteraction: false,
-    }" -->
     <swiper-slide
-      ><a href=""
+      ><router-link to="/dramalist"
         ><img
           class="topswiper_img1"
           src="../assets/img/homeS1P1.jpg"
@@ -50,7 +51,7 @@ const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
         <div class="topswiper_desc">
           川口春奈X目黑蓮，重逢無聲世界的甜虐愛戀
         </div>
-      </a></swiper-slide
+      </router-link></swiper-slide
     >
     <swiper-slide
       ><a href=""
