@@ -53,7 +53,7 @@ const title2Leave = () => {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss">
 .swiper1 {
   width: 100%;
   height: auto;

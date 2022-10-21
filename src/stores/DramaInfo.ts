@@ -1,8 +1,8 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useDramaInfo = defineStore('dramaInfo', () => {
   const drama001 = {
+    dramaid: 0,
     name: 'silent',
     year: 2022,
     actor: [
@@ -28,6 +28,32 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     ],
     description:
       '高二的秋天，紬的目光被在台上朗讀作文的佐倉想的聲音所吸引。在朋友的助攻下，兩人終於在高三那年開始交往。然而，想卻在畢業後一聲不響地消失。8年過去，即使心裡充滿不解，紬也開始了自己的新人生。某天，紬在人群中發現想的身影，也得知他因病幾乎失去聽力的震撼事實...',
+    homestatus: '全新集數上架',
+    homedescription: '川口春奈X目黑蓮，重逢無聲世界的甜虐愛戀',
   }
-  return { drama001 }
+  const drama002 = {
+    dramaid: 1,
+    name: '青春灰姑娘',
+    year: 2022,
+    actor: [
+      '久間田琳加',
+      '本田響矢',
+      '水谷果穗',
+      '箭內夢菜',
+      '若林時英',
+      '島村龍乃介',
+      '岬AKARI',
+    ],
+    director: ['後藤庸介'],
+    screenwriter: ['今西祐子', '木滝りま'],
+    type: ['浪漫愛情', '青春校園', '奇幻冒險', '雙字幕', '免費'],
+    label: ['漫畫改編', '穿越'],
+    highlight: ['2022秋季日劇'],
+    description:
+      '萩野紫苑高中時因不擅打扮被初戀對象狠狠拒絕。如今29歲的她，脫胎換骨成了亮麗幹練的美妝顧問，過著充實的每一天。然而，聯誼時男性的品頭論足，再次勾起了紫苑的內心陰影。她憤而撕毀高中時的照片，不料瞬間一陣強光，竟讓她穿越回到了2010年！她決心以強大的美妝技巧為17歲的自己大變身、重新改寫青春！',
+    homestatus: '青春首播',
+    homedescription: '攜美妝技巧重返１７歲、克服初戀陰影',
+  }
+  const dramaList = [drama001, drama002]
+  return { dramaList, drama001, drama002 }
 })

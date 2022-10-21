@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import type { Ref } from 'vue'
-import { computed } from '@vue/reactivity'
 import { useDramaInfo } from '../stores/DramaInfo'
+// import CommentDialog from '../views/CommentDialog.vue'
 import sidephoto1 from '../assets/img/drama001/sidephoto001_1.jpg'
 import sidephoto2 from '../assets/img/drama001/sidephoto001_2.jpg'
 import sidephoto3 from '../assets/img/drama001/sidephoto001_3.jpg'
 import sidephoto4 from '../assets/img/drama001/sidephoto001_4.jpg'
+import { useRoute } from 'vue-router'
 
 // Data ///////////////////////////////////////////////////////////////
 // 封面圖片列參數
@@ -16,7 +17,27 @@ const num: Ref<number> = ref(1)
 const collectIsHover = ref(false)
 const scoreIsHover = ref(false)
 // 戲劇資訊參數
+console.log(useRoute().params, 'hello')
 const { drama001 } = useDramaInfo()
+const actorsDeleteLast = drama001.actor.slice(0, -1)
+const actorLast = drama001.actor[drama001.actor.length - 1]
+
+const directorsDeleteLast = drama001.director.slice(0, -1)
+const directorLast = drama001.director[drama001.director.length - 1]
+
+const screenwritersDeleteLast = drama001.screenwriter.slice(0, -1)
+const screenwriterLast = drama001.screenwriter[drama001.screenwriter.length - 1]
+
+const typesDeleteLast = drama001.type.slice(0, -1)
+const typeLast = drama001.type[drama001.type.length - 1]
+
+const labelsDeleteLast = drama001.label.slice(0, -1)
+const labelLast = drama001.label[drama001.label.length - 1]
+
+//  評論參數
+const enteredComment = ref('')
+const comments: string[] = reactive([])
+const commentIsTrue = ref(false)
 
 // Function //////////////////////////////////////////////////////////
 const collectHover = () => {
@@ -34,113 +55,44 @@ const scoreHover = () => {
 const scoreLeave = () => {
   scoreIsHover.value = false
 }
-onMounted(() => {
-  const getActorTitle = document.getElementById('actortitle')!
-  const getDirectorTitle = document.getElementById('directortitle')!
-  const getScreenwriterTitle = document.getElementById('screenwritertitle')!
-  const getTypeTitle = document.getElementById('typetitle')!
-  const getLabelTitle = document.getElementById('labeltitle')!
 
-  // 演員序列
-  if (drama001.actor.length > 1) {
-    const actorLast = drama001.actor.pop()
-    drama001.actor.forEach((actor) => {
-      getActorTitle.insertAdjacentHTML(
-        'beforeend',
-        `<a href="" class="actor_info_content">${actor}</a>/`
-      )
-    })
-    getActorTitle.insertAdjacentHTML(
-      'beforeend',
-      `<a href="" class="actor_info_content">${actorLast}</a>`
-    )
-  } else {
-    getActorTitle.insertAdjacentHTML(
-      'beforeend',
-      `<a href="" class="actor_info_content">${drama001.actor}</a>`
-    )
-  }
+const addComment = () => {
+  comments.push(enteredComment.value)
+  enteredComment.value = ''
+}
 
-  // 導演序列
-  if (drama001.director.length > 1) {
-    const directorLast = drama001.director.pop()
-    drama001.director.forEach((director) => {
-      getDirectorTitle.insertAdjacentHTML(
-        'beforeend',
-        `<a href="" class="actor_info_content">${director}</a>/`
-      )
-    })
-    getDirectorTitle.insertAdjacentHTML(
-      'beforeend',
-      `<a href="" class="actor_info_content">${directorLast}</a>`
-    )
-  } else {
-    getDirectorTitle.insertAdjacentHTML(
-      'beforeend',
-      `<a href="" class="actor_info_content">${drama001.director}</a>`
-    )
-  }
+const outputDialog = () => {
+  commentIsTrue.value = false
+}
 
-  // 編劇序列
-  if (drama001.screenwriter.length > 1) {
-    const screenwriterLast = drama001.screenwriter.pop()
-    drama001.screenwriter.forEach((screenwriter) => {
-      getScreenwriterTitle.insertAdjacentHTML(
-        'beforeend',
-        `<a href="" class="actor_info_content">${screenwriter}</a>/`
-      )
-    })
-    getScreenwriterTitle.insertAdjacentHTML(
-      'beforeend',
-      `<a href="" class="actor_info_content">${screenwriterLast}</a>`
-    )
-  } else {
-    getScreenwriterTitle.insertAdjacentHTML(
-      'beforeend',
-      `<a href="" class="actor_info_content">${drama001.screenwriter}</a>`
-    )
-  }
+// const removeComment = (idx: number) => {
+//   comments.splice(idx, 1)
+// }
 
-  // 類型序列
-  if (drama001.type.length > 1) {
-    const typeLast = drama001.type.pop()
-    drama001.type.forEach((type) => {
-      getTypeTitle.insertAdjacentHTML(
-        'beforeend',
-        `<a href="" class="actor_info_content">${type}</a>/`
-      )
-    })
-    getTypeTitle.insertAdjacentHTML(
-      'beforeend',
-      `<a href="" class="actor_info_content">${typeLast}</a>`
-    )
-  } else {
-    getTypeTitle.insertAdjacentHTML(
-      'beforeend',
-      `<a href="" class="actor_info_content">${drama001.type}</a>`
-    )
-  }
-
-  // 標籤序列
-  if (drama001.label.length > 1) {
-    const labelLast = drama001.label.pop()
-    drama001.label.forEach((label) => {
-      getLabelTitle.insertAdjacentHTML(
-        'beforeend',
-        `<a href="" class="actor_info_content">${label}</a>/`
-      )
-    })
-    getLabelTitle.insertAdjacentHTML(
-      'beforeend',
-      `<a href="" class="actor_info_content">${labelLast}</a>`
-    )
-  } else {
-    getLabelTitle.insertAdjacentHTML(
-      'beforeend',
-      `<a href="" class="actor_info_content">${drama001.label}</a>`
-    )
-  }
-})
+// onMounted(() => {
+//     刪除評論
+//     if (comments.length > 0) {
+//       const getComments = document.getElementById('comments')!
+//       const addDeleteIcon = () => {
+//         console.log(getComments)
+//         getComments.insertAdjacentHTML(
+//           'beforeend',
+//           `<font-awesome-icon icon="fa-solid fa-arrow-up-from-bracket" />`
+//         )
+//       }
+//     }
+//   const edit = document.getElementById('edit_button')!
+//   edit.addEventListener('click', function () {
+//     if (comments.length > 0) {
+//       const getComments = document.getElementById('comments_id')!
+//       console.log(getComments)
+//       getComments.insertAdjacentHTML(
+//         'beforeend',
+//         `<button v-for="index in comments" @click="removeComment(index)"><svg class="svg-inline--fa fa-circle-xmark" aria-hidden="true" focusable="false" data-prefix="far" data-icon="circle-xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path class="" fill="currentColor" d="M175 175C184.4 165.7 199.6 165.7 208.1 175L255.1 222.1L303 175C312.4 165.7 327.6 165.7 336.1 175C346.3 184.4 346.3 199.6 336.1 208.1L289.9 255.1L336.1 303C346.3 312.4 346.3 327.6 336.1 336.1C327.6 346.3 312.4 346.3 303 336.1L255.1 289.9L208.1 336.1C199.6 346.3 184.4 346.3 175 336.1C165.7 327.6 165.7 312.4 175 303L222.1 255.1L175 208.1C165.7 199.6 165.7 184.4 175 175V175zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z"></path></svg></button>`
+//       )
+//     }
+//   })
+// })
 
 // 圖片自動切換 //////////////////////////////////////////////////////
 setInterval(() => {
@@ -158,6 +110,7 @@ setInterval(() => {
 <template>
   <main>
     <div class="container">
+      <!-- <CommentDialog v-if="commentIsTrue" /> -->
       <div class="cover_row">
         <div class="cover_bg"></div>
         <img
@@ -202,27 +155,143 @@ setInterval(() => {
             <div class="btn_three_text">評分</div>
           </button>
         </div>
-        <div class="actor_info">
-          <div id="actortitle" class="actor_info_title">演員</div>
-          <div id="directortitle" class="actor_info_title">導演</div>
-          <div id="screenwritertitle" class="actor_info_title">編劇</div>
-          <div id="typetitle" class="actor_info_title">類型</div>
-          <div id="labeltitle" class="actor_info_title">標籤</div>
+        <div class="group_info">
+          <div id="actortitle" class="group_info_title">
+            演員
+            <div
+              v-if="drama001.actor.length > 1 === true"
+              class="group_info_content"
+            >
+              <div
+                v-for="actorDeleteLast in actorsDeleteLast"
+                :key="actorDeleteLast"
+              >
+                <a href="" class="group_info_text">{{ actorDeleteLast }}</a
+                >/
+              </div>
+              <a href="" class="group_info_text">{{ actorLast }}</a>
+            </div>
+            <div v-else>
+              <div v-for="actor in drama001.actor" :key="actor">
+                <a href="" class="group_info_text">{{ actor }}</a>
+              </div>
+            </div>
+          </div>
+          <div id="directortitle" class="group_info_title">
+            導演
+            <div
+              v-if="drama001.director.length > 1 === true"
+              class="group_info_content"
+            >
+              <div
+                v-for="directorDeleteLast in directorsDeleteLast"
+                :key="directorDeleteLast"
+              >
+                <a href="" class="group_info_text">{{ directorDeleteLast }}</a
+                >/
+              </div>
+              <a href="" class="group_info_text">{{ directorLast }}</a>
+            </div>
+            <div v-else>{{ drama001.director }}</div>
+          </div>
+          <div id="screenwritertitle" class="group_info_title">
+            編劇
+            <div
+              v-if="drama001.screenwriter.length > 1 === true"
+              class="group_info_content"
+            >
+              <div
+                v-for="screenwriterDeleteLast in screenwritersDeleteLast"
+                :key="screenwriterDeleteLast"
+              >
+                <a href="" class="group_info_text">{{
+                  screenwriterDeleteLast
+                }}</a
+                >/
+              </div>
+              <a href="" class="group_info_text">{{ screenwriterLast }}</a>
+            </div>
+            <div v-else>
+              <div
+                v-for="screenwriter in drama001.screenwriter"
+                :key="screenwriter"
+              >
+                <a href="" class="group_info_text">{{ screenwriter }}</a>
+              </div>
+            </div>
+          </div>
+          <div id="typetitle" class="group_info_title">
+            類型
+            <div
+              v-if="drama001.type.length > 1 === true"
+              class="group_info_content"
+            >
+              <div
+                v-for="typeDeleteLast in typesDeleteLast"
+                :key="typeDeleteLast"
+              >
+                <a href="" class="group_info_text">{{ typeDeleteLast }}</a
+                >/
+              </div>
+              <a href="" class="group_info_text">{{ typeLast }}</a>
+            </div>
+            <div v-else>{{ drama001.type }}</div>
+          </div>
+          <div id="labeltitle" class="group_info_title">
+            標籤
+            <div
+              v-if="drama001.label.length > 1 === true"
+              class="group_info_content"
+            >
+              <div
+                v-for="labelDeleteLast in labelsDeleteLast"
+                :key="labelDeleteLast"
+              >
+                <a href="" class="group_info_text">{{ labelDeleteLast }}</a
+                >/
+              </div>
+              <a href="" class="group_info_text">{{ labelLast }}</a>
+            </div>
+            <div v-else>{{ drama001.label }}</div>
+          </div>
         </div>
         <div class="intro_title">劇我所知</div>
-        <div class="actor_info_title" v-for="highlight in drama001.highlight">
+        <div
+          class="group_info_title"
+          v-for="highlight in drama001.highlight"
+          :key="highlight"
+        >
           {{ highlight }}
         </div>
         <div class="desc_text">{{ drama001.description }}</div>
+        <div class="comment_title">
+          <div class="intro_title">熱門短評</div>
+          <button class="comment_text" @click="outputDialog">我也要說</button>
+          <button class="comment_text" @click="addComment">送出</button>
+          <button id="edit_button" class="comment_text">編輯</button>
+          <input type="text" v-model="enteredComment" />
+          <div v-if="comments.length === 0" style="color: white">
+            目前尚無評論。
+          </div>
+          <div v-else>
+            <button
+              id="comments_id"
+              v-for="comment in comments"
+              :key="comment"
+              style="display: flex"
+            >
+              {{ comment }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </main>
 </template>
 
-<style>
+<style lang="scss">
 .container {
   width: 100%;
-  height: 100vh;
   margin: 0px auto;
   background-color: #222;
 }
@@ -301,19 +370,24 @@ setInterval(() => {
   color: #df396e;
 }
 
-.actor_info {
+.group_info {
   margin-top: 40px;
   display: flex;
   flex-wrap: wrap;
 }
 
-.actor_info_title {
+.group_info_title {
   color: #999;
   font-size: 14px;
   font-weight: 400;
+  display: flex;
 }
 
-.actor_info_content {
+.group_info_content {
+  display: flex;
+}
+
+.group_info_text {
   margin: 0px 10px;
   color: white;
   font-weight: bold;
@@ -333,5 +407,14 @@ setInterval(() => {
   color: #999;
   font-size: 14px;
   font-weight: 400;
+}
+
+.comment_text {
+  color: #df396e;
+  margin-right: 0px;
+}
+
+.group_info_text:hover {
+  color: #df396e;
 }
 </style>

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 // Import Swiper Vue.js components
+import { ref, reactive } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
+import { useDramaInfo } from '../stores/DramaInfo'
 
 // Import Swiper styles
 import 'swiper/css'
@@ -11,6 +13,18 @@ import 'swiper/css/pagination'
 // import required modules
 import { Autoplay, Pagination, Mousewheel, Keyboard, Navigation } from 'swiper'
 
+import homeS1P0 from '../assets/img/homeS1P0.jpg'
+import homeS1P1 from '../assets/img/homeS1P1.jpg'
+
+const homeS1Photo = [homeS1P0, homeS1P1]
+
+const { dramaList } = useDramaInfo()
+const dramaId: number[] = reactive([])
+dramaList.forEach((drama) => {
+  dramaId.push(drama.dramaid)
+})
+console.log(dramaId)
+console.log(dramaList)
 const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
 </script>
 
@@ -32,28 +46,24 @@ const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
     :modules="modules1"
     class="mySwiper1"
   >
-    <swiper-slide
-      ><router-link to="/dramalist"
-        ><img
-          class="topswiper_img1"
-          src="../assets/img/homeS1P1.jpg"
-          alt="photo"
-        /><img
+    <swiper-slide v-for="id in dramaId" :key="id"
+      ><router-link :to="'/dramalist/' + id"
+        ><img class="topswiper_img1" :src="homeS1Photo[id]" alt="photo" /><img
           class="topswiper_img2"
-          src="../assets/img/homeS1P1.jpg"
+          :src="homeS1Photo[id]"
           alt="photo"
         />
         <div class="topswiper_title">
-          全新集數上架
+          {{ dramaList[id].homestatus }}
           <div class="line"></div>
         </div>
-        <div class="topswiper_dramaname">《slient》</div>
+        <div class="topswiper_dramaname">《{{ dramaList[id].name }}》</div>
         <div class="topswiper_desc">
-          川口春奈X目黑蓮，重逢無聲世界的甜虐愛戀
+          {{ dramaList[id].homedescription }}
         </div>
       </router-link></swiper-slide
     >
-    <swiper-slide
+    <!-- <swiper-slide
       ><a href=""
         ><img
           class="topswiper_img1"
@@ -130,7 +140,7 @@ const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
         <div class="topswiper_dramaname">《喂！！帥哥》</div>
         <div class="topswiper_desc">那邊的帥哥，要不要當我女婿啊</div></a
       ></swiper-slide
-    >
+    > -->
   </swiper>
 </template>
 

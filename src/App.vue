@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+
 </script>
 
 <template>
@@ -43,7 +44,7 @@ import { RouterLink, RouterView } from 'vue-router'
   </div>
 </template>
 
-<style scoped>
+<style lang="scss">
 .container {
   width: 100%;
   height: auto;

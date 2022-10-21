@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import HomePage from '../views/HomePage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: Home,
+      component: HomePage,
     },
     {
       path: '/newdrama',
@@ -20,9 +20,10 @@ const router = createRouter({
       component: () => import('../views/HotDrama.vue'),
     },
     {
-      path: '/dramalist',
+      path: '/dramalist/:dramaId',
       name: 'DramaList',
       component: () => import('../views/DramaList.vue'),
+      props: true,
     },
     {
       path: '/:domin(.*)*',
