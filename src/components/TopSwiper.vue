@@ -13,19 +13,17 @@ import 'swiper/css/pagination'
 // import required modules
 import { Autoplay, Pagination, Mousewheel, Keyboard, Navigation } from 'swiper'
 
-import homeS1P0 from '../assets/img/homeS1P0.jpg'
-import homeS1P1 from '../assets/img/homeS1P1.jpg'
-
-const homeS1Photo = [homeS1P0, homeS1P1]
+const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
 
 const { dramaList } = useDramaInfo()
 const dramaId: number[] = reactive([])
 dramaList.forEach((drama) => {
   dramaId.push(drama.dramaid)
 })
-console.log(dramaId)
-console.log(dramaList)
-const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
+
+const getS1ImageUrl = (name: number) => {
+  return new URL(`../assets/img/homeS1P${name}.jpg`, import.meta.url).href
+}
 </script>
 
 <template>
@@ -38,109 +36,38 @@ const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
     :pagination="{
       clickable: true,
     }"
-    :autoplay="{
-      delay: 5000,
-      disableOnInteraction: false,
-    }"
     :navigation="true"
     :modules="modules1"
     class="mySwiper1"
   >
     <swiper-slide v-for="id in dramaId" :key="id"
       ><router-link :to="'/dramalist/' + id"
-        ><img class="topswiper_img1" :src="homeS1Photo[id]" alt="photo" /><img
+        ><img class="topswiper_img1" :src="getS1ImageUrl(id)" alt="photo" /><img
           class="topswiper_img2"
-          :src="homeS1Photo[id]"
+          :src="getS1ImageUrl(id)"
           alt="photo"
         />
-        <div class="topswiper_title">
-          {{ dramaList[id].homestatus }}
-          <div class="line"></div>
+        <div v-if="dramaList[id].name.length <= 11">
+          <div class="topswiper_title">
+            {{ dramaList[id].homestatus }}
+            <div class="line"></div>
+          </div>
+          <div class="topswiper_dramaname">《{{ dramaList[id].name }}》</div>
         </div>
-        <div class="topswiper_dramaname">《{{ dramaList[id].name }}》</div>
+        <div v-else>
+          <div class="topswiper_title_long">
+            {{ dramaList[id].homestatus }}
+            <div class="line"></div>
+          </div>
+          <div class="topswiper_dramaname_long">
+            《{{ dramaList[id].name }}》
+          </div>
+        </div>
         <div class="topswiper_desc">
           {{ dramaList[id].homedescription }}
         </div>
       </router-link></swiper-slide
     >
-    <!-- <swiper-slide
-      ><a href=""
-        ><img
-          class="topswiper_img1"
-          src="../assets/img/homeS1P2.jpg"
-          alt="photo"
-        /><img
-          class="topswiper_img2"
-          src="../assets/img/homeS1P2.jpg"
-          alt="photo"
-        />
-        <div class="topswiper_title">
-          青春首播
-          <div class="line"></div>
-        </div>
-        <div class="topswiper_dramaname">《青春灰姑娘》</div>
-        <div class="topswiper_desc">攜美妝技巧重返１７歲、克服初戀陰影</div></a
-      ></swiper-slide
-    >
-    <swiper-slide
-      ><a href=""
-        ><img
-          class="topswiper_img1"
-          src="../assets/img/homeS1P3.jpg"
-          alt="photo"
-        /><img
-          class="topswiper_img2"
-          src="../assets/img/homeS1P3.jpg"
-          alt="photo"
-        />
-        <div class="topswiper_title">
-          全新集數上架
-          <div class="line"></div>
-        </div>
-        <div class="topswiper_dramaname">《戀愛心機又怎樣》</div>
-        <div class="topswiper_desc">「派遣護理師X」岡田將生、泉澤祐希</div></a
-      ></swiper-slide
-    >
-    <swiper-slide
-      ><a href=""
-        ><img
-          class="topswiper_img1"
-          src="../assets/img/homeS1P4.jpg"
-          alt="photo"
-        /><img
-          class="topswiper_img2"
-          src="../assets/img/homeS1P4.jpg"
-          alt="photo"
-        />
-        <div class="topswiper_title">
-          即將上架
-          <div class="line"></div>
-        </div>
-        <div class="topswiper_dramaname">《詐欺獵人》</div>
-        <div class="topswiper_desc">
-          經典重開機！平野紫耀化身令和詐欺獵人
-        </div></a
-      ></swiper-slide
-    >
-    <swiper-slide
-      ><a href=""
-        ><img
-          class="topswiper_img1"
-          src="../assets/img/homeS1P5.jpg"
-          alt="photo"
-        /><img
-          class="topswiper_img2"
-          src="../assets/img/homeS1P5.jpg"
-          alt="photo"
-        />
-        <div class="topswiper_title">
-          新上架
-          <div class="line"></div>
-        </div>
-        <div class="topswiper_dramaname">《喂！！帥哥》</div>
-        <div class="topswiper_desc">那邊的帥哥，要不要當我女婿啊</div></a
-      ></swiper-slide
-    > -->
   </swiper>
 </template>
 
@@ -198,10 +125,29 @@ const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
   color: white;
 }
 
+.mySwiper1 .swiper-slide .topswiper_title_long {
+  position: absolute;
+  left: 700px;
+  top: 200px;
+  font-size: 15px;
+  color: white;
+}
+
 .mySwiper1 .swiper-slide .topswiper_dramaname {
   position: absolute;
   left: 700px;
   top: 280px;
+  font-size: 30px;
+  color: white;
+  font-weight: bold;
+}
+
+.mySwiper1 .swiper-slide .topswiper_dramaname_long {
+  position: absolute;
+  width: 280px;
+  left: 700px;
+  top: 230px;
+  text-align: left;
   font-size: 30px;
   color: white;
   font-weight: bold;

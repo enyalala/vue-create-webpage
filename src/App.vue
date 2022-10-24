@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-
 </script>
 
 <template>
@@ -62,7 +61,7 @@ import { RouterLink, RouterView } from 'vue-router'
   background-color: #551127;
   top: 0;
   position: fixed;
-  z-index: 1000;
+  z-index: 500;
 }
 .navbar_content {
   width: 100%;

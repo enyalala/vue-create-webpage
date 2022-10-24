@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 export const useDramaInfo = defineStore('dramaInfo', () => {
-  const drama001 = {
+  const drama0 = {
     dramaid: 0,
     name: 'silent',
     year: 2022,
@@ -30,8 +30,9 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
       '高二的秋天，紬的目光被在台上朗讀作文的佐倉想的聲音所吸引。在朋友的助攻下，兩人終於在高三那年開始交往。然而，想卻在畢業後一聲不響地消失。8年過去，即使心裡充滿不解，紬也開始了自己的新人生。某天，紬在人群中發現想的身影，也得知他因病幾乎失去聽力的震撼事實...',
     homestatus: '全新集數上架',
     homedescription: '川口春奈X目黑蓮，重逢無聲世界的甜虐愛戀',
+    sidephotocount: 4,
   }
-  const drama002 = {
+  const drama1 = {
     dramaid: 1,
     name: '青春灰姑娘',
     year: 2022,
@@ -53,7 +54,99 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
       '萩野紫苑高中時因不擅打扮被初戀對象狠狠拒絕。如今29歲的她，脫胎換骨成了亮麗幹練的美妝顧問，過著充實的每一天。然而，聯誼時男性的品頭論足，再次勾起了紫苑的內心陰影。她憤而撕毀高中時的照片，不料瞬間一陣強光，竟讓她穿越回到了2010年！她決心以強大的美妝技巧為17歲的自己大變身、重新改寫青春！',
     homestatus: '青春首播',
     homedescription: '攜美妝技巧重返１７歲、克服初戀陰影',
+    sidephotocount: 1,
   }
-  const dramaList = [drama001, drama002]
-  return { dramaList, drama001, drama002 }
+  const drama2 = {
+    dramaid: 2,
+    name: 'ELPIS -是希望還是災禍-',
+    year: 2022,
+    actor: [
+      '長澤雅美',
+      '真榮田鄉敦',
+      '鈴木亮平',
+      '三浦透子',
+      '三浦貴大',
+      '近藤公園',
+      '梶原善',
+      '片岡正二郎',
+      '山路和弘',
+      '岡部貴志',
+      '筒井真理子',
+    ],
+    director: ['大根仁'],
+    screenwriter: ['渡邊綾'],
+    type: ['懸疑推理', '職場社會'],
+    label: ['主播', '2022秋季日劇'],
+    highlight: [
+      '2022秋季日劇',
+      '★長澤雅美睽違四年強勢回歸小螢幕！聯手兩大肌肉系男神-真榮田鄉敦、鈴木亮平追擊冤罪真相',
+      '★王牌主播因醜聞跌落神壇！？電視圈的花花世界，眼見也不一定為憑？',
+      '★《糸子的洋裝店》《危機好感》編劇x《韋馱天》導演，深入「玻璃巨塔」打造社會派懸疑娛樂大戲',
+    ],
+    description:
+      '王牌主播淺川惠那因醜聞跌落神壇，退居電視台底層的深夜節目擔任主持。為了尋回自我價值，惠那與菜鳥導演岸本拓朗、菁英記者齋藤正一，三人開始追查一樁連環殺人案的冤罪疑雲。打開潘朵拉的盒子後，等待著他們的真相，究竟是希望還是災禍？',
+    homestatus: '即將上架',
+    homedescription: '長澤雅美化身王牌主播追擊冤罪真相',
+    sidephotocount: 3,
+  }
+  const drama3 = {
+    dramaid: 3,
+    name: '詐欺獵人',
+    year: 2022,
+    actor: [
+      '平野紫耀',
+      '黑島結菜',
+      '三浦友和',
+      '山本耕史',
+      '坂東彌十郎',
+      '井之脇海',
+      '中村友理',
+      '宇野祥平',
+      '時任勇氣',
+      '船越英一郎',
+    ],
+    director: ['田中健太', '石井康晴', '平野俊一'],
+    screenwriter: ['篠崎繪里子'],
+    type: ['職場社會', '雙字幕', '免費'],
+    label: ['漫畫改編', '日劇翻拍', '詐欺師', '復仇', '2022秋季日劇'],
+    highlight: [],
+    description:
+      '王牌主播淺川惠那因醜聞跌落神壇，退居電視台底層的深夜節目擔任主持。為了尋回自我價值，惠那與菜鳥導演岸本拓朗、菁英記者齋藤正一，三人開始追查一樁連環殺人案的冤罪疑雲。打開潘朵拉的盒子後，等待著他們的真相，究竟是希望還是災禍？',
+    homestatus: '即將上架',
+    homedescription: '經典重開機！平野紫耀化身令和詐欺獵人',
+    sidephotocount: 1,
+  }
+  const drama4 = {
+    dramaid: 4,
+    name: '喂！！帥哥',
+    year: 2022,
+    actor: [
+      '吉田鋼太郎',
+      '木南晴夏',
+      '佐久間由衣',
+      '武田玲奈',
+      '須藤蓮',
+      '久保田悠來',
+      '奧野壯',
+      '太田莉菜',
+      '桐山漣',
+      '山中聰',
+      '野波麻帆',
+      '高杉真宙',
+      'MEGUMI',
+      '濱野謙太',
+    ],
+    director: ['山口雅俊'],
+    screenwriter: ['山口雅俊'],
+    type: ['輕鬆喜劇', '家庭鄉土', '免費'],
+    label: ['漫畫改編', '美食'],
+    highlight: [],
+    description:
+      '伊藤源太郎是個人情味十足的老派頑固大叔，他與妻子千鶴的三個女兒都已經獨立，然而長女由香老是陷入不倫戀情、次女里香面臨離婚危機、三女美香則與默默無聞的漫畫家同居中。源太郎對於女兒看男人的眼光相當憂心，於是決定無視女兒們的喜好，直接把自己看上的好男人帶回家！',
+    homestatus: '新上架',
+    homedescription: '那邊的帥哥，要不要當我女婿啊',
+    sidephotocount: 4,
+  }
+  const dramaList = [drama0, drama1, drama2, drama3, drama4]
+  return { dramaList }
 })

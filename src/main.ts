@@ -13,14 +13,26 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
 import { faTwitter } from '@fortawesome/free-brands-svg-icons'
-import { faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowUpFromBracket,
+  faStar as fasStar,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons'
 import {
   faHeart,
-  faStar,
+  faStar as farStar,
   faCircleXmark,
 } from '@fortawesome/free-regular-svg-icons'
 /* add icons to the library */
-library.add(faTwitter, faArrowUpFromBracket, faHeart, faStar, faCircleXmark)
+library.add(
+  faTwitter,
+  faArrowUpFromBracket,
+  faHeart,
+  farStar,
+  fasStar,
+  faCircleXmark,
+  faXmark
+)
 
 const app = createApp(App)
 

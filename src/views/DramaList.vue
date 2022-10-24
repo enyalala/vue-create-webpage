@@ -1,38 +1,39 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import type { Ref } from 'vue'
 import { useDramaInfo } from '../stores/DramaInfo'
-// import CommentDialog from '../views/CommentDialog.vue'
-import sidephoto1 from '../assets/img/drama001/sidephoto001_1.jpg'
-import sidephoto2 from '../assets/img/drama001/sidephoto001_2.jpg'
-import sidephoto3 from '../assets/img/drama001/sidephoto001_3.jpg'
-import sidephoto4 from '../assets/img/drama001/sidephoto001_4.jpg'
 import { useRoute } from 'vue-router'
+
+import CommentDialog from '../views/CommentDialog.vue'
 
 // Data ///////////////////////////////////////////////////////////////
 // 封面圖片列參數
-const sidephoto = [sidephoto1, sidephoto2, sidephoto3, sidephoto4]
+
+const { dramaList } = useDramaInfo()
+
+const id = Number(useRoute().params.dramaId)
+const dramaInfoList = dramaList[id]
+
 const num: Ref<number> = ref(1)
 // 按鈕參數
 const collectIsHover = ref(false)
 const scoreIsHover = ref(false)
 // 戲劇資訊參數
-console.log(useRoute().params, 'hello')
-const { drama001 } = useDramaInfo()
-const actorsDeleteLast = drama001.actor.slice(0, -1)
-const actorLast = drama001.actor[drama001.actor.length - 1]
+const actorsDeleteLast = dramaInfoList.actor.slice(0, -1)
+const actorLast = dramaInfoList.actor[dramaInfoList.actor.length - 1]
 
-const directorsDeleteLast = drama001.director.slice(0, -1)
-const directorLast = drama001.director[drama001.director.length - 1]
+const directorsDeleteLast = dramaInfoList.director.slice(0, -1)
+const directorLast = dramaInfoList.director[dramaInfoList.director.length - 1]
 
-const screenwritersDeleteLast = drama001.screenwriter.slice(0, -1)
-const screenwriterLast = drama001.screenwriter[drama001.screenwriter.length - 1]
+const screenwritersDeleteLast = dramaInfoList.screenwriter.slice(0, -1)
+const screenwriterLast =
+  dramaInfoList.screenwriter[dramaInfoList.screenwriter.length - 1]
 
-const typesDeleteLast = drama001.type.slice(0, -1)
-const typeLast = drama001.type[drama001.type.length - 1]
+const typesDeleteLast = dramaInfoList.type.slice(0, -1)
+const typeLast = dramaInfoList.type[dramaInfoList.type.length - 1]
 
-const labelsDeleteLast = drama001.label.slice(0, -1)
-const labelLast = drama001.label[drama001.label.length - 1]
+const labelsDeleteLast = dramaInfoList.label.slice(0, -1)
+const labelLast = dramaInfoList.label[dramaInfoList.label.length - 1]
 
 //  評論參數
 const enteredComment = ref('')
@@ -40,6 +41,11 @@ const comments: string[] = reactive([])
 const commentIsTrue = ref(false)
 
 // Function //////////////////////////////////////////////////////////
+const getCoverUrl = (name: number) => {
+  return new URL(`../assets/img/dramacover/cover${name}.jpg`, import.meta.url)
+    .href
+}
+
 const collectHover = () => {
   collectIsHover.value = true
 }
@@ -62,7 +68,7 @@ const addComment = () => {
 }
 
 const outputDialog = () => {
-  commentIsTrue.value = false
+  commentIsTrue.value = true
 }
 
 // const removeComment = (idx: number) => {
@@ -96,7 +102,7 @@ const outputDialog = () => {
 
 // 圖片自動切換 //////////////////////////////////////////////////////
 setInterval(() => {
-  if (num.value < 4) {
+  if (num.value < dramaInfoList.sidephotocount) {
     num.value++
   } else {
     num.value = 0
@@ -104,21 +110,31 @@ setInterval(() => {
   }
   return num.value
 }, 5000)
+
+const getSideUrl = (name: number, count: number) => {
+  return new URL(
+    `../assets/img/sidephoto/sidephoto${name}_${count}.jpg`,
+    import.meta.url
+  ).href
+}
 // setInterval(() => console.log(num.value), 5000)
 </script>
 
 <template>
   <main>
     <div class="container">
-      <!-- <CommentDialog v-if="commentIsTrue" /> -->
+      <CommentDialog v-if="commentIsTrue" />
       <div class="cover_row">
+        <div class="cover_content">
+          <span class="cover_name_text">{{ dramaInfoList.name }}</span>
+          <div class="cover_year_text">
+            {{ dramaInfoList.year }} |
+            <font-awesome-icon icon="fa-solid fa-star" />
+          </div>
+        </div>
         <div class="cover_bg"></div>
-        <img
-          class="cover_img"
-          src="../assets/img/drama001/cover001.jpg"
-          alt=""
-        />
-        <img class="side_img" :src="sidephoto[num - 1]" alt="photo" />
+        <img class="cover_img" :src="getCoverUrl(id)" alt="" />
+        <img class="side_img" :src="getSideUrl(id, num)" alt="photo" />
       </div>
       <div class="drama_info">
         <div class="btn_content">
@@ -159,7 +175,7 @@ setInterval(() => {
           <div id="actortitle" class="group_info_title">
             演員
             <div
-              v-if="drama001.actor.length > 1 === true"
+              v-if="dramaInfoList.actor.length > 1 === true"
               class="group_info_content"
             >
               <div
@@ -172,7 +188,7 @@ setInterval(() => {
               <a href="" class="group_info_text">{{ actorLast }}</a>
             </div>
             <div v-else>
-              <div v-for="actor in drama001.actor" :key="actor">
+              <div v-for="actor in dramaInfoList.actor" :key="actor">
                 <a href="" class="group_info_text">{{ actor }}</a>
               </div>
             </div>
@@ -180,7 +196,7 @@ setInterval(() => {
           <div id="directortitle" class="group_info_title">
             導演
             <div
-              v-if="drama001.director.length > 1 === true"
+              v-if="dramaInfoList.director.length > 1 === true"
               class="group_info_content"
             >
               <div
@@ -192,12 +208,16 @@ setInterval(() => {
               </div>
               <a href="" class="group_info_text">{{ directorLast }}</a>
             </div>
-            <div v-else>{{ drama001.director }}</div>
+            <div v-else>
+              <div v-for="director in dramaInfoList.director" :key="director">
+                <a href="" class="group_info_text">{{ director }}</a>
+              </div>
+            </div>
           </div>
           <div id="screenwritertitle" class="group_info_title">
             編劇
             <div
-              v-if="drama001.screenwriter.length > 1 === true"
+              v-if="dramaInfoList.screenwriter.length > 1 === true"
               class="group_info_content"
             >
               <div
@@ -213,7 +233,7 @@ setInterval(() => {
             </div>
             <div v-else>
               <div
-                v-for="screenwriter in drama001.screenwriter"
+                v-for="screenwriter in dramaInfoList.screenwriter"
                 :key="screenwriter"
               >
                 <a href="" class="group_info_text">{{ screenwriter }}</a>
@@ -223,7 +243,7 @@ setInterval(() => {
           <div id="typetitle" class="group_info_title">
             類型
             <div
-              v-if="drama001.type.length > 1 === true"
+              v-if="dramaInfoList.type.length > 1 === true"
               class="group_info_content"
             >
               <div
@@ -235,12 +255,12 @@ setInterval(() => {
               </div>
               <a href="" class="group_info_text">{{ typeLast }}</a>
             </div>
-            <div v-else>{{ drama001.type }}</div>
+            <div v-else>{{ dramaInfoList.type }}</div>
           </div>
           <div id="labeltitle" class="group_info_title">
             標籤
             <div
-              v-if="drama001.label.length > 1 === true"
+              v-if="dramaInfoList.label.length > 1 === true"
               class="group_info_content"
             >
               <div
@@ -252,18 +272,18 @@ setInterval(() => {
               </div>
               <a href="" class="group_info_text">{{ labelLast }}</a>
             </div>
-            <div v-else>{{ drama001.label }}</div>
+            <div v-else>{{ dramaInfoList.label }}</div>
           </div>
         </div>
         <div class="intro_title">劇我所知</div>
         <div
           class="group_info_title"
-          v-for="highlight in drama001.highlight"
+          v-for="highlight in dramaInfoList.highlight"
           :key="highlight"
         >
           {{ highlight }}
         </div>
-        <div class="desc_text">{{ drama001.description }}</div>
+        <div class="desc_text">{{ dramaInfoList.description }}</div>
         <div class="comment_title">
           <div class="intro_title">熱門短評</div>
           <button class="comment_text" @click="outputDialog">我也要說</button>
@@ -302,6 +322,13 @@ setInterval(() => {
   margin: 0px auto;
 }
 
+.sidephoto_row {
+  width: 100%;
+  height: 350px;
+  position: relative;
+  margin: 0px auto;
+}
+
 .cover_bg {
   width: 70%;
   height: 350px;
@@ -315,6 +342,25 @@ setInterval(() => {
   font-size: 30px;
   font-weight: bold;
   padding: 30px 0px 80px 75px;
+}
+
+.cover_content {
+  position: absolute;
+  left: 230px;
+  top: 100px;
+  z-index: 100;
+}
+
+.cover_name_text {
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.cover_year_text {
+  color: gray;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .cover_img {
