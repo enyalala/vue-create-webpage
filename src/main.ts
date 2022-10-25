@@ -17,12 +17,9 @@ import {
   faArrowUpFromBracket,
   faStar as fasStar,
   faXmark,
-} from '@fortawesome/free-solid-svg-icons'
-import {
-  faHeart,
-  faStar as farStar,
   faCircleXmark,
-} from '@fortawesome/free-regular-svg-icons'
+} from '@fortawesome/free-solid-svg-icons'
+import { faHeart, faStar as farStar } from '@fortawesome/free-regular-svg-icons'
 /* add icons to the library */
 library.add(
   faTwitter,

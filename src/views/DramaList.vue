@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onUpdated } from 'vue'
 import type { Ref } from 'vue'
 import { useDramaInfo } from '../stores/DramaInfo'
 import { useRoute } from 'vue-router'
@@ -7,17 +7,17 @@ import { useRoute } from 'vue-router'
 import CommentDialog from '../views/CommentDialog.vue'
 
 // Data ///////////////////////////////////////////////////////////////
-// 封面圖片列參數
-
 const { dramaList } = useDramaInfo()
-
 const id = Number(useRoute().params.dramaId)
 const dramaInfoList = dramaList[id]
 
+// 封面圖片列參數
 const num: Ref<number> = ref(1)
+
 // 按鈕參數
 const collectIsHover = ref(false)
 const scoreIsHover = ref(false)
+
 // 戲劇資訊參數
 const actorsDeleteLast = dramaInfoList.actor.slice(0, -1)
 const actorLast = dramaInfoList.actor[dramaInfoList.actor.length - 1]
@@ -39,6 +39,8 @@ const labelLast = dramaInfoList.label[dramaInfoList.label.length - 1]
 const enteredComment = ref('')
 const comments: string[] = reactive([])
 const commentIsTrue = ref(false)
+const subtitleShow = ref(false)
+const editIsTrue = ref(false)
 
 // Function //////////////////////////////////////////////////////////
 const getCoverUrl = (name: number) => {
@@ -63,42 +65,39 @@ const scoreLeave = () => {
 }
 
 const addComment = () => {
-  comments.push(enteredComment.value)
-  enteredComment.value = ''
+  enteredComment.value.trim()
+  if (enteredComment.value !== '') {
+    comments.push(enteredComment.value)
+    enteredComment.value = ''
+  }
 }
 
 const outputDialog = () => {
   commentIsTrue.value = true
 }
 
-// const removeComment = (idx: number) => {
-//   comments.splice(idx, 1)
-// }
+const hideModal = () => {
+  commentIsTrue.value = false
+}
 
-// onMounted(() => {
-//     刪除評論
-//     if (comments.length > 0) {
-//       const getComments = document.getElementById('comments')!
-//       const addDeleteIcon = () => {
-//         console.log(getComments)
-//         getComments.insertAdjacentHTML(
-//           'beforeend',
-//           `<font-awesome-icon icon="fa-solid fa-arrow-up-from-bracket" />`
-//         )
-//       }
-//     }
-//   const edit = document.getElementById('edit_button')!
-//   edit.addEventListener('click', function () {
-//     if (comments.length > 0) {
-//       const getComments = document.getElementById('comments_id')!
-//       console.log(getComments)
-//       getComments.insertAdjacentHTML(
-//         'beforeend',
-//         `<button v-for="index in comments" @click="removeComment(index)"><svg class="svg-inline--fa fa-circle-xmark" aria-hidden="true" focusable="false" data-prefix="far" data-icon="circle-xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path class="" fill="currentColor" d="M175 175C184.4 165.7 199.6 165.7 208.1 175L255.1 222.1L303 175C312.4 165.7 327.6 165.7 336.1 175C346.3 184.4 346.3 199.6 336.1 208.1L289.9 255.1L336.1 303C346.3 312.4 346.3 327.6 336.1 336.1C327.6 346.3 312.4 346.3 303 336.1L255.1 289.9L208.1 336.1C199.6 346.3 184.4 346.3 175 336.1C165.7 327.6 165.7 312.4 175 303L222.1 255.1L175 208.1C165.7 199.6 165.7 184.4 175 175V175zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z"></path></svg></button>`
-//       )
-//     }
-//   })
-// })
+const titleOver = () => {
+  subtitleShow.value = true
+}
+const titleLeave = () => {
+  subtitleShow.value = false
+}
+
+const completeShow = () => {
+  editIsTrue.value = true
+}
+
+const editShow = () => {
+  editIsTrue.value = false
+}
+
+const removeComment = (idx: number) => {
+  comments.splice(idx, 1)
+}
 
 // 圖片自動切換 //////////////////////////////////////////////////////
 setInterval(() => {
@@ -118,12 +117,90 @@ const getSideUrl = (name: number, count: number) => {
   ).href
 }
 // setInterval(() => console.log(num.value), 5000)
+
+onUpdated(() => {
+  if (comments.length === 0) {
+    editIsTrue.value = false
+  }
+})
 </script>
 
 <template>
   <main>
     <div class="container">
-      <CommentDialog v-if="commentIsTrue" />
+      <CommentDialog v-if="commentIsTrue">
+        <template #closeZone>
+          <div class="close_zone">
+            <div class="close" @click="hideModal">
+              <font-awesome-icon icon="fa-solid fa-xmark" />
+            </div>
+          </div>
+        </template>
+        <template #commentArea>
+          <div class="comment_area">
+            <textarea
+              class="text_area"
+              v-model="enteredComment"
+              placeholder="來為喜歡的劇說些什麼吧..."
+              maxlength="20"
+              rows="2"
+            ></textarea>
+            <div class="comment_count">{{ enteredComment.length }}/20</div>
+            <div>
+              <button class="btn_output" @click="addComment">送出</button>
+            </div>
+          </div></template
+        >
+        <template #comments>
+          <button
+            class="btn_edit"
+            @click="completeShow"
+            v-show="comments.length !== 0 && !editIsTrue"
+          >
+            編輯
+          </button>
+          <button
+            class="btn_edit"
+            @click="editShow"
+            v-show="comments.length !== 0 && editIsTrue"
+          >
+            完成
+          </button>
+          <div class="inner_comment_title">
+            <div class="hot_title">我的短評</div>
+          </div>
+          <div v-if="comments.length === 0" style="color: white">
+            目前尚無評論。
+          </div>
+          <div v-else>
+            <button
+              v-for="(comment, index) in comments"
+              :key="comment"
+              class="btn_allcomments"
+            >
+              {{ comment }}
+              <button v-if="editIsTrue" @click="removeComment(index)">
+                <font-awesome-icon icon="fa-solid fa-circle-xmark" />
+              </button>
+            </button>
+          </div>
+          <div class="inner_comment_title">
+            <div class="hot_title">熱門短評</div>
+          </div>
+          <div v-if="comments.length === 0" style="color: white">
+            目前尚無評論。
+          </div>
+          <div v-else>
+            <button
+              v-for="hotcomment in comments"
+              :key="hotcomment"
+              class="btn_allcomments"
+            >
+              {{ hotcomment }}
+            </button>
+          </div></template
+        >
+      </CommentDialog>
       <div class="cover_row">
         <div class="cover_content">
           <span class="cover_name_text">{{ dramaInfoList.name }}</span>
@@ -284,21 +361,30 @@ const getSideUrl = (name: number, count: number) => {
           {{ highlight }}
         </div>
         <div class="desc_text">{{ dramaInfoList.description }}</div>
-        <div class="comment_title">
-          <div class="intro_title">熱門短評</div>
+        <div
+          class="comment_title"
+          @mouseover="titleOver"
+          @mouseleave="titleLeave"
+        >
+          <div class="hot_title">熱門短評</div>
+          <button
+            class="subtitle_text"
+            v-show="subtitleShow"
+            @click="outputDialog"
+          >
+            更多 ＞
+          </button>
           <button class="comment_text" @click="outputDialog">我也要說</button>
-          <button class="comment_text" @click="addComment">送出</button>
-          <button id="edit_button" class="comment_text">編輯</button>
-          <input type="text" v-model="enteredComment" />
+        </div>
+        <div @mouseover="titleOver" @mouseleave="titleLeave">
           <div v-if="comments.length === 0" style="color: white">
             目前尚無評論。
           </div>
           <div v-else>
             <button
-              id="comments_id"
               v-for="comment in comments"
               :key="comment"
-              style="display: flex"
+              class="btn_allcomments"
             >
               {{ comment }}
             </button>
@@ -413,7 +499,7 @@ const getSideUrl = (name: number, count: number) => {
 }
 
 .btn_icon_bright {
-  color: #df396e;
+  color: rgb(240, 72, 110);
 }
 
 .group_info {
@@ -442,9 +528,15 @@ const getSideUrl = (name: number, count: number) => {
 
 .intro_title {
   font-size: 16px;
-  color: white;
+  color: #ffffff;
+  font-weight: 500;
   margin-top: 34px;
   margin-bottom: 13px;
+}
+
+.hot_title {
+  font-size: 16px;
+  color: #ffffff;
   font-weight: 500;
 }
 
@@ -455,12 +547,77 @@ const getSideUrl = (name: number, count: number) => {
   font-weight: 400;
 }
 
+.comment_title {
+  display: flex;
+  position: relative;
+  margin-top: 34px;
+  margin-bottom: 13px;
+}
+
+.inner_comment_title {
+  display: flex;
+  position: relative;
+  margin: 15px 0px;
+}
+
 .comment_text {
-  color: #df396e;
-  margin-right: 0px;
+  position: absolute;
+  color: rgb(240, 72, 110);
+  border: none;
+  background: none;
+  font-size: 16px;
+  right: 0px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn_allcomments {
+  border-radius: 34px;
+  border: 1px solid gray;
+  display: inline-block;
+  margin: 0px 10px 10px 0px;
+  padding: 7px 10px;
+  font-size: 1４px;
+  cursor: pointer;
+  color: rgb(153, 153, 153);
+  background-color: transparent;
+  letter-spacing: 1px;
+  line-height: 1.5;
+}
+
+.btn_allcomments:hover {
+  color: white;
+}
+
+.btn_edit {
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+  position: absolute;
+  right: 15px;
+  background: transparent;
+  border: none;
+  z-index: 950;
+}
+
+.btn_edit:hover {
+  color: rgb(240, 72, 110);
+}
+
+.subtitle_text {
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0px 20px;
+  background: transparent;
+  border: none;
+}
+
+.subtitle_text:hover {
+  border: 1px solid rgb(240, 72, 110);
 }
 
 .group_info_text:hover {
-  color: #df396e;
+  color: rgb(240, 72, 110);
 }
 </style>

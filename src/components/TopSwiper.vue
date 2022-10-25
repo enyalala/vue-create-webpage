@@ -36,6 +36,10 @@ const getS1ImageUrl = (name: number) => {
     :pagination="{
       clickable: true,
     }"
+    :autoplay="{
+      delay: 5000,
+      disableOnInteraction: false,
+    }"
     :navigation="true"
     :modules="modules1"
     class="mySwiper1"

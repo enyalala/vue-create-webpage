@@ -1,34 +1,80 @@
-<script></script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="modal">
-    <div class="close_zone">
-      <div class="close">
-        <font-awesome-icon icon="fa-solid fa-xmark" />
-      </div>
-    </div>
-    <h1>I'm a modal window 😍</h1>
-    <p></p>
+    <slot name="closeZone"> </slot>
+    <slot name="commentArea"> </slot>
+    <slot name="comments"> </slot>
   </div>
   <div class="overlay"></div>
 </template>
 
 <style>
+.hidden {
+  display: none;
+}
+
 .close_zone {
   position: sticky;
   top: 0px;
   width: 100%;
   height: 60px;
-  margin-right: 10px;
   z-index: 950;
 }
+
 .close {
-  position: sticky;
+  position: absolute;
   top: 10px;
   right: 10px;
+  font-size: 30px;
   color: white;
   cursor: pointer;
   z-index: 1000;
+}
+
+.comment_area {
+  position: relative;
+  margin-bottom: 20px;
+  z-index: 950;
+}
+
+.text_area {
+  width: 100%;
+  height: 100%;
+  padding: 10px 95px 100px 10px;
+  background-color: rgb(40, 40, 40);
+  border-radius: 4px;
+  border: none;
+  color: white;
+  resize: none;
+  font-size: 14px;
+}
+
+.text_area:focus {
+  border: 1px solid rgb(240, 72, 110);
+}
+
+.comment_count {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: white;
+  font-size: 14px;
+}
+
+.btn_output {
+  position: absolute;
+  bottom: 15px;
+  right: 10px;
+  padding: 5px 12px;
+  cursor: pointer;
+  text-align: center;
+  width: 60px;
+  height: 35px;
+  color: white;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: rgb(240, 72, 110);
 }
 
 .modal {

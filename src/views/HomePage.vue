@@ -86,6 +86,6 @@ const title2Leave = () => {
 }
 
 .home_subtitle_text:hover {
-  color: #df396e;
+  color: rgb(240, 72, 110);
 }
 </style>

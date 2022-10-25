@@ -30,6 +30,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
       '高二的秋天，紬的目光被在台上朗讀作文的佐倉想的聲音所吸引。在朋友的助攻下，兩人終於在高三那年開始交往。然而，想卻在畢業後一聲不響地消失。8年過去，即使心裡充滿不解，紬也開始了自己的新人生。某天，紬在人群中發現想的身影，也得知他因病幾乎失去聽力的震撼事實...',
     homestatus: '全新集數上架',
     homedescription: '川口春奈X目黑蓮，重逢無聲世界的甜虐愛戀',
+    comments: [''],
     sidephotocount: 4,
   }
   const drama1 = {
@@ -54,6 +55,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
       '萩野紫苑高中時因不擅打扮被初戀對象狠狠拒絕。如今29歲的她，脫胎換骨成了亮麗幹練的美妝顧問，過著充實的每一天。然而，聯誼時男性的品頭論足，再次勾起了紫苑的內心陰影。她憤而撕毀高中時的照片，不料瞬間一陣強光，竟讓她穿越回到了2010年！她決心以強大的美妝技巧為17歲的自己大變身、重新改寫青春！',
     homestatus: '青春首播',
     homedescription: '攜美妝技巧重返１７歲、克服初戀陰影',
+    comments: [''],
     sidephotocount: 1,
   }
   const drama2 = {
@@ -87,6 +89,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
       '王牌主播淺川惠那因醜聞跌落神壇，退居電視台底層的深夜節目擔任主持。為了尋回自我價值，惠那與菜鳥導演岸本拓朗、菁英記者齋藤正一，三人開始追查一樁連環殺人案的冤罪疑雲。打開潘朵拉的盒子後，等待著他們的真相，究竟是希望還是災禍？',
     homestatus: '即將上架',
     homedescription: '長澤雅美化身王牌主播追擊冤罪真相',
+    comments: [''],
     sidephotocount: 3,
   }
   const drama3 = {
@@ -114,6 +117,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
       '王牌主播淺川惠那因醜聞跌落神壇，退居電視台底層的深夜節目擔任主持。為了尋回自我價值，惠那與菜鳥導演岸本拓朗、菁英記者齋藤正一，三人開始追查一樁連環殺人案的冤罪疑雲。打開潘朵拉的盒子後，等待著他們的真相，究竟是希望還是災禍？',
     homestatus: '即將上架',
     homedescription: '經典重開機！平野紫耀化身令和詐欺獵人',
+    comments: [''],
     sidephotocount: 1,
   }
   const drama4 = {
@@ -145,6 +149,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
       '伊藤源太郎是個人情味十足的老派頑固大叔，他與妻子千鶴的三個女兒都已經獨立，然而長女由香老是陷入不倫戀情、次女里香面臨離婚危機、三女美香則與默默無聞的漫畫家同居中。源太郎對於女兒看男人的眼光相當憂心，於是決定無視女兒們的喜好，直接把自己看上的好男人帶回家！',
     homestatus: '新上架',
     homedescription: '那邊的帥哥，要不要當我女婿啊',
+    comments: [''],
     sidephotocount: 4,
   }
   const dramaList = [drama0, drama1, drama2, drama3, drama4]
