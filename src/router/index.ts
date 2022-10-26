@@ -26,6 +26,12 @@ const router = createRouter({
       props: true,
     },
     {
+      path: '/mycollection',
+      name: 'MyCollection',
+      component: () => import('../views/MyCollection.vue'),
+      props: true,
+    },
+    {
       path: '/:domin(.*)*',
       name: 'NotFound',
       // route level code-splitting

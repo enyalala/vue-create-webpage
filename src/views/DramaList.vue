@@ -17,6 +17,9 @@ const num: Ref<number> = ref(1)
 // 按鈕參數
 const collectIsHover = ref(false)
 const scoreIsHover = ref(false)
+const hideStar = ref(true)
+const standardText = ref('')
+const yourScore = ref(0)
 
 // 戲劇資訊參數
 const actorsDeleteLast = dramaInfoList.actor.slice(0, -1)
@@ -99,6 +102,33 @@ const removeComment = (idx: number) => {
   comments.splice(idx, 1)
 }
 
+const changeFiveStar = () => {
+  hideStar.value = false
+}
+
+const starStardard = (num: number) => {
+  if (num === 1) {
+    standardText.value = '極不推薦'
+  } else if (num === 2) {
+    standardText.value = '不推薦'
+  } else if (num === 3) {
+    standardText.value = '還可以'
+  } else if (num === 4) {
+    standardText.value = '值得一看'
+  } else if (num === 5) {
+    standardText.value = '極力推薦'
+  }
+}
+
+const scored = (score: number) => {
+  yourScore.value = score
+  hideStar.value = true
+}
+
+const collectDrama = () => {
+  dramaInfoList.collect = !dramaInfoList.collect
+}
+
 // 圖片自動切換 //////////////////////////////////////////////////////
 setInterval(() => {
   if (num.value < dramaInfoList.sidephotocount) {
@@ -179,7 +209,11 @@ onUpdated(() => {
               class="btn_allcomments"
             >
               {{ comment }}
-              <button v-if="editIsTrue" @click="removeComment(index)">
+              <button
+                v-if="editIsTrue"
+                @click="removeComment(index)"
+                class="btn_delete"
+              >
                 <font-awesome-icon icon="fa-solid fa-circle-xmark" />
               </button>
             </button>
@@ -206,7 +240,7 @@ onUpdated(() => {
           <span class="cover_name_text">{{ dramaInfoList.name }}</span>
           <div class="cover_year_text">
             {{ dramaInfoList.year }} |
-            <font-awesome-icon icon="fa-solid fa-star" />
+            <font-awesome-icon icon="fa-solid fa-star" /> {{ yourScore }}
           </div>
         </div>
         <div class="cover_bg"></div>
@@ -219,10 +253,17 @@ onUpdated(() => {
             class="btn_three"
             @mouseover="collectHover"
             @mouseleave="collectLeave"
+            @click="collectDrama"
           >
-            <div class="btn_three_icon">
+            <div v-if="dramaInfoList.collect === false" class="btn_three_icon">
               <font-awesome-icon
                 icon="fa-regular fa-heart"
+                :class="{ btn_icon_bright: collectIsHover }"
+              />
+            </div>
+            <div v-else class="btn_three_icon">
+              <font-awesome-icon
+                icon="fa-solid fa-heart"
                 :class="{ btn_icon_bright: collectIsHover }"
               />
             </div>
@@ -234,19 +275,84 @@ onUpdated(() => {
             </div>
             <div class="btn_three_text">分享</div>
           </button>
-          <button
-            class="btn_three"
-            @mouseover="scoreHover"
-            @mouseleave="scoreLeave"
-          >
-            <div
-              class="btn_three_icon"
-              :class="{ btn_icon_bright: scoreIsHover }"
+          <div v-if="hideStar && yourScore === 0">
+            <button
+              class="btn_three"
+              @mouseover="scoreHover"
+              @mouseleave="scoreLeave"
+              @click="changeFiveStar"
             >
-              <font-awesome-icon icon="fa-regular fa-star" />
-            </div>
-            <div class="btn_three_text">評分</div>
-          </button>
+              <div class="btn_three_content">
+                <div
+                  class="btn_three_icon"
+                  :class="{ btn_icon_bright: scoreIsHover }"
+                >
+                  <font-awesome-icon icon="fa-regular fa-star" />
+                </div>
+                <div class="btn_three_text">評分</div>
+              </div>
+            </button>
+          </div>
+          <div v-else-if="hideStar && yourScore !== 0">
+            <button
+              class="btn_three"
+              @mouseover="scoreHover"
+              @mouseleave="scoreLeave"
+              @click="changeFiveStar"
+            >
+              <div class="btn_three_content">
+                <div
+                  class="btn_three_icon"
+                  :class="{ btn_icon_bright: scoreIsHover }"
+                >
+                  <font-awesome-icon icon="fa-solid fa-star" />
+                </div>
+                <div class="btn_three_text">評分</div>
+              </div>
+            </button>
+          </div>
+          <div class="group_info_content" v-else>
+            <button class="btn_three">
+              <div class="btn_star_content">
+                <button
+                  class="btn_star_icon1"
+                  @mouseover="starStardard(5)"
+                  @click="scored(5)"
+                >
+                  <font-awesome-icon icon="fa-solid fa-star" />
+                </button>
+                <button
+                  class="btn_star_icon2"
+                  @mouseover="starStardard(4)"
+                  @click="scored(4)"
+                >
+                  <font-awesome-icon icon="fa-solid fa-star" />
+                </button>
+                <button
+                  class="btn_star_icon3"
+                  @mouseover="starStardard(3)"
+                  @click="scored(3)"
+                >
+                  <font-awesome-icon icon="fa-solid fa-star" />
+                </button>
+                <button
+                  class="btn_star_icon4"
+                  @mouseover="starStardard(2)"
+                  @click="scored(2)"
+                >
+                  <font-awesome-icon icon="fa-solid fa-star" />
+                </button>
+                <button
+                  class="btn_star_icon5"
+                  @mouseover="starStardard(1)"
+                  @click="scored(1)"
+                >
+                  <font-awesome-icon icon="fa-solid fa-star" />
+                </button>
+              </div>
+            </button>
+            <div class="star_standard">{{ standardText }}</div>
+          </div>
         </div>
         <div class="group_info">
           <div id="actortitle" class="group_info_title">
@@ -398,6 +504,7 @@ onUpdated(() => {
 <style lang="scss">
 .container {
   width: 100%;
+  height: auto;
   margin: 0px auto;
   background-color: #222;
 }
@@ -487,6 +594,12 @@ onUpdated(() => {
   cursor: pointer;
 }
 
+.btn_three_content {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
 .btn_three_text {
   color: white;
   font-size: 14px;
@@ -496,6 +609,119 @@ onUpdated(() => {
 .btn_three_icon {
   color: white;
   margin-right: 5px;
+}
+
+.btn_star_content {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.btn_star_icon1 {
+  background: none;
+  border: none;
+  color: gray;
+  padding: 0;
+}
+
+.btn_star_icon2 {
+  background: none;
+  border: none;
+  color: gray;
+  padding: 0;
+}
+
+.btn_star_icon3 {
+  background: none;
+  border: none;
+  color: gray;
+  padding: 0;
+}
+
+.btn_star_icon4 {
+  background: none;
+  border: none;
+  color: gray;
+  padding: 0;
+}
+
+.btn_star_icon5 {
+  background: none;
+  border: none;
+  color: gray;
+  padding: 0;
+}
+
+.btn_star_icon5:hover {
+  color: white;
+}
+.btn_star_icon4:hover {
+  color: white;
+}
+.btn_star_icon4:hover + .btn_star_icon5 {
+  color: white;
+}
+
+.btn_star_icon3:hover {
+  color: white;
+}
+
+.btn_star_icon3:hover + .btn_star_icon4 {
+  color: white;
+}
+
+.btn_star_icon3:hover + .btn_star_icon4 + .btn_star_icon5 {
+  color: white;
+}
+
+.btn_star_icon2:hover {
+  color: white;
+}
+
+.btn_star_icon2:hover + .btn_star_icon3 {
+  color: white;
+}
+
+.btn_star_icon2:hover + .btn_star_icon3 + .btn_star_icon4 {
+  color: white;
+}
+
+.btn_star_icon2:hover + .btn_star_icon3 + .btn_star_icon4 + .btn_star_icon5 {
+  color: white;
+}
+
+.btn_star_icon1:hover {
+  color: white;
+}
+
+.btn_star_icon1:hover + .btn_star_icon2 {
+  color: white;
+}
+
+.btn_star_icon1:hover + .btn_star_icon2 + .btn_star_icon3 {
+  color: white;
+}
+.btn_star_icon1:hover + .btn_star_icon2 + .btn_star_icon3 + .btn_star_icon4 {
+  color: white;
+}
+
+.btn_star_icon1:hover
+  + .btn_star_icon2
+  + .btn_star_icon3
+  + .btn_star_icon4
+  + .btn_star_icon5 {
+  color: white;
+}
+
+.star_standard {
+  background: white;
+  width: 90px;
+  font-size: 14px;
+  border-radius: 30px;
+  padding: 7px 10px;
+  margin-left: 5px;
+  text-align: center;
 }
 
 .btn_icon_bright {
@@ -571,13 +797,19 @@ onUpdated(() => {
   cursor: pointer;
 }
 
+.allcomments {
+  margin: 20px 0px;
+  color: white;
+  font-size: 14px;
+}
+
 .btn_allcomments {
   border-radius: 34px;
   border: 1px solid gray;
   display: inline-block;
   margin: 0px 10px 10px 0px;
   padding: 7px 10px;
-  font-size: 1４px;
+  font-size: 14px;
   cursor: pointer;
   color: rgb(153, 153, 153);
   background-color: transparent;
@@ -597,7 +829,7 @@ onUpdated(() => {
   right: 15px;
   background: transparent;
   border: none;
-  z-index: 950;
+  z-index: 900;
 }
 
 .btn_edit:hover {
@@ -614,7 +846,7 @@ onUpdated(() => {
 }
 
 .subtitle_text:hover {
-  border: 1px solid rgb(240, 72, 110);
+  color: rgb(240, 72, 110);
 }
 
 .group_info_text:hover {

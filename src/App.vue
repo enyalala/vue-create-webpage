@@ -31,7 +31,7 @@ import { RouterLink, RouterView } from 'vue-router'
             <router-link to="/" class="navbar_link" href="">更多</router-link>
           </li>
           <li>
-            <router-link to="/" class="navbar_link" ßhref=""
+            <router-link to="/mycollection" class="navbar_link" ßhref=""
               >我的收藏</router-link
             >
           </li>

@@ -16,6 +16,7 @@
 
 .close_zone {
   position: sticky;
+  background-color: black;
   top: 0px;
   width: 100%;
   height: 60px;
@@ -35,7 +36,7 @@
 .comment_area {
   position: relative;
   margin-bottom: 20px;
-  z-index: 950;
+  z-index: 900;
 }
 
 .text_area {
@@ -77,6 +78,17 @@
   background-color: rgb(240, 72, 110);
 }
 
+.btn_delete {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: gray;
+}
+
+.btn_delete:hover {
+  color: white;
+}
+
 .modal {
   position: fixed;
   left: 30%;
@@ -88,6 +100,7 @@
   border-radius: 6px;
   border: 1px solid rgb(75, 75, 75);
   z-index: 900;
+  overflow-y: scroll;
 }
 
 .overlay {

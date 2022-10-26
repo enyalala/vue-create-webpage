@@ -18,13 +18,18 @@ import {
   faStar as fasStar,
   faXmark,
   faCircleXmark,
+  faHeart as fasHeart,
 } from '@fortawesome/free-solid-svg-icons'
-import { faHeart, faStar as farStar } from '@fortawesome/free-regular-svg-icons'
+import {
+  faHeart as farHeart,
+  faStar as farStar,
+} from '@fortawesome/free-regular-svg-icons'
 /* add icons to the library */
 library.add(
   faTwitter,
   faArrowUpFromBracket,
-  faHeart,
+  farHeart,
+  fasHeart,
   farStar,
   fasStar,
   faCircleXmark,

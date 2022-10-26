@@ -67,7 +67,11 @@ const lastSlideHideNew = () => {
   display: flex;
   margin: 0px auto;
   flex-wrap: wrap;
-  border: 1px solid red;
+  overflow: auto;
+}
+
+.row::-webkit-scrollbar {
+  display: none;
 }
 
 .new_title_text {
@@ -128,18 +132,22 @@ const lastSlideHideNew = () => {
 
 .mySwiperNew .swiper-slide:hover {
   width: 368px;
+  flex-shrink: 0;
 }
 
 .mySwiperNew .swiper-slide:nth-child(2n):hover {
   width: 368px;
+  flex-shrink: 0;
 }
 
 .mySwiperNew .swiper-slide:nth-child(3n):hover {
   width: 368px;
+  flex-shrink: 0;
 }
 
 .mySwiperNew .swiper-slide:last-child:hover {
   width: 368px;
+  flex-shrink: 0;
 }
 
 .mySwiperNew .swiper-slide.move {
