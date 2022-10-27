@@ -1,18 +1,30 @@
 <script setup lang="ts">
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
-
-// Import Swiper styles
-import 'swiper/css'
-
-import 'swiper/css/pagination'
-
-// import required modules
+import { useDramaInfo } from '../stores/DramaInfo'
 import { Pagination, Navigation } from 'swiper'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
+import 'swiper/css'
+import 'swiper/css/pagination'
 
 const modules3: any = [Pagination, Navigation]
 const slideMove = ref(false)
+
+const { dramaList } = useDramaInfo()
+const dramaId: number[] = reactive([])
+dramaList.forEach((drama) => {
+  if (drama.classification.includes('熱播')) {
+    dramaId.push(drama.dramaid)
+  }
+})
+
+const dramaIdDeleteLast = dramaId.slice(0, -1)
+const dramaIdLast = dramaId[dramaId.length - 1]
+
+const getS3ImageUrl = (name: number) => {
+  return new URL(`../assets/img/dramacover/cover${name}.jpg`, import.meta.url)
+    .href
+}
 
 const lastSlideShow = () => {
   slideMove.value = true
@@ -34,38 +46,20 @@ const lastSlideHide = () => {
     :modules="modules3"
     class="mySwiper3"
   >
-    <swiper-slide :class="{ move: slideMove }"
-      ><a href=""
-        ><img src="../assets/img/homeS3P1.jpg" alt="img" /></a></swiper-slide
-    ><swiper-slide :class="{ move: slideMove }"
-      ><a href=""
-        ><img src="../assets/img/homeS3P2.jpg" alt="img" /></a></swiper-slide
-    ><swiper-slide :class="{ move: slideMove }"
-      ><a href=""
-        ><img src="../assets/img/homeS3P3.jpg" alt="img" /></a></swiper-slide
-    ><swiper-slide :class="{ move: slideMove }"
-      ><a href=""
-        ><img src="../assets/img/homeS3P4.jpg" alt="img" /></a></swiper-slide
-    ><swiper-slide :class="{ move: slideMove }"
-      ><a href=""
-        ><img src="../assets/img/homeS3P5.jpg" alt="img" /></a></swiper-slide
-    ><swiper-slide :class="{ move: slideMove }"
-      ><a href=""
-        ><img src="../assets/img/homeS3P6.jpg" alt="img" /></a></swiper-slide
-    ><swiper-slide :class="{ move: slideMove }"
-      ><a href=""
-        ><img src="../assets/img/homeS3P7.jpg" alt="img" /></a></swiper-slide
-    ><swiper-slide :class="{ move: slideMove }"
-      ><a href=""
-        ><img src="../assets/img/homeS3P8.jpg" alt="img" /></a></swiper-slide
-    ><swiper-slide :class="{ move: slideMove }"
-      ><a href=""
-        ><img src="../assets/img/homeS3P9.jpg" alt="img" /></a></swiper-slide
+    <swiper-slide
+      v-for="id in dramaIdDeleteLast"
+      :key="id"
+      :class="{ move: slideMove }"
+      ><router-link :to="'/dramalist/' + id"
+        ><img
+          :src="getS3ImageUrl(id)"
+          alt="photo" /></router-link></swiper-slide
     ><swiper-slide
       @mouseover="lastSlideShow"
       @mouseleave="lastSlideHide"
       :class="{ move: slideMove }"
-      ><a href=""><img src="../assets/img/homeS3P10.jpg" alt="img" /></a
+      ><router-link :to="'/dramalist/' + dramaIdLast"
+        ><img :src="getS3ImageUrl(dramaIdLast)" alt="photo" /></router-link
     ></swiper-slide>
   </swiper>
 </template>

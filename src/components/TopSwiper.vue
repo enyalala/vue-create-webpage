@@ -1,8 +1,8 @@
 <script setup lang="ts">
 // Import Swiper Vue.js components
-import { ref, reactive } from 'vue'
+import { reactive } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink } from 'vue-router'
 import { useDramaInfo } from '../stores/DramaInfo'
 
 // Import Swiper styles
@@ -18,7 +18,9 @@ const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
 const { dramaList } = useDramaInfo()
 const dramaId: number[] = reactive([])
 dramaList.forEach((drama) => {
-  dramaId.push(drama.dramaid)
+  if (drama.classification.includes('首頁')) {
+    dramaId.push(drama.dramaid)
+  }
 })
 
 const getS1ImageUrl = (name: number) => {

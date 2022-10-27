@@ -743,6 +743,7 @@ onUpdated(() => {
 
 .group_info_content {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .group_info_text {
