@@ -44,6 +44,8 @@ import { RouterLink, RouterView } from 'vue-router'
 </template>
 
 <style lang="scss">
+@import '@/styles/variable';
+
 .container {
   width: 100%;
   height: auto;
@@ -53,7 +55,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 .nav_box {
   width: 100%;
-  height: 56px;
+  height: $nav-height;
 }
 .navbar {
   width: 100%;

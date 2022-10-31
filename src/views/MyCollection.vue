@@ -102,9 +102,10 @@ const getCoverUrl = (name: number) => {
 </template>
 
 <style lang="scss" scoped>
+@import '@/styles/variable';
 .container {
   width: 100%;
-  height: auto;
+  min-height: calc(100vh - $nav-height);
   margin: 0px auto;
   background-color: #222;
 }
