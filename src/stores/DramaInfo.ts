@@ -4,7 +4,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
   const drama0 = {
     dramaid: 0,
     name: 'silent',
-    classification: ['戲劇', '熱播', '首頁'],
+    classification: ['戲劇', '熱播', '首頁', '新劇'],
     year: '2022',
     actor: [
       '川口春奈',
@@ -38,7 +38,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
   const drama1 = {
     dramaid: 1,
     name: '青春灰姑娘',
-    classification: ['戲劇', '首頁'],
+    classification: ['戲劇', '首頁', '新劇'],
     year: '2022',
     actor: [
       '久間田琳加',
@@ -65,7 +65,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
   const drama2 = {
     dramaid: 2,
     name: 'ELPIS -是希望還是災禍-',
-    classification: ['戲劇', '首頁'],
+    classification: ['戲劇', '首頁', '新劇'],
     year: '2022',
     actor: [
       '長澤雅美',
@@ -101,7 +101,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
   const drama3 = {
     dramaid: 3,
     name: '詐欺獵人',
-    classification: ['戲劇', '首頁'],
+    classification: ['戲劇', '首頁', '新劇'],
     year: '2022',
     actor: [
       '平野紫耀',
@@ -165,7 +165,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
   const drama5 = {
     dramaid: 5,
     name: '企鵝先鋒！',
-    classification: ['戲劇', '熱播'],
+    classification: ['戲劇', '熱播', '新劇'],
     year: '2022',
     actor: [
       '奈緒',
@@ -294,7 +294,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
   const drama8 = {
     dramaid: 8,
     name: '靈媒偵探城塚翡翠',
-    classification: ['戲劇', '熱播'],
+    classification: ['戲劇', '熱播', '新劇'],
     year: '2022',
     actor: ['原果耶', '瀨戶康史', '小芝風花', '及川光博', '田中道子'],
     director: ['菅原伸太郎', '南雲聖一'],
@@ -320,7 +320,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
   const drama9 = {
     dramaid: 9,
     name: '為親愛的我致上殺意',
-    classification: ['戲劇', '熱播'],
+    classification: ['戲劇', '熱播', '新劇'],
     year: '2022',
     actor: [
       '山田涼介',
@@ -396,7 +396,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
   const drama12 = {
     dramaid: 12,
     name: 'SPY X FAMILY 間諜家家酒',
-    classification: ['動畫', '熱播'],
+    classification: ['動畫', '熱播', '新劇'],
     year: '2022',
     actor: ['江口拓也', '早見沙織', '種崎敦美'],
     director: ['古橋一浩'],

@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import { useDramaInfo } from '../stores/DramaInfo'
+import { useDramaInfo } from '@/stores/DramaInfo'
+import type { CollectData } from '@/models/SectionData'
 
 const { dramaList } = useDramaInfo()
 const collectId: number[] = reactive([])
 const collectDrama: any[] = reactive([])
-const moveMent = ref(false)
+const selectIndex = ref(-1)
+const selectIdx = ref(-1)
 
-const lastShow = () => {
-  moveMent.value = true
-}
-const lastHide = () => {
-  moveMent.value = false
+const lastShow = (row: number, col: number) => {
+  selectIndex.value = row
+  selectIdx.value = col
 }
 
 dramaList.forEach((drama) => {
@@ -43,57 +43,47 @@ const getCoverUrl = (name: number) => {
   return new URL(`../assets/img/dramacover/cover${name}.jpg`, import.meta.url)
     .href
 }
-// console.log(collectDrama, collectId)
+
+const collectList = reactive<CollectData[]>([
+  {
+    condition: col1Id,
+    drama_name: col1Drama,
+  },
+  {
+    condition: col2Id,
+    drama_name: col2Drama,
+  },
+  {
+    condition: col3Id,
+    drama_name: col3Drama,
+  },
+  {
+    condition: col4Id,
+    drama_name: col4Drama,
+  },
+])
 </script>
 
 <template>
   <main>
-    <div class="container" :class="{ one_row: rowCount < 2 }">
+    <div class="container">
       <div class="collect_title_text">我的收藏</div>
-      <div class="row" v-for="row in rowList" :key="row">
-        <div v-if="col1Id[row] !== undefined">
-          <div class="collection" :class="{ move: moveMent }">
-            <router-link :to="'/dramalist/' + col1Id[row]">
-              <img :src="getCoverUrl(col1Id[row])" alt="photo" />
-              <div class="name_text">
-                {{ col1Drama[row].name }}
-              </div></router-link
+      <div class="row" v-for="(row, index) in rowList" :key="row">
+        <div v-for="(col, idx) in collectList" :key="idx">
+          <div v-if="col.condition[row] !== undefined">
+            <div
+              class="collection"
+              :class="{ move: index === selectIndex }"
+              @mouseover="idx === 3 ? lastShow(index, idx) : null"
+              @mouseleave="idx === 3 ? lastShow(-1, -1) : null"
             >
-          </div>
-        </div>
-        <div v-if="col2Id[row] !== undefined">
-          <div class="collection" :class="{ move: moveMent }">
-            <router-link :to="'/dramalist/' + col2Id[row]">
-              <img :src="getCoverUrl(col2Id[row])" alt="photo" />
-              <div class="name_text">
-                {{ col2Drama[row].name }}
-              </div></router-link
-            >
-          </div>
-        </div>
-        <div v-if="col3Id[row] !== undefined">
-          <div class="collection" :class="{ move: moveMent }">
-            <router-link :to="'/dramalist/' + col3Id[row]">
-              <img :src="getCoverUrl(col3Id[row])" alt="photo" />
-              <div class="name_text">
-                {{ col3Drama[row].name }}
-              </div></router-link
-            >
-          </div>
-        </div>
-        <div v-if="col4Id[row] !== undefined">
-          <div
-            class="collection"
-            @mouseover="lastShow"
-            @mouseleave="lastHide"
-            :class="{ move: moveMent }"
-          >
-            <router-link :to="'/dramalist/' + col4Id[row]">
-              <img :src="getCoverUrl(col4Id[row])" alt="photo" />
-              <div class="name_text">
-                {{ col4Drama[row].name }}
-              </div></router-link
-            >
+              <router-link :to="'/dramalist/' + col.condition[row]">
+                <img :src="getCoverUrl(col.condition[row])" alt="photo" />
+                <div class="name_text">
+                  {{ col.drama_name[row].name }}
+                </div></router-link
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -108,10 +98,6 @@ const getCoverUrl = (name: number) => {
   min-height: calc(100vh - $nav-height);
   margin: 0px auto;
   background-color: #222;
-}
-
-.one_row {
-  height: 100vh;
 }
 
 .row {

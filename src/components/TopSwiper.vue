@@ -1,16 +1,12 @@
 <script setup lang="ts">
-// Import Swiper Vue.js components
 import { reactive } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { RouterLink } from 'vue-router'
 import { useDramaInfo } from '../stores/DramaInfo'
 
-// Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-
-// import required modules
 import { Autoplay, Pagination, Mousewheel, Keyboard, Navigation } from 'swiper'
 
 const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]

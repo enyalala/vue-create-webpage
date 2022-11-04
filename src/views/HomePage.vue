@@ -3,17 +3,17 @@ import TopSwiper from '@/components/TopSwiper.vue'
 import SecSwiper from '@/components/SecSwiper.vue'
 import TrdSwiper from '@/components/TrdSwiper.vue'
 import SectionTitle from '@/components/SectionTitle.vue'
-import { reactive } from 'vue'
+import { reactive, shallowRef } from 'vue'
 import type { SectionData } from '@/models/SectionData'
 
 const list = reactive<SectionData[]>([
   {
     classes: 'swiper-container',
-    component: TopSwiper,
+    component: shallowRef(TopSwiper),
   },
   {
     classes: 'swiper-container swiper2',
-    component: SecSwiper,
+    component: shallowRef(SecSwiper),
     sectionData: {
       sectionTitle: '新劇跟播中',
       to: '/newdrama',
@@ -21,7 +21,7 @@ const list = reactive<SectionData[]>([
   },
   {
     classes: 'swiper-container swiper3',
-    component: TrdSwiper,
+    component: shallowRef(TrdSwiper),
     sectionData: {
       sectionTitle: '熱播排行榜',
       to: '/hotdrama',

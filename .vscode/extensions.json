@@ -2,6 +2,6 @@
   "recommendations": [
     "Vue.volar",
     "Vue.vscode-typescript-vue-plugin",
-    "Vue.ESLint",
+    "dbaeumer.vscode-eslint",
   ]
 }

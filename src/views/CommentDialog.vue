@@ -1,94 +1,101 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import HotComment from '@/components/HotComment.vue'
+import { ref, reactive, onUpdated } from 'vue'
+const emits = defineEmits(['addComments', 'removeComments'])
+
+const enteredComment = ref('')
+const comments: string[] = reactive([])
+
+const editIsTrue = ref(false)
+
+const addComment = () => {
+  enteredComment.value.trim()
+  if (enteredComment.value !== '') {
+    comments.push(enteredComment.value)
+    emits('addComments', enteredComment.value)
+    enteredComment.value = ''
+  }
+}
+
+const completeShow = () => {
+  editIsTrue.value = true
+}
+
+const editShow = () => {
+  editIsTrue.value = false
+}
+
+const removeComment = (idx: number) => {
+  comments.splice(idx, 1)
+  emits('removeComments', idx)
+}
+
+onUpdated(() => {
+  if (comments.length === 0) {
+    editIsTrue.value = false
+  }
+})
+</script>
 
 <template>
   <div class="modal">
-    <slot name="closeZone"> </slot>
-    <slot name="commentArea"> </slot>
-    <slot name="comments"> </slot>
+    <slot name="close"> </slot>
+    <div class="comment_area">
+      <textarea
+        class="text_area"
+        v-model="enteredComment"
+        placeholder="來為喜歡的劇說些什麼吧..."
+        maxlength="20"
+        rows="2"
+      ></textarea>
+      <div class="comment_count">{{ enteredComment.length }}/20</div>
+      <div>
+        <button class="btn_output" @click="addComment">送出</button>
+      </div>
+    </div>
+    <button
+      class="btn_edit"
+      @click="completeShow"
+      v-show="comments.length !== 0 && !editIsTrue"
+    >
+      編輯
+    </button>
+    <button
+      class="btn_edit"
+      @click="editShow"
+      v-show="comments.length !== 0 && editIsTrue"
+    >
+      完成
+    </button>
+    <div class="inner_comment_title">
+      <div class="hot_title">我的短評</div>
+    </div>
+    <div v-if="comments.length === 0" style="color: white">目前尚無評論。</div>
+    <div v-else>
+      <button
+        v-for="(comment, index) in comments"
+        :key="comment"
+        class="btn_allcomments"
+      >
+        {{ comment }}
+        <button
+          v-if="editIsTrue"
+          @click="removeComment(index)"
+          class="btn_delete"
+        >
+          <font-awesome-icon icon="fa-solid fa-circle-xmark" />
+        </button>
+      </button>
+    </div>
+    <div class="inner_comment_title">
+      <div class="hot_title">熱門短評</div>
+    </div>
+    <HotComment :comments="comments" />
   </div>
   <div class="overlay"></div>
 </template>
 
-<style>
-.hidden {
-  display: none;
-}
-
-.close_zone {
-  position: sticky;
-  background-color: black;
-  top: 0px;
-  width: 100%;
-  height: 60px;
-  z-index: 950;
-}
-
-.close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 30px;
-  color: white;
-  cursor: pointer;
-  z-index: 1000;
-}
-
-.comment_area {
-  position: relative;
-  margin-bottom: 20px;
-  z-index: 900;
-}
-
-.text_area {
-  width: 100%;
-  height: 100%;
-  padding: 10px 95px 100px 10px;
-  background-color: rgb(40, 40, 40);
-  border-radius: 4px;
-  border: none;
-  color: white;
-  resize: none;
-  font-size: 14px;
-}
-
-.text_area:focus {
-  border: 1px solid rgb(240, 72, 110);
-}
-
-.comment_count {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  color: white;
-  font-size: 14px;
-}
-
-.btn_output {
-  position: absolute;
-  bottom: 15px;
-  right: 10px;
-  padding: 5px 12px;
-  cursor: pointer;
-  text-align: center;
-  width: 60px;
-  height: 35px;
-  color: white;
-  font-size: 14px;
-  border-radius: 4px;
-  background-color: rgb(240, 72, 110);
-}
-
-.btn_delete {
-  cursor: pointer;
-  background: none;
-  border: none;
-  color: gray;
-}
-
-.btn_delete:hover {
-  color: white;
-}
-
+<style lang="scss" scoped>
 .modal {
   position: fixed;
   left: 30%;
@@ -101,6 +108,105 @@
   border: 1px solid rgb(75, 75, 75);
   z-index: 900;
   overflow-y: scroll;
+
+  .comment_area {
+    position: relative;
+    margin-bottom: 20px;
+    z-index: 900;
+
+    .comment_count {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      color: white;
+      font-size: 14px;
+    }
+
+    .text_area {
+      width: 100%;
+      height: 100%;
+      padding: 10px 95px 100px 10px;
+      background-color: rgb(40, 40, 40);
+      border-radius: 4px;
+      border: none;
+      color: white;
+      resize: none;
+      font-size: 14px;
+
+      &:focus {
+        border: 1px solid rgb(240, 72, 110);
+      }
+    }
+
+    .btn_output {
+      position: absolute;
+      bottom: 15px;
+      right: 10px;
+      padding: 5px 12px;
+      cursor: pointer;
+      text-align: center;
+      width: 60px;
+      height: 35px;
+      color: white;
+      font-size: 14px;
+      border-radius: 4px;
+      background-color: rgb(240, 72, 110);
+    }
+  }
+
+  .btn_delete {
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: gray;
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  .inner_comment_title {
+    display: flex;
+    position: relative;
+    margin: 15px 0px;
+    .hot_title {
+      font-size: 16px;
+      color: #ffffff;
+      font-weight: 500;
+    }
+  }
+  .btn_edit {
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    right: 15px;
+    background: transparent;
+    border: none;
+    z-index: 900;
+  }
+
+  .btn_edit:hover {
+    color: rgb(240, 72, 110);
+  }
+
+  .btn_allcomments {
+    border-radius: 34px;
+    border: 1px solid gray;
+    display: inline-block;
+    margin: 0px 10px 10px 0px;
+    padding: 7px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    color: rgb(153, 153, 153);
+    background-color: transparent;
+    letter-spacing: 1px;
+    line-height: 1.5;
+
+    &:hover {
+      color: white;
+    }
+  }
 }
 
 .overlay {
