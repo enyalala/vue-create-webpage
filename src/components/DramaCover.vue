@@ -4,9 +4,7 @@ import type { Ref } from 'vue'
 import { useImageUrl } from '@/stores/GetImageUrl'
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
-
 const num: Ref<number> = ref(1)
-
 const props = defineProps({
   idOfDrama: {
     type: Number,
@@ -15,10 +13,6 @@ const props = defineProps({
   dramaInfoList: {
     type: Object,
     required: true,
-  },
-  yourScore: {
-    type: Number,
-    default: 0,
   },
 })
 
@@ -40,7 +34,8 @@ setInterval(() => {
       <span class="cover_name_text">{{ props.dramaInfoList.name }}</span>
       <div class="cover_year_text">
         {{ props.dramaInfoList.year }} |
-        <font-awesome-icon icon="fa-solid fa-star" /> {{ props.yourScore }}
+        <font-awesome-icon icon="fa-solid fa-star" />
+        {{ props.dramaInfoList.score }}
       </div>
     </div>
     <div class="cover_bg"></div>

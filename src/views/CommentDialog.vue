@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import HotComment from '@/components/HotComment.vue'
 import { ref, reactive, onUpdated } from 'vue'
-const emits = defineEmits(['addComments', 'removeComments'])
 
+const emits = defineEmits(['addComments', 'removeComments'])
 const enteredComment = ref('')
 const comments: string[] = reactive([])
-
 const editIsTrue = ref(false)
 
 const addComment = () => {

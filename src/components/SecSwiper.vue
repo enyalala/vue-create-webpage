@@ -8,26 +8,10 @@ import { useImageUrl } from '@/stores/GetImageUrl'
 import { useDramaInfo } from '@/stores/DramaInfo'
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
-
-const modules2: any = [Pagination, Navigation]
-
-const props = defineProps({
-  idOfDrama: {
-    type: Number,
-    default: 0,
-  },
-  dramaInfoList: {
-    type: Object,
-    required: true,
-  },
-  yourScore: {
-    type: Number,
-    default: 0,
-  },
-})
-
-const dramaId: number[] = reactive([])
 const { dramaList } = useDramaInfo()
+const modules2: any = [Pagination, Navigation]
+const dramaId: number[] = reactive([])
+
 dramaList.forEach((drama) => {
   if (drama.classification.includes('熱播')) {
     dramaId.push(drama.dramaid)
@@ -53,7 +37,7 @@ dramaList.forEach((drama) => {
             <span class="name_text">{{ dramaList[drama_id].name }}</span>
             <div class="star_text">
               <font-awesome-icon icon="fa-solid fa-star" />
-              {{ props.yourScore }}
+              {{ dramaList[drama_id].score }}
             </div>
             <div class="desc_text">{{ dramaList[drama_id].description }}</div>
           </div>

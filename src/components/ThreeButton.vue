@@ -13,7 +13,6 @@ const props = defineProps({
 })
 
 const emits = defineEmits(['yourScore'])
-
 const yourScore = ref(0)
 const hideStar = ref(true)
 const standardText = ref('')
@@ -59,7 +58,7 @@ const starStardard = (num: number) => {
       </div>
       <div class="btn_three_text">分享</div>
     </button>
-    <div v-if="hideStar && yourScore === 0">
+    <div v-if="hideStar && props.dramaInfoList.score === 0">
       <button class="btn_three" @click="changeFiveStar">
         <div class="btn_three_content">
           <div class="btn_three_icon">
@@ -69,7 +68,7 @@ const starStardard = (num: number) => {
         </div>
       </button>
     </div>
-    <div v-else-if="hideStar && yourScore !== 0">
+    <div v-else-if="hideStar && props.dramaInfoList.score !== 0">
       <button class="btn_three" @click="changeFiveStar">
         <div class="btn_three_content">
           <div class="btn_three_icon">

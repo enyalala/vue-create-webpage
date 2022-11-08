@@ -34,6 +34,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 4,
     comments: [''],
     collect: true,
+    score: 0,
   }
   const drama1 = {
     dramaid: 1,
@@ -61,6 +62,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 1,
     comments: [''],
     collect: true,
+    score: 0,
   }
   const drama2 = {
     dramaid: 2,
@@ -97,6 +99,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 3,
     comments: [''],
     collect: true,
+    score: 0,
   }
   const drama3 = {
     dramaid: 3,
@@ -127,6 +130,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 1,
     comments: [''],
     collect: true,
+    score: 0,
   }
   const drama4 = {
     dramaid: 4,
@@ -161,6 +165,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 4,
     comments: [''],
     collect: true,
+    score: 0,
   }
   const drama5 = {
     dramaid: 5,
@@ -200,6 +205,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 4,
     comments: [''],
     collect: false,
+    score: 0,
   }
   const drama6 = {
     dramaid: 6,
@@ -249,6 +255,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 4,
     comments: [''],
     collect: false,
+    score: 0,
   }
 
   const drama7 = {
@@ -289,6 +296,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 4,
     comments: [''],
     collect: false,
+    score: 0,
   }
 
   const drama8 = {
@@ -316,6 +324,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 4,
     comments: [''],
     collect: false,
+    score: 0,
   }
   const drama9 = {
     dramaid: 9,
@@ -350,6 +359,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 4,
     comments: [''],
     collect: false,
+    score: 0,
   }
   const drama10 = {
     dramaid: 10,
@@ -373,6 +383,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 4,
     comments: [''],
     collect: false,
+    score: 0,
   }
   const drama11 = {
     dramaid: 11,
@@ -392,6 +403,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 1,
     comments: [''],
     collect: false,
+    score: 0,
   }
   const drama12 = {
     dramaid: 12,
@@ -417,6 +429,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 1,
     comments: [''],
     collect: false,
+    score: 0,
   }
   const drama13 = {
     dramaid: 13,
@@ -441,6 +454,7 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     sidephotocount: 4,
     comments: [''],
     collect: false,
+    score: 0,
   }
   const dramaList = [
     drama0,

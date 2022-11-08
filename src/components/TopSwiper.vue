@@ -1,27 +1,26 @@
 <script setup lang="ts">
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
 import { reactive } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { RouterLink } from 'vue-router'
 import { useDramaInfo } from '../stores/DramaInfo'
-
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
 import { Autoplay, Pagination, Mousewheel, Keyboard, Navigation } from 'swiper'
 
 const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
 
 const { dramaList } = useDramaInfo()
 const dramaId: number[] = reactive([])
+const getS1ImageUrl = (name: number) => {
+  return new URL(`../assets/img/homeS1P${name}.jpg`, import.meta.url).href
+}
+
 dramaList.forEach((drama) => {
   if (drama.classification.includes('首頁')) {
     dramaId.push(drama.dramaid)
   }
 })
-
-const getS1ImageUrl = (name: number) => {
-  return new URL(`../assets/img/homeS1P${name}.jpg`, import.meta.url).href
-}
 </script>
 
 <template>
@@ -73,7 +72,7 @@ const getS1ImageUrl = (name: number) => {
   </swiper>
 </template>
 
-<style>
+<style lang="scss">
 .mySwiper1.swiper {
   width: 100%;
   height: 380px;
@@ -83,6 +82,7 @@ const getS1ImageUrl = (name: number) => {
   text-align: center;
   font-size: 18px;
   background: #fff;
+  width: 70%;
 
   /* Center slide text vertically */
   display: -webkit-box;
@@ -99,88 +99,85 @@ const getS1ImageUrl = (name: number) => {
   -webkit-align-items: center;
   align-items: center;
   overflow: hidden;
-}
-.mySwiper1 .swiper-slide a {
-  width: 100%;
-  height: 100%;
-}
-.mySwiper1 .swiper-slide .topswiper_img1 {
-  position: absolute;
-  height: 380px;
-  left: 0px;
-  z-index: 100;
-}
 
-.mySwiper1 .swiper-slide .topswiper_img2 {
-  position: absolute;
-  width: 100%;
-  right: 0px;
-  opacity: 0.4;
-  filter: brightness(40%) contrast(120%);
-}
+  & a {
+    width: 100%;
+    height: 100%;
+  }
+  .topswiper_img1 {
+    position: absolute;
+    height: 380px;
+    left: 0px;
+    z-index: 100;
+  }
 
-.mySwiper1 .swiper-slide .topswiper_title {
-  position: absolute;
-  left: 700px;
-  top: 250px;
-  font-size: 15px;
-  color: white;
-}
+  .topswiper_img2 {
+    position: absolute;
+    width: 100%;
+    right: 0px;
+    opacity: 0.4;
+    filter: brightness(40%) contrast(120%);
+  }
 
-.mySwiper1 .swiper-slide .topswiper_title_long {
-  position: absolute;
-  left: 700px;
-  top: 200px;
-  font-size: 15px;
-  color: white;
-}
+  .topswiper_title {
+    position: absolute;
+    left: 700px;
+    top: 250px;
+    font-size: 15px;
+    color: white;
+  }
 
-.mySwiper1 .swiper-slide .topswiper_dramaname {
-  position: absolute;
-  left: 700px;
-  top: 280px;
-  font-size: 30px;
-  color: white;
-  font-weight: bold;
-}
+  .topswiper_title_long {
+    position: absolute;
+    left: 700px;
+    top: 200px;
+    font-size: 15px;
+    color: white;
+  }
 
-.mySwiper1 .swiper-slide .topswiper_dramaname_long {
-  position: absolute;
-  width: 280px;
-  left: 700px;
-  top: 230px;
-  text-align: left;
-  font-size: 30px;
-  color: white;
-  font-weight: bold;
-}
+  .topswiper_dramaname {
+    position: absolute;
+    left: 700px;
+    top: 280px;
+    font-size: 30px;
+    color: white;
+    font-weight: bold;
+  }
 
-.mySwiper1 .swiper-slide .topswiper_desc {
-  position: absolute;
-  left: 700px;
-  top: 330px;
-  font-size: 16px;
-  color: white;
-}
+  .topswiper_dramaname_long {
+    position: absolute;
+    width: 280px;
+    left: 700px;
+    top: 230px;
+    text-align: left;
+    font-size: 30px;
+    color: white;
+    font-weight: bold;
+  }
 
-.mySwiper1 .swiper-slide .line {
-  display: inline-block;
-  padding-left: 10px;
-  width: 230px;
-  height: 0.5px;
-  background-color: white;
-  vertical-align: middle;
-}
+  .topswiper_desc {
+    position: absolute;
+    left: 700px;
+    top: 330px;
+    font-size: 16px;
+    color: white;
+  }
 
-.mySwiper1 .swiper-slide {
-  width: 70%;
-}
+  .line {
+    display: inline-block;
+    padding-left: 10px;
+    width: 230px;
+    height: 0.5px;
+    background-color: white;
+    vertical-align: middle;
+  }
 
-.mySwiper1 .swiper-slide:nth-child(2n) {
-  width: 70%;
-}
+  &:nth-child(2n) {
+    width: 70%;
+  }
 
-.mySwiper1 .swiper-slide:nth-child(3n) {
-  width: 70%;
+  &:nth-child(3n) {
+    width: 70%;
+  }
 }
 </style>

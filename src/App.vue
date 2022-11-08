@@ -104,6 +104,7 @@ const navlist = reactive<NavData[]>([
             width: 100px;
             height: 22px;
             vertical-align: middle;
+            cursor: pointer;
           }
 
           .navbar_link {

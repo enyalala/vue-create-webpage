@@ -2,7 +2,6 @@
 import { ref, reactive } from 'vue'
 import { useDramaInfo } from '@/stores/DramaInfo'
 import { useRoute } from 'vue-router'
-
 import CommentDialog from '@/views/CommentDialog.vue'
 import DramaCover from '@/components/DramaCover.vue'
 import ThreeButton from '@/components/ThreeButton.vue'
@@ -31,9 +30,9 @@ const labelsDeleteLast = dramaInfoList.label.slice(0, -1)
 const labelLast = dramaInfoList.label[dramaInfoList.label.length - 1]
 
 // Function //////////////////////////////////////////////////////////
-const yourScore = ref(0)
+
 const yourSoreCallback = (res: number) => {
-  yourScore.value = res
+  dramaInfoList.score = res
 }
 
 const comments: string[] = reactive([])
@@ -70,11 +69,7 @@ const collectDrama = () => {
               <font-awesome-icon icon="fa-solid fa-xmark" />
             </div></div></template
       ></CommentDialog>
-      <DramaCover
-        :dramaInfoList="dramaInfoList"
-        :idOfDrama="idOfDrama"
-        :yourScore="yourScore"
-      />
+      <DramaCover :dramaInfoList="dramaInfoList" :idOfDrama="idOfDrama" />
       <div class="drama_info">
         <ThreeButton
           @yourScore="yourSoreCallback"

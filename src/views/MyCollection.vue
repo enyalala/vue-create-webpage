@@ -1,18 +1,25 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, onUpdated } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useDramaInfo } from '@/stores/DramaInfo'
 import type { CollectData } from '@/models/SectionData'
+import { useImageUrl } from '@/stores/GetImageUrl'
 
+const { getCoverUrl, getSideUrl } = useImageUrl()
 const { dramaList } = useDramaInfo()
 const collectId: number[] = reactive([])
 const collectDrama: any[] = reactive([])
+const lastIndex = ref(-1)
 const selectIndex = ref(-1)
 const selectIdx = ref(-1)
 
-const lastShow = (row: number, col: number) => {
+const selectImg = (row: number, col: number) => {
   selectIndex.value = row
   selectIdx.value = col
+}
+
+const lastShow = (row: number) => {
+  lastIndex.value = row
 }
 
 dramaList.forEach((drama) => {
@@ -39,11 +46,6 @@ const col2Drama = collectDrama.filter((drama) => col2Id.includes(drama.dramaid))
 const col3Drama = collectDrama.filter((drama) => col3Id.includes(drama.dramaid))
 const col4Drama = collectDrama.filter((drama) => col4Id.includes(drama.dramaid))
 
-const getCoverUrl = (name: number) => {
-  return new URL(`../assets/img/dramacover/cover${name}.jpg`, import.meta.url)
-    .href
-}
-
 const collectList = reactive<CollectData[]>([
   {
     condition: col1Id,
@@ -62,6 +64,18 @@ const collectList = reactive<CollectData[]>([
     drama_name: col4Drama,
   },
 ])
+
+const uncollect = (index: number, idx: number) => {
+  dramaList[collectList[idx].condition[index]].collect = false
+}
+
+onUpdated(() => {
+  dramaList.forEach((drama) => {
+    if (drama.collect === true) {
+      collectId.push(drama.dramaid)
+    }
+  })
+})
 </script>
 
 <template>
@@ -73,12 +87,30 @@ const collectList = reactive<CollectData[]>([
           <div v-if="col.condition[row] !== undefined">
             <div
               class="collection"
-              :class="{ move: index === selectIndex }"
-              @mouseover="idx === 3 ? lastShow(index, idx) : null"
-              @mouseleave="idx === 3 ? lastShow(-1, -1) : null"
+              :class="{ move: index === lastIndex }"
+              @mouseover="idx === 3 ? lastShow(index) : null"
+              @mouseleave="idx === 3 ? lastShow(-1) : null"
             >
               <router-link :to="'/dramalist/' + col.condition[row]">
-                <img :src="getCoverUrl(col.condition[row])" alt="photo" />
+                <div v-if="index === selectIndex && idx === selectIdx">
+                  <div class="img-box" @mouseleave="selectImg(-1, -1)">
+                    <img :src="getSideUrl(col.condition[row], 1)" alt="photo" />
+                    <router-link
+                      to="/mycollection"
+                      class="collect_icon"
+                      @click="uncollect(index, idx)"
+                    >
+                      <font-awesome-icon icon="fa-solid fa-heart" />
+                    </router-link>
+                  </div>
+                </div>
+                <div class="img-box" v-else>
+                  <img
+                    @mouseover="selectImg(index, idx)"
+                    :src="getCoverUrl(col.condition[row])"
+                    alt="photo"
+                  />
+                </div>
                 <div class="name_text">
                   {{ col.drama_name[row].name }}
                 </div></router-link
@@ -98,78 +130,98 @@ const collectList = reactive<CollectData[]>([
   min-height: calc(100vh - $nav-height);
   margin: 0px auto;
   background-color: #222;
-}
 
-.row {
-  width: 840px;
-  height: 330px;
-  display: flex;
-  margin: 0px auto;
-  overflow: auto;
-}
+  .collect_title_text {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    padding: 30px 0px 80px 75px;
+  }
 
-.row::-webkit-scrollbar {
-  display: none;
-}
+  .row {
+    width: 840px;
+    height: 330px;
+    display: flex;
+    margin: 0px auto;
+    overflow: auto;
 
-.name_text {
-  color: white;
-  font-size: 16px;
-  font-weight: 500;
-}
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
-.collect_title_text {
-  color: white;
-  font-size: 30px;
-  font-weight: bold;
-  padding: 30px 0px 80px 75px;
-}
+    .collection {
+      width: $base-collect-width;
+      height: 100%;
+      object-fit: scale-down;
+      margin-right: 10px;
+      transition: all 0.4s ease-out;
+      flex-shrink: 0;
 
-.collection {
-  width: 198px;
-  height: 270px;
-  object-fit: scale-down;
-  margin-right: 10px;
-  transition: all 0.3s ease-out;
-  flex-shrink: 0;
-}
+      .name_text {
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      .img-box {
+        width: 100%;
+        height: $base-collect-height;
+        position: relative;
 
-.collection:nth-child(2n) {
-  width: 198px;
-  height: 270px;
-  object-fit: scale-down;
-  margin-right: 10px;
-  transition: all 0.3s ease-out;
-  flex-shrink: 0;
-}
+        & img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
 
-.collection:nth-child(3n) {
-  width: 198px;
-  height: 270px;
-  object-fit: scale-down;
-  margin-right: 10px;
-  transition: all 0.3s ease-out;
-  flex-shrink: 0;
-}
+        .collect_icon {
+          color: rgb(240, 72, 110);
+          position: absolute;
+          bottom: 5px;
+          right: 10px;
+          font-size: 24px;
+          background: none;
+          border: none;
+          :hover {
+            color: rgb(237, 90, 124);
+            cursor: pointer;
+          }
+        }
+      }
 
-.collection:hover {
-  width: 408px;
-}
+      &:nth-child(2n) {
+        width: $base-collect-width;
+        height: $base-collect-height;
 
-.collection:nth-child(2n):hover {
-  width: 408px;
-}
+        margin-right: 10px;
+        transition: all 0.4s ease-out;
+        flex-shrink: 0;
 
-.collection:nth-child(3n):hover {
-  width: 408px;
+        &:hover {
+          width: 2 * $base-collect-width;
+        }
+      }
+
+      &:nth-child(3n) {
+        width: $base-collect-width;
+        height: $base-collect-height;
+
+        margin-right: 10px;
+        transition: all 0.4s ease-out;
+        flex-shrink: 0;
+
+        &:hover {
+          width: 2 * $base-collect-width;
+        }
+      }
+
+      &:hover {
+        width: 2 * $base-collect-width;
+      }
+    }
+  }
 }
 
 .collection.move {
   transform: translateX(-210px);
-}
-
-img {
-  width: 100%;
-  height: 100%;
 }
 </style>
