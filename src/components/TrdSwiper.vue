@@ -65,7 +65,7 @@ const getRankUrl = (name: number) => {
     >
       <router-link :to="'/dramalist/' + id"
         ><div class="content">
-          <div v-if="index !== selectIndex">
+          <div class="img_content" v-if="index !== selectIndex">
             <img
               class="img1"
               @mouseover="dramaover(index)"
@@ -73,7 +73,14 @@ const getRankUrl = (name: number) => {
               alt="photo"
             />
           </div>
-          <div v-else>
+          <div class="img_content" v-else>
+            <img
+              class="img1"
+              @mouseleave="dramaover(-1)"
+              :src="getCoverUrl(id)"
+              alt="photo"
+            />
+
             <img
               class="img2"
               @mouseleave="dramaleave(-1)"
@@ -91,10 +98,11 @@ const getRankUrl = (name: number) => {
       :class="{ move: slideMove }"
       ><router-link :to="'/dramalist/' + dramaIdLast"
         ><div class="content">
-          <div v-if="!slideMove">
+          <div class="img_content" v-if="!slideMove">
             <img class="img1" :src="getCoverUrl(dramaIdLast)" alt="photo" />
           </div>
-          <div v-else>
+          <div class="img_content" v-else>
+            <img class="img1" :src="getCoverUrl(dramaIdLast)" alt="photo" />
             <img class="img2" :src="getSideUrl(dramaIdLast, 1)" alt="photo" />
           </div>
           <img class="img_rank" :src="getRankUrl(dramaId.length)" alt="" />
@@ -145,14 +153,37 @@ const getRankUrl = (name: number) => {
     height: 100%;
     overflow: hidden;
     position: relative;
-
-    .img1 {
-      width: 100%;
-      position: absolute;
-    }
-    .img2 {
+    .img_content {
+      width: auto;
+      overflow: hidden;
       height: 213px;
-      position: absolute;
+
+      .img1 {
+        width: 100%;
+        position: absolute;
+        z-index: 100;
+
+        &:hover {
+          width: 150%;
+
+          animation-name: imgchange;
+          animation-duration: 0.5s;
+          animation-fill-mode: forwards;
+
+          @keyframes imgchange {
+            50% {
+              opacity: 0.5;
+            }
+            100% {
+              opacity: 0;
+            }
+          }
+        }
+      }
+      .img2 {
+        height: 213px;
+        position: absolute;
+      }
     }
     .img_rank {
       position: absolute;

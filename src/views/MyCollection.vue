@@ -49,19 +49,19 @@ const col4Drama = collectDrama.filter((drama) => col4Id.includes(drama.dramaid))
 const collectList = reactive<CollectData[]>([
   {
     condition: col1Id,
-    drama_name: col1Drama,
+    dramaName: col1Drama,
   },
   {
     condition: col2Id,
-    drama_name: col2Drama,
+    dramaName: col2Drama,
   },
   {
     condition: col3Id,
-    drama_name: col3Drama,
+    dramaName: col3Drama,
   },
   {
     condition: col4Id,
-    drama_name: col4Drama,
+    dramaName: col4Drama,
   },
 ])
 
@@ -112,7 +112,7 @@ onUpdated(() => {
                   />
                 </div>
                 <div class="name_text">
-                  {{ col.drama_name[row].name }}
+                  {{ col.dramaName[row].name }}
                 </div></router-link
               >
             </div>

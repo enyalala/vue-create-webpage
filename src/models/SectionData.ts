@@ -1,3 +1,4 @@
+import type { Drama } from '@/models/Drama'
 import type { Component } from 'vue'
 
 export interface SectionData {
@@ -17,13 +18,11 @@ export interface NavData {
 }
 
 export interface GroupInfoData {
-  group_info_title: string
-  data_name: string
-  data_delete_last: string[] | string
-  data_last: string
+  groupInfoTitle: string
+  dataName: keyof Drama
 }
 
 export interface CollectData {
   condition: number[]
-  drama_name: any
+  dramaName: any
 }

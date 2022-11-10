@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { reactive } from 'vue'
+import { ref, reactive } from 'vue'
 import type { NavData } from '@/models/SectionData'
+
+import { useDramaInfo } from '@/stores/DramaInfo'
+const { dramaList } = useDramaInfo()
 
 const getImgUrl: () => string = () => {
   return new URL('./assets/img_kktv_logo.svg', import.meta.url).href
@@ -44,6 +47,16 @@ const navlist = reactive<NavData[]>([
     navtitle: '我的收藏',
   },
 ])
+const inputSearch = ref('')
+const historySearch: string[] = reactive([])
+const filterInfos = dramaList.filter((drama) => {
+  drama.name.includes(inputSearch.value) ||
+    drama.actor.includes(inputSearch.value) ||
+    drama.director.includes(inputSearch.value) ||
+    drama.screenwriter.includes(inputSearch.value)
+})
+
+console.log(inputSearch, filterInfos)
 </script>
 
 <template>
@@ -67,6 +80,18 @@ const navlist = reactive<NavData[]>([
             >
           </li>
         </ul>
+        <div>
+          <div>
+            <input
+              type="text"
+              placeholder="搜尋片名或人名"
+              v-model="inputSearch"
+            />
+            <li v-for="(item, index) in filterInfos" :key="index">
+              hi{{ item }}
+            </li>
+          </div>
+        </div>
       </div>
     </div>
     <div class="nav_box"></div>

@@ -191,80 +191,47 @@ const starStardard = (num: number) => {
         color: gray;
         padding: 0;
       }
-      .btn_star_icon1 {
-        @extend %btn_star_style;
 
-        &:hover {
-          color: white;
-        }
-
-        &:hover + .btn_star_icon2 {
-          color: white;
-        }
-
-        &:hover + .btn_star_icon2 + .btn_star_icon3 {
-          color: white;
-        }
-
-        &:hover + .btn_star_icon2 + .btn_star_icon3 + .btn_star_icon4 {
-          color: white;
-        }
-        &:hover
-          + .btn_star_icon2
-          + .btn_star_icon3
-          + .btn_star_icon4
-          + .btn_star_icon5 {
-          color: white;
-        }
-      }
-      .btn_star_icon2 {
-        @extend %btn_star_style;
-        &:hover {
-          color: white;
-        }
-
-        &:hover + .btn_star_icon3 {
-          color: white;
-        }
-
-        &:hover + .btn_star_icon3 + .btn_star_icon4 {
-          color: white;
-        }
-        &:hover + .btn_star_icon3 + .btn_star_icon4 + .btn_star_icon5 {
-          color: white;
-        }
-      }
-      .btn_star_icon3 {
-        @extend %btn_star_style;
-        &:hover {
-          color: white;
-        }
-
-        &:hover {
-          color: white;
-        }
-
-        &:hover + .btn_star_icon4 {
-          color: white;
-        }
-        &:hover + .btn_star_icon4 + .btn_star_icon5 {
-          color: white;
-        }
-      }
-      .btn_star_icon4 {
-        @extend %btn_star_style;
-        &:hover {
-          color: white;
-        }
-
-        &:hover + .btn_star_icon5 {
-          color: white;
-        }
-      }
-      .btn_star_icon5 {
-        @extend %btn_star_style;
-        &:hover {
-          color: white;
+      @for $i from 1 through 5 {
+        .btn_star_icon#{$i} {
+          @extend %btn_star_style;
+          &:hover {
+            color: white;
+          }
+          @if $i < 5 {
+            &:hover + .btn_star_icon#{$i + 1} {
+              color: white;
+            }
+          }
+          @if $i < 4 {
+            &:hover + .btn_star_icon#{$i + 1} + .btn_star_icon#{$i + 2} {
+              color: white;
+            }
+          }
+          @if $i < 3 {
+            &:hover
+              + .btn_star_icon#{$i
+              + 1}
+              + .btn_star_icon#{$i
+              + 2}
+              + .btn_star_icon#{$i
+              + 3} {
+              color: white;
+            }
+          }
+          @if $i < 2 {
+            &:hover
+              + .btn_star_icon#{$i
+              + 1}
+              + .btn_star_icon#{$i
+              + 2}
+              + .btn_star_icon#{$i
+              + 3}
+              + .btn_star_icon#{$i
+              + 4} {
+              color: white;
+            }
+          }
         }
       }
     }

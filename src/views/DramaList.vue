@@ -8,26 +8,11 @@ import ThreeButton from '@/components/ThreeButton.vue'
 import DramaGroupInfo from '@/components/DramaGroupInfo.vue'
 import HotComment from '@/components/HotComment.vue'
 
+
 // Data ///////////////////////////////////////////////////////////////
 const { dramaList } = useDramaInfo()
 const idOfDrama = Number(useRoute().params.dramaId)
 const dramaInfoList = dramaList[idOfDrama]
-
-const actorsDeleteLast = dramaInfoList.actor.slice(0, -1)
-const actorLast = dramaInfoList.actor[dramaInfoList.actor.length - 1]
-
-const directorsDeleteLast = dramaInfoList.director.slice(0, -1)
-const directorLast = dramaInfoList.director[dramaInfoList.director.length - 1]
-
-const screenwritersDeleteLast = dramaInfoList.screenwriter.slice(0, -1)
-const screenwriterLast =
-  dramaInfoList.screenwriter[dramaInfoList.screenwriter.length - 1]
-
-const typesDeleteLast = dramaInfoList.type.slice(0, -1)
-const typeLast = dramaInfoList.type[dramaInfoList.type.length - 1]
-
-const labelsDeleteLast = dramaInfoList.label.slice(0, -1)
-const labelLast = dramaInfoList.label[dramaInfoList.label.length - 1]
 
 // Function //////////////////////////////////////////////////////////
 
@@ -77,19 +62,7 @@ const collectDrama = () => {
           :dramaInfoList="dramaInfoList"
         />
         <div class="group_info">
-          <DramaGroupInfo
-            :dramaInfoList="dramaInfoList"
-            :actorsDeleteLast="actorsDeleteLast"
-            :actorLast="actorLast"
-            :directorsDeleteLast="directorsDeleteLast"
-            :directorLast="directorLast"
-            :screenwritersDeleteLast="screenwritersDeleteLast"
-            :screenwriterLast="screenwriterLast"
-            :typesDeleteLast="typesDeleteLast"
-            :typeLast="typeLast"
-            :labelsDeleteLast="labelsDeleteLast"
-            :labelLast="labelLast"
-          />
+          <DramaGroupInfo :dramaInfoList="dramaInfoList" />
         </div>
         <div class="intro_title">劇我所知</div>
         <div
