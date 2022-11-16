@@ -12,32 +12,35 @@ const router = createRouter({
     {
       path: '/newdrama',
       name: 'NewDrama',
-      component: () => import('../views/NewDrama.vue'),
+      component: () => import('@/views/NewDrama.vue'),
     },
     {
       path: '/hotdrama',
       name: 'HotDrama',
-      component: () => import('../views/HotDrama.vue'),
+      component: () => import('@/views/HotDrama.vue'),
     },
     {
       path: '/dramalist/:dramaId',
       name: 'DramaList',
-      component: () => import('../views/DramaList.vue'),
+      component: () => import('@/views/DramaList.vue'),
       props: true,
     },
     {
       path: '/mycollection',
       name: 'MyCollection',
-      component: () => import('../views/MyCollection.vue'),
+      component: () => import('@/views/MyCollection.vue'),
+      props: true,
+    },
+    {
+      path: '/search',
+      name: 'SearchPage',
+      component: () => import('@/views/SearchPage.vue'),
       props: true,
     },
     {
       path: '/:domin(.*)*',
       name: 'NotFound',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/NotFound.vue'),
+      component: () => import('@/views/NotFound.vue'),
     },
   ],
 })

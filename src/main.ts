@@ -16,9 +16,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import {
   faArrowUpFromBracket,
-  faStar as fasStar,
   faXmark,
   faCircleXmark,
+  faMagnifyingGlass,
+  faStar as fasStar,
   faHeart as fasHeart,
 } from '@fortawesome/free-solid-svg-icons'
 import {
@@ -34,7 +35,8 @@ library.add(
   farStar,
   fasStar,
   faCircleXmark,
-  faXmark
+  faXmark,
+  faMagnifyingGlass
 )
 
 const app = createApp(App)

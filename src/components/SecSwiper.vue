@@ -105,6 +105,7 @@ dramaList.forEach((drama) => {
         top: 88px;
         font-size: 12px;
         line-height: 18px;
+        text-overflow: ellipsis;
         overflow: hidden;
       }
     }

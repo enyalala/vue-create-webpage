@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import type { NavData } from '@/models/SectionData'
 
 import { useDramaInfo } from '@/stores/DramaInfo'
+
 const { dramaList } = useDramaInfo()
 
 const getImgUrl: () => string = () => {
-  return new URL('./assets/img_kktv_logo.svg', import.meta.url).href
+  return new URL('./assets/img/kktv_logo.svg', import.meta.url).href
 }
 
 const navlist = reactive<NavData[]>([
@@ -48,22 +49,58 @@ const navlist = reactive<NavData[]>([
   },
 ])
 const inputSearch = ref('')
+const searchShow = ref(false)
 const historySearch: string[] = reactive([])
-const filterInfos = dramaList.filter((drama) => {
-  drama.name.includes(inputSearch.value) ||
-    drama.actor.includes(inputSearch.value) ||
-    drama.director.includes(inputSearch.value) ||
-    drama.screenwriter.includes(inputSearch.value)
-})
+const filterInfos: string[] = reactive([])
+const searchInfo: string[] = reactive([])
+const selectItemIndex = ref(-1)
+const selectItemName = ref('')
 
-console.log(inputSearch, filterInfos)
+const returnItem = (name: string, idx: number) => {
+  selectItemName.value = name
+  selectItemIndex.value = idx
+  historySearch.push(name)
+}
+
+const selectItem = (name: string) => {
+  inputSearch.value = name
+}
+
+const switchSearch = () => {
+  searchShow.value = !searchShow.value
+}
+
+watch(inputSearch, () => {
+  dramaList.filter((drama) => {
+    if (inputSearch.value !== '') {
+      const matchName: any = drama.name.match(inputSearch.value)
+      const matchActor: any = drama.actor.filter((actor) =>
+        actor.includes(inputSearch.value)
+      )
+
+      if (matchName) {
+        filterInfos.push(matchName.input)
+      }
+      if (matchActor.length > 0) {
+        matchActor.forEach((value: string) => filterInfos.push(value))
+      }
+
+      // 刪除重複值儲存至searchInfo
+      Object.assign(searchInfo, [...new Set(filterInfos)])
+    } else {
+      filterInfos.splice(0, filterInfos.length)
+      searchInfo.splice(0, searchInfo.length)
+    }
+  })
+  console.log(filterInfos, searchInfo)
+})
 </script>
 
 <template>
   <div class="container">
     <div class="navbar">
       <div class="navbar_content">
-        <ul>
+        <ul class="nav_left">
           <li>
             <router-link
               v-for="(data, index) in navlist"
@@ -80,22 +117,69 @@ console.log(inputSearch, filterInfos)
             >
           </li>
         </ul>
-        <div>
-          <div>
+        <div class="nav_right">
+          <button
+            v-if="searchShow === false"
+            class="btn_search"
+            @click="switchSearch"
+          >
+            <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+          </button>
+          <div v-else class="search_content">
+            <button class="btn_search">
+              <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+            </button>
             <input
+              class="search_input"
               type="text"
               placeholder="搜尋片名或人名"
               v-model="inputSearch"
             />
-            <li v-for="(item, index) in filterInfos" :key="index">
-              hi{{ item }}
-            </li>
+            <button class="btn_search" @click="switchSearch">
+              <font-awesome-icon icon="fa-solid fa-xmark" />
+            </button>
+            <ul class="auto_complete_list">
+              <!-- <div >
+                <li class="auto_complete_header">
+                  <span>搜尋記錄</span><button class="clear">清除記錄</button>
+                </li>
+                <li
+                  class="auto_complete_item"
+                  v-for="(hisItem, index) in historySearch"
+                  :key="index"
+                  @mouseover="selectItem(hisItem)"
+                >
+                  <router-link
+                    class="auto_complete_text"
+                    to="/search"
+                    @click="returnItem(hisItem, index)"
+                    >{{ hisItem }}</router-link
+                  >
+                </li>
+              </div> -->
+              <div>
+                <li
+                  class="auto_complete_item"
+                  v-for="(item, index) in searchInfo"
+                  :key="index"
+                  @mouseover="selectItem(item)"
+                >
+                  <router-link
+                    class="auto_complete_text"
+                    to="/search"
+                    @click="returnItem(item, index)"
+                    >{{ item }}</router-link
+                  >
+                </li>
+              </div>
+            </ul>
           </div>
+          <img src="@/assets/img/kktv_member.svg" alt="photo" />
         </div>
       </div>
     </div>
     <div class="nav_box"></div>
-    <router-view />
+    <router-view :selectItemName="selectItemName" />
   </div>
 </template>
 
@@ -118,31 +202,120 @@ console.log(inputSearch, filterInfos)
       width: 100%;
       height: 100%;
       display: flex;
-      ul {
-        list-style: none;
+      justify-content: space-between;
+
+      .nav_right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        & img {
+          width: 30px;
+          margin: 0px 20px;
+        }
+        .btn_search {
+          width: 32px;
+          height: 32px;
+          padding: 5px;
+          cursor: pointer;
+          background: transparent;
+          border: none;
+          color: white;
+          transition: all 0.3s ease-out;
+          &:hover {
+            color: rgb(240, 72, 110);
+          }
+        }
+        .search_content {
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          width: 244px;
+          border-bottom: 1px solid hsla(0, 0%, 100%, 0.6);
+          display: flex;
+
+          .search_input {
+            width: 100%;
+            font-size: 14px;
+            height: 40px;
+            background: transparent;
+            color: white;
+            outline: none;
+            border: none;
+          }
+
+          .auto_complete_list {
+            position: absolute;
+            background-color: #121212;
+            width: calc(100% - 20px);
+            top: 100%;
+            list-style: none;
+            padding: 0px;
+            .auto_complete_header {
+              line-height: 32px;
+              font-size: 14px;
+              padding: 0px 16px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              color: #999;
+
+              .clear {
+                cursor: pointer;
+                background: transparent;
+                color: #ccc;
+                border: none;
+
+                &:hover {
+                  color: #fff;
+                }
+              }
+            }
+            .auto_complete_item {
+              width: 100%;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
+              line-height: 48px;
+              padding: 0px 16px;
+              border-bottom: 1px solid rgba(75, 75, 75, 0.5);
+              &:hover {
+                background-color: rgba(75, 75, 75, 0.3);
+                .auto_complete_text {
+                  color: rgb(240, 72, 110);
+                }
+              }
+
+              .auto_complete_text {
+                color: #ccc;
+              }
+            }
+          }
+        }
+      }
+      .nav_left {
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        li {
-          list-style: none;
-          .navbar_logo {
-            width: 100px;
-            height: 22px;
-            vertical-align: middle;
-            cursor: pointer;
-          }
+        list-style: none;
 
-          .navbar_link {
-            margin: 0 10px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            font-size: 14px;
-            text-decoration: none;
-            height: 56px;
-            line-height: 20px;
-            color: #fff;
-          }
+        .navbar_logo {
+          width: 100px;
+          height: 22px;
+          vertical-align: middle;
+          cursor: pointer;
+        }
+
+        .navbar_link {
+          margin: 0 10px;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          font-size: 14px;
+          text-decoration: none;
+          height: 56px;
+          line-height: 20px;
+          color: #fff;
         }
       }
     }
