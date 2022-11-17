@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, onMounted } from 'vue'
 import type { NavData } from '@/models/SectionData'
+import { getDramas } from '@/apis/index'
 
-import { useDramaInfo } from '@/stores/DramaInfo'
+// const getImgUrl: () => string = () => {
+//   return new URL('./assets/img/kktv_logo.svg', import.meta.url).href
+// }
 
-const { dramaList } = useDramaInfo()
-
-const getImgUrl: () => string = () => {
-  return new URL('./assets/img/kktv_logo.svg', import.meta.url).href
-}
+const inputSearch = ref('')
+const searchShow = ref(false)
+/** 關鍵字搜尋的文字，是否從歷史記錄選取的 */
+const isSearchValueFromHistory = ref(false)
+const selectItemIndex = ref(-1)
+const selectItemName = ref('')
+const dramaList = reactive([])
 
 const navlist = reactive<NavData[]>([
   {
@@ -48,13 +53,9 @@ const navlist = reactive<NavData[]>([
     navtitle: '我的收藏',
   },
 ])
-const inputSearch = ref('')
-const searchShow = ref(false)
 const historySearch: string[] = reactive([])
 const filterInfos: string[] = reactive([])
 const searchInfo: string[] = reactive([])
-const selectItemIndex = ref(-1)
-const selectItemName = ref('')
 
 const returnItem = (name: string, idx: number) => {
   selectItemName.value = name
@@ -62,8 +63,9 @@ const returnItem = (name: string, idx: number) => {
   historySearch.push(name)
 }
 
-const selectItem = (name: string) => {
+const selectItem = (name: string, fromHistory = false) => {
   inputSearch.value = name
+  isSearchValueFromHistory.value = fromHistory
 }
 
 const switchSearch = () => {
@@ -71,10 +73,10 @@ const switchSearch = () => {
 }
 
 watch(inputSearch, () => {
-  dramaList.filter((drama) => {
+  dramaList.filter((drama: any) => {
     if (inputSearch.value !== '') {
-      const matchName: any = drama.name.match(inputSearch.value)
-      const matchActor: any = drama.actor.filter((actor) =>
+      const matchName = drama.name.match(inputSearch.value)
+      const matchActor = drama.actor.filter((actor: string) =>
         actor.includes(inputSearch.value)
       )
 
@@ -92,7 +94,15 @@ watch(inputSearch, () => {
       searchInfo.splice(0, searchInfo.length)
     }
   })
-  console.log(filterInfos, searchInfo)
+  // console.log(filterInfos, searchInfo)
+})
+
+function getImgUrl(): string {
+  return new URL('./assets/img/kktv_logo.svg', import.meta.url).href
+}
+
+onMounted(() => {
+  getDramas(dramaList)
 })
 </script>
 
@@ -118,11 +128,7 @@ watch(inputSearch, () => {
           </li>
         </ul>
         <div class="nav_right">
-          <button
-            v-if="searchShow === false"
-            class="btn_search"
-            @click="switchSearch"
-          >
+          <button v-if="!searchShow" class="btn_search" @click="switchSearch">
             <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
           </button>
           <div v-else class="search_content">
@@ -134,12 +140,18 @@ watch(inputSearch, () => {
               type="text"
               placeholder="搜尋片名或人名"
               v-model="inputSearch"
+              @input="isSearchValueFromHistory = false"
             />
             <button class="btn_search" @click="switchSearch">
               <font-awesome-icon icon="fa-solid fa-xmark" />
             </button>
             <ul class="auto_complete_list">
-              <!-- <div >
+              <div
+                v-if="
+                  (!inputSearch || isSearchValueFromHistory) &&
+                  historySearch.length
+                "
+              >
                 <li class="auto_complete_header">
                   <span>搜尋記錄</span><button class="clear">清除記錄</button>
                 </li>
@@ -147,7 +159,7 @@ watch(inputSearch, () => {
                   class="auto_complete_item"
                   v-for="(hisItem, index) in historySearch"
                   :key="index"
-                  @mouseover="selectItem(hisItem)"
+                  @mouseover="selectItem(hisItem, true)"
                 >
                   <router-link
                     class="auto_complete_text"
@@ -156,8 +168,8 @@ watch(inputSearch, () => {
                     >{{ hisItem }}</router-link
                   >
                 </li>
-              </div> -->
-              <div>
+              </div>
+              <div v-if="!isSearchValueFromHistory">
                 <li
                   class="auto_complete_item"
                   v-for="(item, index) in searchInfo"
@@ -179,7 +191,7 @@ watch(inputSearch, () => {
       </div>
     </div>
     <div class="nav_box"></div>
-    <router-view :selectItemName="selectItemName" />
+    <router-view />
   </div>
 </template>
 

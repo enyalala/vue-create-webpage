@@ -1,5 +1,5 @@
 export interface Drama {
-  dramaid: number
+  id: number
   name: string
   classification: string[]
   year: string

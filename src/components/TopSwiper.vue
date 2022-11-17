@@ -2,24 +2,29 @@
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { RouterLink } from 'vue-router'
-import { useDramaInfo } from '../stores/DramaInfo'
 import { Autoplay, Pagination, Mousewheel, Keyboard, Navigation } from 'swiper'
+import { getDramas } from '@/apis/index'
+import type { Drama } from '@/models/Drama'
 
 const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
 
-const { dramaList } = useDramaInfo()
 const dramaId: number[] = reactive([])
+const dramas: Drama[] = reactive([])
+
 const getS1ImageUrl = (name: number) => {
   return new URL(`../assets/img/homeS1P${name}.jpg`, import.meta.url).href
 }
 
-dramaList.forEach((drama) => {
-  if (drama.classification.includes('首頁')) {
-    dramaId.push(drama.dramaid)
-  }
+onMounted(async () => {
+  await getDramas(dramas)
+  dramas.forEach((drama) => {
+    if (drama.classification.includes('首頁')) {
+      dramaId.push(drama.id)
+    }
+  })
 })
 </script>
 
@@ -48,24 +53,22 @@ dramaList.forEach((drama) => {
           :src="getS1ImageUrl(id)"
           alt="photo"
         />
-        <div v-if="dramaList[id].name.length <= 11">
+        <div v-if="dramas[id].name.length <= 11">
           <div class="topswiper_title">
-            {{ dramaList[id].homestatus }}
+            {{ dramas[id].homestatus }}
             <div class="line"></div>
           </div>
-          <div class="topswiper_dramaname">《{{ dramaList[id].name }}》</div>
+          <div class="topswiper_dramaname">《{{ dramas[id].name }}》</div>
         </div>
         <div v-else>
           <div class="topswiper_title_long">
-            {{ dramaList[id].homestatus }}
+            {{ dramas[id].homestatus }}
             <div class="line"></div>
           </div>
-          <div class="topswiper_dramaname_long">
-            《{{ dramaList[id].name }}》
-          </div>
+          <div class="topswiper_dramaname_long">《{{ dramas[id].name }}》</div>
         </div>
         <div class="topswiper_desc">
-          {{ dramaList[id].homedescription }}
+          {{ dramas[id].homedescription }}
         </div>
       </router-link></swiper-slide
     >

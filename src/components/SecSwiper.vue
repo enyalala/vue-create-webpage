@@ -2,20 +2,25 @@
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { Pagination, Navigation } from 'swiper'
 import { useImageUrl } from '@/stores/GetImageUrl'
-import { useDramaInfo } from '@/stores/DramaInfo'
+import type { Drama } from '@/models/Drama'
+import { getDramas } from '@/apis/index'
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
-const { dramaList } = useDramaInfo()
 const modules2: any = [Pagination, Navigation]
-const dramaId: number[] = reactive([])
 
-dramaList.forEach((drama) => {
-  if (drama.classification.includes('熱播')) {
-    dramaId.push(drama.dramaid)
-  }
+const dramaId: number[] = reactive([])
+const dramas: Drama[] = reactive([])
+
+onMounted(async () => {
+  await getDramas(dramas)
+  dramas.forEach((drama) => {
+    if (drama.classification.includes('新劇')) {
+      dramaId.push(drama.id)
+    }
+  })
 })
 </script>
 
@@ -34,12 +39,12 @@ dramaList.forEach((drama) => {
         <div class="content">
           <div class="cover_bg"></div>
           <div class="text_content">
-            <span class="name_text">{{ dramaList[drama_id].name }}</span>
+            <span class="name_text">{{ dramas[drama_id].name }}</span>
             <div class="star_text">
               <font-awesome-icon icon="fa-solid fa-star" />
-              {{ dramaList[drama_id].score }}
+              {{ dramas[drama_id].score }}
             </div>
-            <div class="desc_text">{{ dramaList[drama_id].description }}</div>
+            <div class="desc_text">{{ dramas[drama_id].description }}</div>
           </div>
           <div class="cover_img">
             <img :src="getCoverUrl(drama_id)" alt="" />

@@ -30,11 +30,11 @@ console.log(selectDrama)
   <main>
     <div class="container">
       <div class="collect_title_text">
-        {{ props.selectItemName }} 的搜尋結果：
+        {{ props.selectItemName }} 的搜尋結：
       </div>
       <div v-for="(drama, index) in selectDrama" :key="index">
-        <router-link :to="'/dramalist/' + drama.dramaid"
-          ><img :src="getCoverUrl(drama.dramaid)"
+        <router-link :to="'/dramalist/' + drama.id"
+          ><img :src="getCoverUrl(drama.id)"
         /></router-link>
       </div>
     </div>

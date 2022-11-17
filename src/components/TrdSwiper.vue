@@ -15,7 +15,7 @@ const dramaId: number[] = reactive([])
 
 dramaList.forEach((drama) => {
   if (drama.classification.includes('熱播')) {
-    dramaId.push(drama.dramaid)
+    dramaId.push(drama.id)
   }
 })
 
