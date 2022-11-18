@@ -5,6 +5,7 @@ import { useImageUrl } from '@/stores/GetImageUrl'
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
 const num: Ref<number> = ref(1)
+
 const props = defineProps({
   idOfDrama: {
     type: Number,

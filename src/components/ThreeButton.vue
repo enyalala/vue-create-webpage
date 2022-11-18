@@ -25,7 +25,7 @@ const scored = (score: number) => {
 const changeFiveStar = () => {
   hideStar.value = false
 }
-
+/** 星星評分定義 */
 const starStardard = (num: number) => {
   if (num === 1) {
     standardText.value = '極不推薦'

@@ -1,28 +1,31 @@
 <script setup lang="ts">
 import 'swiper/css'
 import 'swiper/css/pagination'
+import { getDramas } from '@/apis/index'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { useDramaInfo } from '@/stores/DramaInfo'
+// import { useDramaInfo } from '@/stores/DramaInfo'
 import { Pagination, Navigation } from 'swiper'
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useImageUrl } from '@/stores/GetImageUrl'
+import type { Drama } from '@/models/Drama'
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
-const { dramaList } = useDramaInfo()
+// const { dramaList } = useDramaInfo()
 const modules3: any = [Pagination, Navigation]
 const slideMove = ref(false)
-const dramaId: number[] = reactive([])
-
-dramaList.forEach((drama) => {
-  if (drama.classification.includes('熱播')) {
-    dramaId.push(drama.id)
-  }
-})
-
-const dramaIdDeleteLast = dramaId.slice(0, -1)
-const dramaIdLast = dramaId[dramaId.length - 1]
 const selectIndex = ref(-1)
 
+const dramaId: number[] = reactive([])
+const dramaList: Drama[] = reactive([])
+
+const dramaIdDeleteLast = computed(() => {
+  return dramaId.slice(0, -1)
+})
+
+const dramaIdLast = computed(() => {
+  return dramaId[dramaId.length - 1]
+})
+console.log(dramaIdDeleteLast.value)
 const lastSlideShow = () => {
   slideMove.value = true
 }
@@ -44,6 +47,16 @@ const getRankUrl = (name: number) => {
     import.meta.url
   ).href
 }
+
+onMounted(async () => {
+  Object.assign(dramaList, (await getDramas()).data)
+  dramaList.forEach((drama) => {
+    if (drama.classification.includes('熱播')) {
+      dramaId.push(drama.id)
+    }
+  })
+  console.log(dramaId)
+})
 </script>
 
 <template>
@@ -106,7 +119,9 @@ const getRankUrl = (name: number) => {
             <img class="img2" :src="getSideUrl(dramaIdLast, 1)" alt="photo" />
           </div>
           <img class="img_rank" :src="getRankUrl(dramaId.length)" alt="" />
-          <div class="name_text">{{ dramaList[dramaIdLast].name }}</div>
+          <div class="name_text" v-for="lastId in dramaIdLast" :key="lastId">
+            <!-- {{ dramaList[lastId].name }} -->
+          </div>
         </div></router-link
       ></swiper-slide
     >

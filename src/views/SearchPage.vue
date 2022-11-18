@@ -1,36 +1,36 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { useDramaInfo } from '@/stores/DramaInfo'
+import { reactive, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useImageUrl } from '@/stores/GetImageUrl'
-const { dramaList } = useDramaInfo()
+import { useSearchItem } from '@/stores/SearchItem'
+import type { Drama } from '@/models/Drama'
+import { getDramas } from '@/apis/index'
+
+const { searchItemInfo } = useSearchItem()
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
 
-const props = defineProps({
-  selectItemName: {
-    type: String,
-    default: '',
-  },
-})
-
 const selectDrama: any = reactive([])
-dramaList.forEach((drama) => {
-  if (
-    drama.name.includes(props.selectItemName) ||
-    drama.actor.includes(props.selectItemName)
-  ) {
-    selectDrama.push(drama)
-  }
+const dramaList: Drama[] = reactive([])
+
+onMounted(async () => {
+  Object.assign(dramaList, (await getDramas()).data)
+  dramaList.forEach((drama) => {
+    if (
+      drama.name.includes(searchItemInfo.selectItemName) ||
+      drama.actor.includes(searchItemInfo.selectItemName)
+    ) {
+      selectDrama.push(drama)
+    }
+  })
 })
-console.log(selectDrama)
 </script>
 
 <template>
   <main>
     <div class="container">
       <div class="collect_title_text">
-        {{ props.selectItemName }} 的搜尋結：
+        {{ searchItemInfo.selectItemName }} 的搜尋結果：
       </div>
       <div v-for="(drama, index) in selectDrama" :key="index">
         <router-link :to="'/dramalist/' + drama.id"

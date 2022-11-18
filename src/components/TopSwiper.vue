@@ -19,7 +19,7 @@ const getS1ImageUrl = (name: number) => {
 }
 
 onMounted(async () => {
-  await getDramas(dramas)
+  Object.assign(dramas, (await getDramas()).data)
   dramas.forEach((drama) => {
     if (drama.classification.includes('首頁')) {
       dramaId.push(drama.id)

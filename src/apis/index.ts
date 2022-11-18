@@ -5,9 +5,8 @@ const dramaInfoRequest = axios.create({
 })
 
 /** 讀取戲劇資訊 */
-export const getDramas = async (arr: object) => {
-  const response = await dramaInfoRequest.get('')
-  Object.assign(arr, response.data)
+export const getDramas = async () => {
+  return dramaInfoRequest.get('')
 }
 
 /** 戲劇不收藏 */
@@ -16,6 +15,6 @@ export const unCollectDrama = async (id: number, arr: object) => {
     collect: false,
   })
 
-  const response = await dramaInfoRequest.get('')
-  Object.assign(arr, response.data)
+  const res = await dramaInfoRequest.get('')
+  Object.assign(arr, res.data)
 }

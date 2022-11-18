@@ -15,7 +15,7 @@ const dramaId: number[] = reactive([])
 const dramas: Drama[] = reactive([])
 
 onMounted(async () => {
-  await getDramas(dramas)
+  Object.assign(dramas, (await getDramas()).data)
   dramas.forEach((drama) => {
     if (drama.classification.includes('新劇')) {
       dramaId.push(drama.id)

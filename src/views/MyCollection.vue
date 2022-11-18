@@ -49,8 +49,8 @@ const lastShow = (row: number) => {
 //     })
 // }
 
-onMounted(() => {
-  getDramas(dramas)
+onMounted(async () => {
+  Object.assign(dramas, (await getDramas()).data)
 })
 </script>
 
