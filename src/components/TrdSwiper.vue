@@ -55,7 +55,6 @@ onMounted(async () => {
       dramaId.push(drama.id)
     }
   })
-  console.log(dramaId)
 })
 </script>
 

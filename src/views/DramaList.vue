@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { useDramaInfo } from '@/stores/DramaInfo'
-import { useRoute } from 'vue-router'
 import CommentDialog from '@/views/CommentDialog.vue'
 import DramaCover from '@/components/DramaCover.vue'
 import ThreeButton from '@/components/ThreeButton.vue'
 import DramaGroupInfo from '@/components/DramaGroupInfo.vue'
 import HotComment from '@/components/HotComment.vue'
-
+import { ref, reactive, onMounted, computed, toRaw } from 'vue'
+// import { useDramaInfo } from '@/stores/DramaInfo'
+import { useRoute } from 'vue-router'
+import { getDramas } from '@/apis/index'
+import type { Drama } from '@/models/Drama'
 
 // Data ///////////////////////////////////////////////////////////////
-const { dramaList } = useDramaInfo()
+// const { dramaList } = useDramaInfo()
+const dramaList: Drama[] = reactive([])
 const idOfDrama = Number(useRoute().params.dramaId)
-const dramaInfoList = dramaList[idOfDrama]
+const dramaInfoList = computed(() => dramaList[idOfDrama])
 
 // Function //////////////////////////////////////////////////////////
 
@@ -38,6 +40,12 @@ const hideModal = () => {
 const collectDrama = () => {
   dramaInfoList.collect = !dramaInfoList.collect
 }
+
+onMounted(async () => {
+  Object.assign(dramaList, (await getDramas()).data)
+  JSON.parse(JSON.stringify(dramaList))
+  console.log(dramaList)
+})
 </script>
 
 <template>

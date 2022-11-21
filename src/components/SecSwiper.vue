@@ -13,7 +13,7 @@ const modules2: any = [Pagination, Navigation]
 
 const dramaId: number[] = reactive([])
 const dramas: Drama[] = reactive([])
-
+console.log(dramas)
 onMounted(async () => {
   Object.assign(dramas, (await getDramas()).data)
   dramas.forEach((drama) => {
