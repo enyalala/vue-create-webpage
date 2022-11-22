@@ -4,23 +4,19 @@ import DramaCover from '@/components/DramaCover.vue'
 import ThreeButton from '@/components/ThreeButton.vue'
 import DramaGroupInfo from '@/components/DramaGroupInfo.vue'
 import HotComment from '@/components/HotComment.vue'
-import { ref, reactive, onMounted, computed, toRaw } from 'vue'
-// import { useDramaInfo } from '@/stores/DramaInfo'
+import { ref, reactive, onMounted, computed, type ComputedRef } from 'vue'
 import { useRoute } from 'vue-router'
 import { getDramas } from '@/apis/index'
 import type { Drama } from '@/models/Drama'
 
 // Data ///////////////////////////////////////////////////////////////
-// const { dramaList } = useDramaInfo()
 const dramaList: Drama[] = reactive([])
 const idOfDrama = Number(useRoute().params.dramaId)
-const dramaInfoList = computed(() => dramaList[idOfDrama])
+const dramaInfo: ComputedRef<Drama | undefined> = computed(
+  () => dramaList[idOfDrama]
+)
 
 // Function //////////////////////////////////////////////////////////
-
-const yourSoreCallback = (res: number) => {
-  dramaInfoList.score = res
-}
 
 const comments: string[] = reactive([])
 const addCommentsCallback = (res: string) => {
@@ -37,14 +33,11 @@ const outputDialog = () => {
 const hideModal = () => {
   commentIsTrue.value = false
 }
-const collectDrama = () => {
-  dramaInfoList.collect = !dramaInfoList.collect
-}
 
 onMounted(async () => {
   Object.assign(dramaList, (await getDramas()).data)
-  JSON.parse(JSON.stringify(dramaList))
-  console.log(dramaList)
+  // JSON.parse(JSON.stringify(dramaList))
+  // console.log(dramaList)
 })
 </script>
 
@@ -62,32 +55,30 @@ onMounted(async () => {
               <font-awesome-icon icon="fa-solid fa-xmark" />
             </div></div></template
       ></CommentDialog>
-      <DramaCover :dramaInfoList="dramaInfoList" :idOfDrama="idOfDrama" />
-      <div class="drama_info">
-        <ThreeButton
-          @yourScore="yourSoreCallback"
-          :collectDrama="collectDrama"
-          :dramaInfoList="dramaInfoList"
-        />
-        <div class="group_info">
-          <DramaGroupInfo :dramaInfoList="dramaInfoList" />
+      <template v-if="dramaInfo">
+        <DramaCover :dramaInfo="dramaInfo" :idOfDrama="idOfDrama" />
+        <div class="drama_info">
+          <ThreeButton :idOfDrama="idOfDrama" />
+          <div class="group_info">
+            <DramaGroupInfo :dramaInfo="dramaInfo" />
+          </div>
+          <div class="intro_title">劇我所知</div>
+          <div
+            class="group_info_title"
+            v-for="highlight in dramaInfo.highlight"
+            :key="highlight"
+          >
+            {{ highlight }}
+          </div>
+          <div class="desc_text">{{ dramaInfo.description }}</div>
+          <div class="comment_title">
+            <div class="hot_title">熱門短評</div>
+            <button class="subtitle_text" @click="outputDialog">更多 ＞</button>
+            <button class="comment_text" @click="outputDialog">我也要說</button>
+          </div>
+          <div class="comment_content"><HotComment :comments="comments" /></div>
         </div>
-        <div class="intro_title">劇我所知</div>
-        <div
-          class="group_info_title"
-          v-for="highlight in dramaInfoList.highlight"
-          :key="highlight"
-        >
-          {{ highlight }}
-        </div>
-        <div class="desc_text">{{ dramaInfoList.description }}</div>
-        <div class="comment_title">
-          <div class="hot_title">熱門短評</div>
-          <button class="subtitle_text" @click="outputDialog">更多 ＞</button>
-          <button class="comment_text" @click="outputDialog">我也要說</button>
-        </div>
-        <div class="comment_content"><HotComment :comments="comments" /></div>
-      </div>
+      </template>
     </div>
   </main>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
-import { unCollectDrama, getDramas } from '@/apis/index'
+import { patchUnCollect, getDramas } from '@/apis/index'
 import { RouterLink } from 'vue-router'
 import { useImageUrl } from '@/stores/GetImageUrl'
 import { computed } from 'vue'
@@ -11,9 +11,9 @@ const lastIndex = ref(-1)
 const selectIndex = ref(-1)
 const selectIdx = ref(-1)
 
-const dramas: Drama[] = reactive([])
+const dramaList: Drama[] = reactive([])
 const dramaRowList = computed(() => {
-  return dramas
+  return dramaList
     .filter(({ collect }) => collect)
     .reduce((prev, drama, index) => {
       const rowIndex = Math.floor(index / 4)
@@ -44,13 +44,19 @@ const lastShow = (row: number) => {
 //     })
 //     .then(() => {
 //       axios.get('http://localhost:3000/dramaInfo').then((response) => {
-//         Object.assign(dramas, response.data)
+//         Object.assign(dramaList, response.data)
 //       })
 //     })
 // }
 
+const unCollect = (id: number) => {
+  patchUnCollect(id).then((response) => {
+    Object.assign(dramaList, response.data)
+  })
+}
+
 onMounted(async () => {
-  Object.assign(dramas, (await getDramas()).data)
+  Object.assign(dramaList, (await getDramas()).data)
 })
 </script>
 
@@ -73,7 +79,7 @@ onMounted(async () => {
                   <router-link
                     to="/mycollection"
                     class="collect_icon"
-                    @click="unCollectDrama(drama.id, dramas)"
+                    @click="unCollect(drama.id)"
                   >
                     <font-awesome-icon icon="fa-solid fa-heart" />
                   </router-link>

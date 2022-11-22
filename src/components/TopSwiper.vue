@@ -12,15 +12,15 @@ import type { Drama } from '@/models/Drama'
 const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
 
 const dramaId: number[] = reactive([])
-const dramas: Drama[] = reactive([])
+const dramaList: Drama[] = reactive([])
 
 const getS1ImageUrl = (name: number) => {
   return new URL(`../assets/img/homeS1P${name}.jpg`, import.meta.url).href
 }
 
 onMounted(async () => {
-  Object.assign(dramas, (await getDramas()).data)
-  dramas.forEach((drama) => {
+  Object.assign(dramaList, (await getDramas()).data)
+  dramaList.forEach((drama) => {
     if (drama.classification.includes('首頁')) {
       dramaId.push(drama.id)
     }
@@ -53,22 +53,24 @@ onMounted(async () => {
           :src="getS1ImageUrl(id)"
           alt="photo"
         />
-        <div v-if="dramas[id].name.length <= 11">
+        <div v-if="dramaList[id].name.length <= 11">
           <div class="topswiper_title">
-            {{ dramas[id].homestatus }}
+            {{ dramaList[id].homestatus }}
             <div class="line"></div>
           </div>
-          <div class="topswiper_dramaname">《{{ dramas[id].name }}》</div>
+          <div class="topswiper_dramaname">《{{ dramaList[id].name }}》</div>
         </div>
         <div v-else>
           <div class="topswiper_title_long">
-            {{ dramas[id].homestatus }}
+            {{ dramaList[id].homestatus }}
             <div class="line"></div>
           </div>
-          <div class="topswiper_dramaname_long">《{{ dramas[id].name }}》</div>
+          <div class="topswiper_dramaname_long">
+            《{{ dramaList[id].name }}》
+          </div>
         </div>
         <div class="topswiper_desc">
-          {{ dramas[id].homedescription }}
+          {{ dramaList[id].homedescription }}
         </div>
       </router-link></swiper-slide
     >

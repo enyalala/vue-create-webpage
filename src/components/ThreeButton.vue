@@ -1,27 +1,35 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
+import { patchCollect, patchScored, getDramas } from '@/apis/index'
+import type { Drama } from '@/models/Drama'
 
 const props = defineProps({
-  collectDrama: {
-    type: Function,
-    required: true,
-  },
-  dramaInfoList: {
-    type: Object,
+  idOfDrama: {
+    type: Number,
     required: true,
   },
 })
 
-const emits = defineEmits(['yourScore'])
-const yourScore = ref(0)
 const hideStar = ref(true)
+const isCollect = ref(false)
 const standardText = ref('')
 
-const scored = (score: number) => {
-  yourScore.value = score
+const dramaList: Drama[] = reactive([])
+
+const scored = (id: number, score: number) => {
   hideStar.value = true
-  emits('yourScore', yourScore)
+  patchScored(id, score).then((response) => {
+    Object.assign(dramaList, response.data)
+  })
 }
+
+const collect = (id: number) => {
+  isCollect.value = !isCollect.value
+  patchCollect(id, isCollect.value).then((response) => {
+    Object.assign(dramaList, response.data)
+  })
+}
+
 const changeFiveStar = () => {
   hideStar.value = false
 }
@@ -39,87 +47,98 @@ const starStardard = (num: number) => {
     standardText.value = '極力推薦'
   }
 }
+
+onMounted(async () => {
+  Object.assign(dramaList, (await getDramas()).data)
+})
 </script>
 
 <template>
   <div class="btn_content">
-    <button class="btn_three" @click="props.collectDrama">
-      <div v-if="props.dramaInfoList.collect === false" class="btn_three_icon">
-        <font-awesome-icon icon="fa-regular fa-heart" />
-      </div>
-      <div v-else class="btn_three_icon">
-        <font-awesome-icon icon="fa-solid fa-heart" />
-      </div>
-      <div class="btn_three_text">收藏</div>
-    </button>
-    <button class="btn_three">
-      <div class="btn_three_icon">
-        <font-awesome-icon icon="fa-solid fa-arrow-up-from-bracket" />
-      </div>
-      <div class="btn_three_text">分享</div>
-    </button>
-    <div v-if="hideStar && props.dramaInfoList.score === 0">
-      <button class="btn_three" @click="changeFiveStar">
-        <div class="btn_three_content">
-          <div class="btn_three_icon">
-            <font-awesome-icon icon="fa-regular fa-star" />
-          </div>
-          <div class="btn_three_text">評分</div>
+    <template v-if="dramaList[props.idOfDrama]">
+      <button class="btn_three" @click="collect(props.idOfDrama)">
+        <div
+          v-if="dramaList[props.idOfDrama].collect === false"
+          class="btn_three_icon"
+        >
+          <font-awesome-icon icon="fa-regular fa-heart" />
         </div>
-      </button>
-    </div>
-    <div v-else-if="hideStar && props.dramaInfoList.score !== 0">
-      <button class="btn_three" @click="changeFiveStar">
-        <div class="btn_three_content">
-          <div class="btn_three_icon">
-            <font-awesome-icon icon="fa-solid fa-star" />
-          </div>
-          <div class="btn_three_text">評分</div>
+        <div v-else class="btn_three_icon">
+          <font-awesome-icon icon="fa-solid fa-heart" />
         </div>
+
+        <div class="btn_three_text">收藏</div>
       </button>
-    </div>
-    <div class="group_info_content" v-else>
       <button class="btn_three">
-        <div class="btn_star_content">
-          <button
-            class="btn_star_icon1"
-            @mouseover="starStardard(5)"
-            @click="scored(5)"
-          >
-            <font-awesome-icon icon="fa-solid fa-star" />
-          </button>
-          <button
-            class="btn_star_icon2"
-            @mouseover="starStardard(4)"
-            @click="scored(4)"
-          >
-            <font-awesome-icon icon="fa-solid fa-star" />
-          </button>
-          <button
-            class="btn_star_icon3"
-            @mouseover="starStardard(3)"
-            @click="scored(3)"
-          >
-            <font-awesome-icon icon="fa-solid fa-star" />
-          </button>
-          <button
-            class="btn_star_icon4"
-            @mouseover="starStardard(2)"
-            @click="scored(2)"
-          >
-            <font-awesome-icon icon="fa-solid fa-star" />
-          </button>
-          <button
-            class="btn_star_icon5"
-            @mouseover="starStardard(1)"
-            @click="scored(1)"
-          >
-            <font-awesome-icon icon="fa-solid fa-star" />
-          </button>
+        <div class="btn_three_icon">
+          <font-awesome-icon icon="fa-solid fa-arrow-up-from-bracket" />
         </div>
+        <div class="btn_three_text">分享</div>
       </button>
-      <div class="star_standard">{{ standardText }}</div>
-    </div>
+      <div v-if="hideStar && dramaList[props.idOfDrama].score === 0">
+        <button class="btn_three" @click="changeFiveStar">
+          <div class="btn_three_content">
+            <div class="btn_three_icon">
+              <font-awesome-icon icon="fa-regular fa-star" />
+            </div>
+            <div class="btn_three_text">評分</div>
+          </div>
+        </button>
+      </div>
+      <div v-else-if="hideStar && dramaList[props.idOfDrama].score !== 0">
+        <button class="btn_three" @click="changeFiveStar">
+          <div class="btn_three_content">
+            <div class="btn_three_icon">
+              <font-awesome-icon icon="fa-solid fa-star" />
+            </div>
+            <div class="btn_three_text">評分</div>
+          </div>
+        </button>
+      </div>
+
+      <div class="group_info_content" v-else>
+        <button class="btn_three">
+          <div class="btn_star_content">
+            <button
+              class="btn_star_icon1"
+              @mouseover="starStardard(5)"
+              @click="scored(props.idOfDrama, 5)"
+            >
+              <font-awesome-icon icon="fa-solid fa-star" />
+            </button>
+            <button
+              class="btn_star_icon2"
+              @mouseover="starStardard(4)"
+              @click="scored(props.idOfDrama, 4)"
+            >
+              <font-awesome-icon icon="fa-solid fa-star" />
+            </button>
+            <button
+              class="btn_star_icon3"
+              @mouseover="starStardard(3)"
+              @click="scored(props.idOfDrama, 3)"
+            >
+              <font-awesome-icon icon="fa-solid fa-star" />
+            </button>
+            <button
+              class="btn_star_icon4"
+              @mouseover="starStardard(2)"
+              @click="scored(props.idOfDrama, 2)"
+            >
+              <font-awesome-icon icon="fa-solid fa-star" />
+            </button>
+            <button
+              class="btn_star_icon5"
+              @mouseover="starStardard(1)"
+              @click="scored(props.idOfDrama, 1)"
+            >
+              <font-awesome-icon icon="fa-solid fa-star" />
+            </button>
+          </div>
+        </button>
+        <div class="star_standard">{{ standardText }}</div>
+      </div>
+    </template>
   </div>
 </template>
 

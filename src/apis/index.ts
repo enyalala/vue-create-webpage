@@ -9,12 +9,26 @@ export const getDramas = async () => {
   return dramaInfoRequest.get('')
 }
 
-/** 戲劇不收藏 */
-export const unCollectDrama = async (id: number, arr: object) => {
+/** 不收藏戲劇 */
+export const patchUnCollect = async (id: number) => {
   await dramaInfoRequest.patch(`/${id}`, {
     collect: false,
   })
+  return dramaInfoRequest.get('')
+}
 
-  const res = await dramaInfoRequest.get('')
-  Object.assign(arr, res.data)
+/** 收藏戲劇 */
+export const patchCollect = async (id: number, value: boolean) => {
+  await dramaInfoRequest.patch(`/${id}`, {
+    collect: value,
+  })
+  return dramaInfoRequest.get('')
+}
+
+/** 評分 */
+export const patchScored = async (id: number, value: number) => {
+  await dramaInfoRequest.patch(`/${id}`, {
+    score: value,
+  })
+  return dramaInfoRequest.get('')
 }

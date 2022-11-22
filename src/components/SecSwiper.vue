@@ -12,11 +12,11 @@ const { getCoverUrl, getSideUrl } = useImageUrl()
 const modules2: any = [Pagination, Navigation]
 
 const dramaId: number[] = reactive([])
-const dramas: Drama[] = reactive([])
-console.log(dramas)
+const dramaList: Drama[] = reactive([])
+
 onMounted(async () => {
-  Object.assign(dramas, (await getDramas()).data)
-  dramas.forEach((drama) => {
+  Object.assign(dramaList, (await getDramas()).data)
+  dramaList.forEach((drama) => {
     if (drama.classification.includes('新劇')) {
       dramaId.push(drama.id)
     }
@@ -39,12 +39,12 @@ onMounted(async () => {
         <div class="content">
           <div class="cover_bg"></div>
           <div class="text_content">
-            <span class="name_text">{{ dramas[drama_id].name }}</span>
+            <span class="name_text">{{ dramaList[drama_id].name }}</span>
             <div class="star_text">
               <font-awesome-icon icon="fa-solid fa-star" />
-              {{ dramas[drama_id].score }}
+              {{ dramaList[drama_id].score }}
             </div>
-            <div class="desc_text">{{ dramas[drama_id].description }}</div>
+            <div class="desc_text">{{ dramaList[drama_id].description }}</div>
           </div>
           <div class="cover_img">
             <img :src="getCoverUrl(drama_id)" alt="" />
@@ -67,7 +67,7 @@ onMounted(async () => {
   font-size: 18px;
   background: #fff;
   position: relative;
-
+  height: 100%;
   width: 47%;
 
   &:nth-child(2n) {

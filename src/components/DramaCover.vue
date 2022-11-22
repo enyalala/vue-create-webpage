@@ -11,7 +11,7 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-  dramaInfoList: {
+  dramaInfo: {
     type: Object,
     required: true,
   },
@@ -19,7 +19,7 @@ const props = defineProps({
 
 // 圖片自動切換 //////////////////////////////////////////////////////
 setInterval(() => {
-  if (num.value < props.dramaInfoList.sidephotocount) {
+  if (num.value < props.dramaInfo.sidephotocount) {
     num.value++
   } else {
     num.value = 0
@@ -32,11 +32,11 @@ setInterval(() => {
 <template>
   <div class="cover_row">
     <div class="cover_content">
-      <span class="cover_name_text">{{ props.dramaInfoList.name }}</span>
+      <span class="cover_name_text">{{ props.dramaInfo.name }}</span>
       <div class="cover_year_text">
-        {{ props.dramaInfoList.year }} |
+        {{ props.dramaInfo.year }} |
         <font-awesome-icon icon="fa-solid fa-star" />
-        {{ props.dramaInfoList.score }}
+        {{ props.dramaInfo.score }}
       </div>
     </div>
     <div class="cover_bg"></div>

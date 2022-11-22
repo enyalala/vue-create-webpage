@@ -3,14 +3,12 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { getDramas } from '@/apis/index'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-// import { useDramaInfo } from '@/stores/DramaInfo'
 import { Pagination, Navigation } from 'swiper'
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useImageUrl } from '@/stores/GetImageUrl'
 import type { Drama } from '@/models/Drama'
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
-// const { dramaList } = useDramaInfo()
 const modules3: any = [Pagination, Navigation]
 const slideMove = ref(false)
 const selectIndex = ref(-1)
@@ -25,7 +23,11 @@ const dramaIdDeleteLast = computed(() => {
 const dramaIdLast = computed(() => {
   return dramaId[dramaId.length - 1]
 })
-console.log(dramaIdDeleteLast.value)
+
+const dramaLastName = computed(() => {
+  return dramaList.find((drama) => drama.id === dramaIdLast.value)?.name
+})
+
 const lastSlideShow = () => {
   slideMove.value = true
 }
@@ -104,24 +106,28 @@ onMounted(async () => {
           <div class="name_text">{{ dramaList[id].name }}</div>
         </div></router-link
       ></swiper-slide
-    ><swiper-slide
+    >
+    <swiper-slide
       @mouseover="lastSlideShow"
       @mouseleave="lastSlideHide"
       :class="{ move: slideMove }"
-      ><router-link :to="'/dramalist/' + dramaIdLast"
-        ><div class="content">
-          <div class="img_content" v-if="!slideMove">
-            <img class="img1" :src="getCoverUrl(dramaIdLast)" alt="photo" />
-          </div>
-          <div class="img_content" v-else>
-            <img class="img1" :src="getCoverUrl(dramaIdLast)" alt="photo" />
-            <img class="img2" :src="getSideUrl(dramaIdLast, 1)" alt="photo" />
-          </div>
-          <img class="img_rank" :src="getRankUrl(dramaId.length)" alt="" />
-          <div class="name_text" v-for="lastId in dramaIdLast" :key="lastId">
-            <!-- {{ dramaList[lastId].name }} -->
-          </div>
-        </div></router-link
+    >
+      <template v-if="dramaIdLast"
+        ><router-link :to="'/dramalist/' + dramaIdLast"
+          ><div class="content">
+            <div class="img_content" v-if="!slideMove">
+              <img class="img1" :src="getCoverUrl(dramaIdLast)" alt="photo" />
+            </div>
+            <div class="img_content" v-else>
+              <img class="img1" :src="getCoverUrl(dramaIdLast)" alt="photo" />
+              <img class="img2" :src="getSideUrl(dramaIdLast, 1)" alt="photo" />
+            </div>
+            <img class="img_rank" :src="getRankUrl(10)" alt="" />
+            <div class="name_text">
+              {{ dramaLastName }}
+            </div>
+          </div></router-link
+        ></template
       ></swiper-slide
     >
   </swiper>

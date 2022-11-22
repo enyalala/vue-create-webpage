@@ -3,7 +3,7 @@ import type { GroupInfoData } from '@/models/SectionData'
 import { reactive, type PropType } from 'vue'
 
 const props = defineProps({
-  dramaInfoList: {
+  dramaInfo: {
     type: Object,
     required: true,
   },
@@ -38,16 +38,16 @@ const groupInfoList = reactive<GroupInfoData[]>([
     v-for="(info, index) in groupInfoList"
     :key="index"
   >
-    <template v-if="props.dramaInfoList[info.dataName].length">
+    <template v-if="props.dramaInfo[info.dataName].length">
       {{ info.groupInfoTitle }}
       <div class="group_info_content">
         <div
-          v-for="(data, dramaIndex) in props.dramaInfoList[info.dataName]"
+          v-for="(data, dramaIndex) in props.dramaInfo[info.dataName]"
           :key="dramaIndex"
         >
           <a href="" class="group_info_text">{{ data }}</a
           ><template
-            v-if="dramaIndex < props.dramaInfoList[info.dataName].length - 1"
+            v-if="dramaIndex < props.dramaInfo[info.dataName].length - 1"
             >/</template
           >
         </div>
