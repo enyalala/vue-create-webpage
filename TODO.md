@@ -20,3 +20,8 @@ quote_type = single
 max_line_length = off
 trim_trailing_whitespace = false
 
+========================================
+
+2022/11/22
+1. dramalist 改成取單筆資料
+2. 組件改成 pure component，只有 props 跟 emits，組件本身不打 API
