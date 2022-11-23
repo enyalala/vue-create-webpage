@@ -3,17 +3,51 @@ import TopSwiper from '@/components/TopSwiper.vue'
 import SecSwiper from '@/components/SecSwiper.vue'
 import TrdSwiper from '@/components/TrdSwiper.vue'
 import SectionTitle from '@/components/SectionTitle.vue'
-import { reactive, shallowRef } from 'vue'
+import { reactive, shallowRef, onMounted, computed } from 'vue'
 import type { SectionData } from '@/models/SectionData'
+import { getDramas } from '@/apis/index'
+import type { Drama } from '@/models/Drama'
 
-const list = reactive<SectionData[]>([
+const dramaList: Drama[] = reactive([])
+const topSwiperId: number[] = reactive([])
+
+const secSwiperId: number[] = reactive([])
+const trdSwiperId: number[] = reactive([])
+
+const topDramaList = computed(() => {
+  return dramaList.filter((drama) => drama.classification.includes('首頁'))
+
+  //   if (drama.classification.includes('首頁')) {
+  //     topDramaList.push(drama)
+  //     return topDramaList
+  //   } else if (drama.classification.includes('新劇')) {
+  //     secDramaList.push(drama)
+  //   } else if (drama.classification.includes('熱播')) {
+  //     trdDramaList.push(drama)
+  //   }
+  // })
+})
+
+const secDramaList = computed(() => {
+  return dramaList.filter((drama) => drama.classification.includes('新劇'))
+})
+
+const trdDramaList = computed(() => {
+  return dramaList.filter((drama) => drama.classification.includes('熱播'))
+})
+
+// console.log(topDramaList)
+
+const list = computed(() => [
   {
     classes: 'swiper-container',
     component: shallowRef(TopSwiper),
+    propsData: topDramaList,
   },
   {
     classes: 'swiper-container swiper2',
     component: shallowRef(SecSwiper),
+    propsData: secDramaList,
     sectionData: {
       sectionTitle: '新劇跟播中',
       to: '/newdrama',
@@ -22,12 +56,18 @@ const list = reactive<SectionData[]>([
   {
     classes: 'swiper-container swiper3',
     component: shallowRef(TrdSwiper),
+    propsData: trdDramaList,
     sectionData: {
       sectionTitle: '熱播排行榜',
       to: '/hotdrama',
     },
   },
 ])
+
+console.log(list.value)
+onMounted(async () => {
+  Object.assign(dramaList, (await getDramas()).data)
+})
 </script>
 
 <template>
@@ -35,8 +75,10 @@ const list = reactive<SectionData[]>([
     <SectionTitle
       v-if="data.sectionData"
       v-bind="data.sectionData"
-    ></SectionTitle>
-    <component :is="data.component"></component>
+    ></SectionTitle
+    ><template v-if="data.propsData">
+      <component :is="data.component" :propsData="data.propsData"></component
+    ></template>
   </div>
 </template>
 

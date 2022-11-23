@@ -3,7 +3,9 @@
 3. views 內的組件 -> import 改成絕對路徑寫法 (@/.....)
 4. style 都要加 scoped，避免影響到全局樣式
 5. 專案中加入 .editorconfig，並安裝套件，設定檔範例如下
+
 # Editor configuration, see https://editorconfig.org
+
 root = true
 
 [*]
@@ -23,5 +25,6 @@ trim_trailing_whitespace = false
 ========================================
 
 2022/11/22
+
 1. dramalist 改成取單筆資料
 2. 組件改成 pure component，只有 props 跟 emits，組件本身不打 API

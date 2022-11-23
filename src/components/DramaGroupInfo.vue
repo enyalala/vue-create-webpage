@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { GroupInfoData } from '@/models/SectionData'
-import { reactive, type PropType } from 'vue'
+import { reactive } from 'vue'
 
 const props = defineProps({
   dramaInfo: {
