@@ -10,7 +10,7 @@ import { getOneDramas } from '@/apis/index'
 import type { Drama } from '@/models/Drama'
 
 // Data ///////////////////////////////////////////////////////////////
-const dramaInfo: Drama[] = reactive([])
+const dramaInfo: { data: Drama | null } = reactive({ data: null })
 const idOfDrama = Number(useRoute().params.dramaId)
 
 // Function //////////////////////////////////////////////////////////
@@ -32,8 +32,8 @@ const hideModal = () => {
 }
 
 onMounted(async () => {
-  Object.assign(dramaInfo, (await getOneDramas(idOfDrama)).data)
-  // JSON.parse(JSON.stringify(dramaList))
+  dramaInfo.data = (await getOneDramas(idOfDrama)).data ?? null
+
   console.log(dramaInfo)
 })
 </script>
@@ -45,7 +45,7 @@ onMounted(async () => {
         v-if="commentIsTrue"
         @addComments="addCommentsCallback"
         @removeComments="removeCommentsCallback"
-        :dramaInfo="dramaInfo"
+        :dramaInfo="dramaInfo.data"
       >
         <template #close>
           <div class="close_zone">
@@ -53,22 +53,22 @@ onMounted(async () => {
               <font-awesome-icon icon="fa-solid fa-xmark" />
             </div></div></template
       ></CommentDialog>
-      <template v-if="dramaInfo">
-        <DramaCover :dramaInfo="dramaInfo" :idOfDrama="idOfDrama" />
+      <template v-if="dramaInfo.data">
+        <DramaCover :dramaInfo="dramaInfo.data" :idOfDrama="idOfDrama" />
         <div class="drama_info">
           <ThreeButton :idOfDrama="idOfDrama" />
           <div class="group_info">
-            <DramaGroupInfo :dramaInfo="dramaInfo" />
+            <DramaGroupInfo :dramaInfo="dramaInfo.data" />
           </div>
           <div class="intro_title">劇我所知</div>
           <div
             class="group_info_title"
-            v-for="item in dramaInfo.highlight"
+            v-for="item in dramaInfo.data.highlight"
             :key="item"
           >
             {{ item }}
           </div>
-          <div class="desc_text">{{ dramaInfo.description }}</div>
+          <div class="desc_text">{{ dramaInfo.data.description }}</div>
           <div class="comment_title">
             <div class="hot_title">熱門短評</div>
             <button class="subtitle_text" @click="outputDialog">更多 ＞</button>
