@@ -38,7 +38,7 @@ const groupInfoList = reactive<GroupInfoData[]>([
     v-for="(info, index) in groupInfoList"
     :key="index"
   >
-    <template v-if="props.dramaInfo[info.dataName].length">
+    <template v-if="props.dramaInfo[info.dataName]">
       {{ info.groupInfoTitle }}
       <div class="group_info_content">
         <div

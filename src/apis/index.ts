@@ -9,6 +9,11 @@ export const getDramas = async () => {
   return dramaInfoRequest.get('')
 }
 
+/** 讀取單筆戲劇資訊 */
+export const getOneDramas = async (id: number) => {
+  return dramaInfoRequest.get(`/${id}`)
+}
+
 /** 不收藏戲劇 */
 export const patchUnCollect = async (id: number) => {
   await dramaInfoRequest.patch(`/${id}`, {

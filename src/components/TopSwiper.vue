@@ -5,13 +5,10 @@ import 'swiper/css/pagination'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { RouterLink } from 'vue-router'
 import { Autoplay, Pagination, Mousewheel, Keyboard, Navigation } from 'swiper'
-import { watch, reactive } from 'vue'
-import type { Drama } from '@/models/Drama'
 
 const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
 
 const props = defineProps({ propsData: { type: Object, required: true } })
-console.log(props.propsData)
 
 const getS1ImageUrl = (name: number) => {
   return new URL(`../assets/img/homeS1P${name}.jpg`, import.meta.url).href
@@ -36,31 +33,33 @@ const getS1ImageUrl = (name: number) => {
     :modules="modules1"
     class="mySwiper1"
   >
-    <swiper-slide v-for="id in props.propsData.id" :key="id"
-      ><router-link :to="'/dramalist/' + id"
-        ><img class="topswiper_img1" :src="getS1ImageUrl(id)" alt="photo" /><img
+    <swiper-slide v-for="data in props.propsData" :key="data"
+      ><router-link :to="'/dramalist/' + data.id"
+        ><img
+          class="topswiper_img1"
+          :src="getS1ImageUrl(data.id)"
+          alt="photo"
+        /><img
           class="topswiper_img2"
-          :src="getS1ImageUrl(id)"
+          :src="getS1ImageUrl(data.id)"
           alt="photo"
         />
-        <div v-if="props.propsData.name.length <= 11">
+        <div v-if="data.name.length <= 11">
           <div class="topswiper_title">
-            {{ props.propsData.homestatus }}
+            {{ data.homestatus }}
             <div class="line"></div>
           </div>
-          <div class="topswiper_dramaname">《{{ props.propsData.name }}》</div>
+          <div class="topswiper_dramaname">《{{ data.name }}》</div>
         </div>
         <div v-else>
           <div class="topswiper_title_long">
-            {{ props.propsData.homestatus }}
+            {{ data.homestatus }}
             <div class="line"></div>
           </div>
-          <div class="topswiper_dramaname_long">
-            《{{ props.propsData.name }}》
-          </div>
+          <div class="topswiper_dramaname_long">《{{ data.name }}》</div>
         </div>
         <div class="topswiper_desc">
-          {{ props.propsData.homedescription }}
+          {{ data.homedescription }}
         </div>
       </router-link></swiper-slide
     ></swiper

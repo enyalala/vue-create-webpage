@@ -313,8 +313,8 @@
       "comments": [
         ""
       ],
-      "collect": false,
-      "score": 0
+      "collect": true,
+      "score": 2
     },
     {
       "id": 6,

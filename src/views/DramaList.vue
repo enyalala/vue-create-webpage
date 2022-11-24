@@ -4,17 +4,14 @@ import DramaCover from '@/components/DramaCover.vue'
 import ThreeButton from '@/components/ThreeButton.vue'
 import DramaGroupInfo from '@/components/DramaGroupInfo.vue'
 import HotComment from '@/components/HotComment.vue'
-import { ref, reactive, onMounted, computed, type ComputedRef } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { getDramas } from '@/apis/index'
+import { getOneDramas } from '@/apis/index'
 import type { Drama } from '@/models/Drama'
 
 // Data ///////////////////////////////////////////////////////////////
-const dramaList: Drama[] = reactive([])
+const dramaInfo: Drama[] = reactive([])
 const idOfDrama = Number(useRoute().params.dramaId)
-const dramaInfo: ComputedRef<Drama | undefined> = computed(
-  () => dramaList[idOfDrama]
-)
 
 // Function //////////////////////////////////////////////////////////
 
@@ -35,9 +32,9 @@ const hideModal = () => {
 }
 
 onMounted(async () => {
-  Object.assign(dramaList, (await getDramas()).data)
+  Object.assign(dramaInfo, (await getOneDramas(idOfDrama)).data)
   // JSON.parse(JSON.stringify(dramaList))
-  // console.log(dramaList)
+  console.log(dramaInfo)
 })
 </script>
 
@@ -48,6 +45,7 @@ onMounted(async () => {
         v-if="commentIsTrue"
         @addComments="addCommentsCallback"
         @removeComments="removeCommentsCallback"
+        :dramaInfo="dramaInfo"
       >
         <template #close>
           <div class="close_zone">
@@ -65,10 +63,10 @@ onMounted(async () => {
           <div class="intro_title">劇我所知</div>
           <div
             class="group_info_title"
-            v-for="highlight in dramaInfo.highlight"
-            :key="highlight"
+            v-for="item in dramaInfo.highlight"
+            :key="item"
           >
-            {{ highlight }}
+            {{ item }}
           </div>
           <div class="desc_text">{{ dramaInfo.description }}</div>
           <div class="comment_title">

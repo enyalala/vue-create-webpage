@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { patchCollect, patchScored, getDramas } from '@/apis/index'
+import { patchCollect, patchScored, getOneDramas } from '@/apis/index'
 import type { Drama } from '@/models/Drama'
 
 const props = defineProps({
@@ -14,19 +14,19 @@ const hideStar = ref(true)
 const isCollect = ref(false)
 const standardText = ref('')
 
-const dramaList: Drama[] = reactive([])
+const dramaInfo: Drama[] = reactive([])
 
 const scored = (id: number, score: number) => {
   hideStar.value = true
   patchScored(id, score).then((response) => {
-    Object.assign(dramaList, response.data)
+    Object.assign(dramaInfo, response.data)
   })
 }
 
 const collect = (id: number) => {
   isCollect.value = !isCollect.value
   patchCollect(id, isCollect.value).then((response) => {
-    Object.assign(dramaList, response.data)
+    Object.assign(dramaInfo, response.data)
   })
 }
 
@@ -34,7 +34,7 @@ const changeFiveStar = () => {
   hideStar.value = false
 }
 /** 星星評分定義 */
-const starStardard = (num: number) => {
+const starStandard = (num: number) => {
   if (num === 1) {
     standardText.value = '極不推薦'
   } else if (num === 2) {
@@ -49,16 +49,17 @@ const starStardard = (num: number) => {
 }
 
 onMounted(async () => {
-  Object.assign(dramaList, (await getDramas()).data)
+  Object.assign(dramaInfo, (await getOneDramas(props.idOfDrama)).data)
+  console.log(dramaInfo)
 })
 </script>
 
 <template>
   <div class="btn_content">
-    <template v-if="dramaList[props.idOfDrama]">
+    <template v-if="dramaInfo[props.idOfDrama]">
       <button class="btn_three" @click="collect(props.idOfDrama)">
         <div
-          v-if="dramaList[props.idOfDrama].collect === false"
+          v-if="dramaInfo[props.idOfDrama].collect === false"
           class="btn_three_icon"
         >
           <font-awesome-icon icon="fa-regular fa-heart" />
@@ -75,7 +76,7 @@ onMounted(async () => {
         </div>
         <div class="btn_three_text">分享</div>
       </button>
-      <div v-if="hideStar && dramaList[props.idOfDrama].score === 0">
+      <div v-if="hideStar && dramaInfo[props.idOfDrama].score === 0">
         <button class="btn_three" @click="changeFiveStar">
           <div class="btn_three_content">
             <div class="btn_three_icon">
@@ -85,7 +86,7 @@ onMounted(async () => {
           </div>
         </button>
       </div>
-      <div v-else-if="hideStar && dramaList[props.idOfDrama].score !== 0">
+      <div v-else-if="hideStar && dramaInfo[props.idOfDrama].score !== 0">
         <button class="btn_three" @click="changeFiveStar">
           <div class="btn_three_content">
             <div class="btn_three_icon">
@@ -101,35 +102,35 @@ onMounted(async () => {
           <div class="btn_star_content">
             <button
               class="btn_star_icon1"
-              @mouseover="starStardard(5)"
+              @mouseover="starStandard(5)"
               @click="scored(props.idOfDrama, 5)"
             >
               <font-awesome-icon icon="fa-solid fa-star" />
             </button>
             <button
               class="btn_star_icon2"
-              @mouseover="starStardard(4)"
+              @mouseover="starStandard(4)"
               @click="scored(props.idOfDrama, 4)"
             >
               <font-awesome-icon icon="fa-solid fa-star" />
             </button>
             <button
               class="btn_star_icon3"
-              @mouseover="starStardard(3)"
+              @mouseover="starStandard(3)"
               @click="scored(props.idOfDrama, 3)"
             >
               <font-awesome-icon icon="fa-solid fa-star" />
             </button>
             <button
               class="btn_star_icon4"
-              @mouseover="starStardard(2)"
+              @mouseover="starStandard(2)"
               @click="scored(props.idOfDrama, 2)"
             >
               <font-awesome-icon icon="fa-solid fa-star" />
             </button>
             <button
               class="btn_star_icon5"
-              @mouseover="starStardard(1)"
+              @mouseover="starStandard(1)"
               @click="scored(props.idOfDrama, 1)"
             >
               <font-awesome-icon icon="fa-solid fa-star" />

@@ -1,31 +1,30 @@
 <script setup lang="ts">
 import 'swiper/css'
 import 'swiper/css/pagination'
-import { getDramas } from '@/apis/index'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Pagination, Navigation } from 'swiper'
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useImageUrl } from '@/stores/GetImageUrl'
-import type { Drama } from '@/models/Drama'
+
+const props = defineProps({ propsData: { type: Object, required: true } })
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
 const modules3: any = [Pagination, Navigation]
 const slideMove = ref(false)
 const selectIndex = ref(-1)
 
-const dramaId: number[] = reactive([])
-const dramaList: Drama[] = reactive([])
-
-const dramaIdDeleteLast = computed(() => {
-  return dramaId.slice(0, -1)
+const dramaDeleteLast = computed(() => {
+  return props.propsData.slice(0, -1)
 })
 
-const dramaIdLast = computed(() => {
-  return dramaId[dramaId.length - 1]
+const dramaLast = computed(() => {
+  return props.propsData[props.propsData.length - 1]
 })
 
 const dramaLastName = computed(() => {
-  return dramaList.find((drama) => drama.id === dramaIdLast.value)?.name
+  return props.propsData.find(
+    (drama: { id: number; name: string }) => drama.id === dramaLast.value.id
+  )?.name
 })
 
 const lastSlideShow = () => {
@@ -35,11 +34,11 @@ const lastSlideHide = () => {
   slideMove.value = false
 }
 
-const dramaover = (idx: number) => {
+const dramaOver = (idx: number) => {
   selectIndex.value = idx
 }
 
-const dramaleave = (idx: number) => {
+const dramaLeave = (idx: number) => {
   selectIndex.value = idx
 }
 
@@ -49,15 +48,6 @@ const getRankUrl = (name: number) => {
     import.meta.url
   ).href
 }
-
-onMounted(async () => {
-  Object.assign(dramaList, (await getDramas()).data)
-  dramaList.forEach((drama) => {
-    if (drama.classification.includes('熱播')) {
-      dramaId.push(drama.id)
-    }
-  })
-})
 </script>
 
 <template>
@@ -73,37 +63,37 @@ onMounted(async () => {
     class="mySwiper3"
   >
     <swiper-slide
-      v-for="(id, index) in dramaIdDeleteLast"
-      :key="id"
+      v-for="(data, index) in dramaDeleteLast"
+      :key="data"
       :class="{ move: slideMove }"
     >
-      <router-link :to="'/dramalist/' + id"
+      <router-link :to="'/dramalist/' + data.id"
         ><div class="content">
           <div class="img_content" v-if="index !== selectIndex">
             <img
               class="img1"
-              @mouseover="dramaover(index)"
-              :src="getCoverUrl(id)"
+              @mouseover="dramaOver(index)"
+              :src="getCoverUrl(data.id)"
               alt="photo"
             />
           </div>
           <div class="img_content" v-else>
             <img
               class="img1"
-              @mouseleave="dramaover(-1)"
-              :src="getCoverUrl(id)"
+              @mouseleave="dramaOver(-1)"
+              :src="getCoverUrl(data.id)"
               alt="photo"
             />
 
             <img
               class="img2"
-              @mouseleave="dramaleave(-1)"
-              :src="getSideUrl(id, 1)"
+              @mouseleave="dramaLeave(-1)"
+              :src="getSideUrl(data.id, 1)"
               alt="photo"
             />
           </div>
           <img class="img_rank" :src="getRankUrl(index + 1)" alt="" />
-          <div class="name_text">{{ dramaList[id].name }}</div>
+          <div class="name_text">{{ data.name }}</div>
         </div></router-link
       ></swiper-slide
     >
@@ -112,15 +102,19 @@ onMounted(async () => {
       @mouseleave="lastSlideHide"
       :class="{ move: slideMove }"
     >
-      <template v-if="dramaIdLast"
-        ><router-link :to="'/dramalist/' + dramaIdLast"
+      <template v-if="dramaLast"
+        ><router-link :to="'/dramalist/' + dramaLast.id"
           ><div class="content">
             <div class="img_content" v-if="!slideMove">
-              <img class="img1" :src="getCoverUrl(dramaIdLast)" alt="photo" />
+              <img class="img1" :src="getCoverUrl(dramaLast.id)" alt="photo" />
             </div>
             <div class="img_content" v-else>
-              <img class="img1" :src="getCoverUrl(dramaIdLast)" alt="photo" />
-              <img class="img2" :src="getSideUrl(dramaIdLast, 1)" alt="photo" />
+              <img class="img1" :src="getCoverUrl(dramaLast.id)" alt="photo" />
+              <img
+                class="img2"
+                :src="getSideUrl(dramaLast.id, 1)"
+                alt="photo"
+              />
             </div>
             <img class="img_rank" :src="getRankUrl(10)" alt="" />
             <div class="name_text">

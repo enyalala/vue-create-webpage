@@ -7,10 +7,6 @@ const { getCoverUrl, getSideUrl } = useImageUrl()
 const num: Ref<number> = ref(1)
 
 const props = defineProps({
-  idOfDrama: {
-    type: Number,
-    default: 0,
-  },
   dramaInfo: {
     type: Object,
     required: true,
@@ -40,8 +36,12 @@ setInterval(() => {
       </div>
     </div>
     <div class="cover_bg"></div>
-    <img class="cover_img" :src="getCoverUrl(props.idOfDrama)" alt="" />
-    <img class="side_img" :src="getSideUrl(props.idOfDrama, num)" alt="photo" />
+    <img class="cover_img" :src="getCoverUrl(props.dramaInfo.id)" alt="" />
+    <img
+      class="side_img"
+      :src="getSideUrl(props.dramaInfo.id, num)"
+      alt="photo"
+    />
   </div>
 </template>
 

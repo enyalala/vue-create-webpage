@@ -2,26 +2,15 @@
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { reactive, onMounted } from 'vue'
 import { Pagination, Navigation } from 'swiper'
 import { useImageUrl } from '@/stores/GetImageUrl'
-import type { Drama } from '@/models/Drama'
-import { getDramas } from '@/apis/index'
+
+const props = defineProps({ propsData: { type: Object, required: true } })
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
 const modules2: any = [Pagination, Navigation]
 
-const dramaId: number[] = reactive([])
-const dramaList: Drama[] = reactive([])
 
-onMounted(async () => {
-  Object.assign(dramaList, (await getDramas()).data)
-  dramaList.forEach((drama) => {
-    if (drama.classification.includes('新劇')) {
-      dramaId.push(drama.id)
-    }
-  })
-})
 </script>
 
 <template>
@@ -34,23 +23,23 @@ onMounted(async () => {
     :modules="modules2"
     class="mySwiper2"
   >
-    <swiper-slide v-for="drama_id in dramaId" :key="drama_id"
-      ><router-link :to="'/dramalist/' + drama_id">
+    <swiper-slide v-for="data in props.propsData" :key="data"
+      ><router-link :to="'/dramalist/' + data.id">
         <div class="content">
           <div class="cover_bg"></div>
           <div class="text_content">
-            <span class="name_text">{{ dramaList[drama_id].name }}</span>
+            <span class="name_text">{{ data.name }}</span>
             <div class="star_text">
               <font-awesome-icon icon="fa-solid fa-star" />
-              {{ dramaList[drama_id].score }}
+              {{ data.score }}
             </div>
-            <div class="desc_text">{{ dramaList[drama_id].description }}</div>
+            <div class="desc_text">{{ data.description }}</div>
           </div>
           <div class="cover_img">
-            <img :src="getCoverUrl(drama_id)" alt="" />
+            <img :src="getCoverUrl(data.id)" alt="" />
           </div>
           <div class="side_img">
-            <img :src="getSideUrl(drama_id, 1)" alt="photo" />
+            <img :src="getSideUrl(data.id, 1)" alt="photo" />
           </div></div></router-link
     ></swiper-slide>
   </swiper>
