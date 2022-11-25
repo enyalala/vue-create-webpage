@@ -3,13 +3,12 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-// import axios from 'axios'
-
+import loading from 'vue-loading-overlay'
+// import 'vue-loading-overlay/dist/vue-loading.css'
 import './assets/main.css'
 
-/* import the fontawesome core */
+/* import fontawesome */
 import { library } from '@fortawesome/fontawesome-svg-core'
-/* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
@@ -19,6 +18,7 @@ import {
   faXmark,
   faCircleXmark,
   faMagnifyingGlass,
+  faCircleCheck,
   faStar as fasStar,
   faHeart as fasHeart,
 } from '@fortawesome/free-solid-svg-icons'
@@ -33,7 +33,7 @@ library.add(
   farHeart,
   fasHeart,
   farStar,
-  fasStar,
+  fasStar,faCircleCheck,
   faCircleXmark,
   faXmark,
   faMagnifyingGlass
@@ -42,6 +42,7 @@ library.add(
 const app = createApp(App)
 
 app.component('font-awesome-icon', FontAwesomeIcon)
+app.component('vueLoading', loading)
 app.use(createPinia())
 app.use(router)
 

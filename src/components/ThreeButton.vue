@@ -1,38 +1,36 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
-import { patchCollect, patchScored, getOneDramas } from '@/apis/index'
-import type { Drama } from '@/models/Drama'
+import { ref } from 'vue'
+
+const emits = defineEmits(['afterCollect', 'afterScored'])
 
 const props = defineProps({
-  idOfDrama: {
-    type: Number,
+  dramaInfo: {
+    type: Object,
     required: true,
   },
 })
 
 const hideStar = ref(true)
-const isCollect = ref(false)
+const isCollectClick = ref(false)
 const standardText = ref('')
 
-const dramaInfo: Drama[] = reactive([])
+const isCollect = ref(props.dramaInfo.collect)
 
-const scored = (id: number, score: number) => {
+const scored = (score: number) => {
   hideStar.value = true
-  patchScored(id, score).then((response) => {
-    Object.assign(dramaInfo, response.data)
-  })
+  emits('afterScored', score)
 }
 
-const collect = (id: number) => {
+const collect = () => {
   isCollect.value = !isCollect.value
-  patchCollect(id, isCollect.value).then((response) => {
-    Object.assign(dramaInfo, response.data)
-  })
+  isCollectClick.value = true
+  emits('afterCollect', isCollect.value)
 }
-
+console.log(isCollectClick.value)
 const changeFiveStar = () => {
   hideStar.value = false
 }
+
 /** 星星評分定義 */
 const starStandard = (num: number) => {
   if (num === 1) {
@@ -47,27 +45,26 @@ const starStandard = (num: number) => {
     standardText.value = '極力推薦'
   }
 }
-
-onMounted(async () => {
-  Object.assign(dramaInfo, (await getOneDramas(props.idOfDrama)).data)
-  console.log(dramaInfo)
-})
 </script>
 
 <template>
   <div class="btn_content">
-    <template v-if="dramaInfo[props.idOfDrama]">
-      <button class="btn_three" @click="collect(props.idOfDrama)">
-        <div
-          v-if="dramaInfo[props.idOfDrama].collect === false"
-          class="btn_three_icon"
-        >
+    <template v-if="props.dramaInfo">
+      <div class="collect_alert" v-if="isCollectClick && isCollect">
+        <font-awesome-icon icon="fa-solid fa-circle-check" />
+        <span> 收藏成功</span>
+      </div>
+      <div class="collect_alert" v-else-if="isCollectClick && !isCollect">
+        <font-awesome-icon icon="fa-solid fa-circle-check" />
+        <span> 取消收藏</span>
+      </div>
+      <button class="btn_three" @click="collect()">
+        <div v-if="!props.dramaInfo.collect" class="btn_three_icon">
           <font-awesome-icon icon="fa-regular fa-heart" />
         </div>
         <div v-else class="btn_three_icon">
           <font-awesome-icon icon="fa-solid fa-heart" />
         </div>
-
         <div class="btn_three_text">收藏</div>
       </button>
       <button class="btn_three">
@@ -76,7 +73,7 @@ onMounted(async () => {
         </div>
         <div class="btn_three_text">分享</div>
       </button>
-      <div v-if="hideStar && dramaInfo[props.idOfDrama].score === 0">
+      <div v-if="hideStar && props.dramaInfo.score === 0">
         <button class="btn_three" @click="changeFiveStar">
           <div class="btn_three_content">
             <div class="btn_three_icon">
@@ -86,7 +83,7 @@ onMounted(async () => {
           </div>
         </button>
       </div>
-      <div v-else-if="hideStar && dramaInfo[props.idOfDrama].score !== 0">
+      <div v-else-if="hideStar && props.dramaInfo.score !== 0">
         <button class="btn_three" @click="changeFiveStar">
           <div class="btn_three_content">
             <div class="btn_three_icon">
@@ -96,42 +93,41 @@ onMounted(async () => {
           </div>
         </button>
       </div>
-
       <div class="group_info_content" v-else>
         <button class="btn_three">
           <div class="btn_star_content">
             <button
               class="btn_star_icon1"
               @mouseover="starStandard(5)"
-              @click="scored(props.idOfDrama, 5)"
+              @click="scored(5)"
             >
               <font-awesome-icon icon="fa-solid fa-star" />
             </button>
             <button
               class="btn_star_icon2"
               @mouseover="starStandard(4)"
-              @click="scored(props.idOfDrama, 4)"
+              @click="scored(4)"
             >
               <font-awesome-icon icon="fa-solid fa-star" />
             </button>
             <button
               class="btn_star_icon3"
               @mouseover="starStandard(3)"
-              @click="scored(props.idOfDrama, 3)"
+              @click="scored(3)"
             >
               <font-awesome-icon icon="fa-solid fa-star" />
             </button>
             <button
               class="btn_star_icon4"
               @mouseover="starStandard(2)"
-              @click="scored(props.idOfDrama, 2)"
+              @click="scored(2)"
             >
               <font-awesome-icon icon="fa-solid fa-star" />
             </button>
             <button
               class="btn_star_icon5"
               @mouseover="starStandard(1)"
-              @click="scored(props.idOfDrama, 1)"
+              @click="scored(1)"
             >
               <font-awesome-icon icon="fa-solid fa-star" />
             </button>
@@ -147,11 +143,32 @@ onMounted(async () => {
 .btn_content {
   margin-top: 40px;
   display: flex;
-  .group_info_text {
-    margin: 0px 10px;
-    color: white;
-    font-weight: bold;
+  position: relative;
+
+  .collect_alert {
+    position: absolute;
+    top: -30px;
+    color: rgb(240, 72, 110);
     font-size: 14px;
+
+    animation-name: collectAlert;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+
+    @keyframes collectAlert {
+      0% {
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      85% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
   }
 
   .star_standard {

@@ -9,8 +9,6 @@ const props = defineProps({ propsData: { type: Object, required: true } })
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
 const modules2: any = [Pagination, Navigation]
-
-
 </script>
 
 <template>

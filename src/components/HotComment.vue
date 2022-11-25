@@ -2,20 +2,21 @@
 import type { PropType } from 'vue'
 
 const props = defineProps({
-  comments: {
-    type: [Array, String] as PropType<string[] | string>,
-    default: '',
+  dramaInfo: {
+    type: Object,
+    required: true,
   },
 })
+
 </script>
 
 <template>
-  <div v-if="props.comments.length === 0" style="color: white">
+  <div v-if="props.dramaInfo.comments.length === 0" style="color: white">
     目前尚無評論。
   </div>
   <div v-else>
     <button
-      v-for="comment in props.comments"
+      v-for="comment in props.dramaInfo.comments"
       :key="comment"
       class="btn_allcomments"
     >

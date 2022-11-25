@@ -2,6 +2,13 @@
 import HotComment from '@/components/HotComment.vue'
 import { ref, reactive, onUpdated } from 'vue'
 
+const props = defineProps({
+  dramaInfo: {
+    type: Object,
+    required: true,
+  },
+})
+
 const emits = defineEmits(['addComments', 'removeComments'])
 const enteredComment = ref('')
 const comments: string[] = reactive([])
@@ -89,7 +96,7 @@ onUpdated(() => {
     <div class="inner_comment_title">
       <div class="hot_title">熱門短評</div>
     </div>
-    <HotComment :comments="comments" />
+    <HotComment :dramaInfo="props.dramaInfo" />
   </div>
   <div class="overlay"></div>
 </template>

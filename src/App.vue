@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { reactive } from 'vue'
+import { reactive, onMounted,ref } from 'vue'
 import type { NavData } from '@/models/SectionData'
+import { getDramas } from '@/apis/index'
+import type { Drama } from '@/models/Drama'
 import SearchBar from '@/components/SearchBar.vue'
 
-// const getImgUrl: () => string = () => {
-//   return new URL('./assets/img/kktv_logo.svg', import.meta.url).href
-// }
-
+const dramaList: { data: Drama | null } = reactive({ data: null })
 const navlist = reactive<NavData[]>([
   {
     classes: '',
@@ -49,6 +48,10 @@ const navlist = reactive<NavData[]>([
 function getImgUrl(): string {
   return new URL('./assets/img/kktv_logo.svg', import.meta.url).href
 }
+
+onMounted(async () => {
+  dramaList.data = (await getDramas()).data ?? null
+})
 </script>
 
 <template>
@@ -72,7 +75,9 @@ function getImgUrl(): string {
             >
           </li>
         </ul>
-        <SearchBar />
+        <template v-if="dramaList.data">
+          <SearchBar :dramaList="dramaList.data"
+        /></template>
       </div>
     </div>
     <div class="nav_box"></div>
@@ -85,7 +90,7 @@ function getImgUrl(): string {
 
 .container {
   width: 100%;
-  height: auto;
+  min-height: 100vh;
   margin: 0px auto;
   background-color: #222;
   .navbar {

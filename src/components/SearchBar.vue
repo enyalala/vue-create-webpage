@@ -1,18 +1,24 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { ref, reactive, watch, onMounted } from 'vue'
-import { getDramas } from '@/apis/index'
+import { ref, reactive, watch } from 'vue'
 import { useSearchItem } from '@/stores/SearchItem'
 
 const { searchItemInfo } = useSearchItem()
+
+const emits = defineEmits(['returnDramas'])
+
+const props = defineProps({
+  dramaList: {
+    type: Object,
+    required: true,
+  },
+})
 
 const inputSearch = ref('')
 const searchShow = ref(false)
 /** 關鍵字搜尋的文字，是否從歷史記錄選取的 */
 const isSearchValueFromHistory = ref(false)
 const selectItemIndex = ref(-1)
-
-const dramaList = reactive([])
 
 const historySearch: Set<string> = reactive(new Set())
 /** 關鍵字搜尋相關結果 */
@@ -24,11 +30,18 @@ const returnItem = (name: string, idx: number) => {
   selectItemIndex.value = idx
   historySearch.add(name)
   inputSearch.value = ''
+  emits('returnDramas')
 }
+
 /** 關鍵字選取行為，並判斷是否從歷史記錄選取 */
 const selectItem = (name: string, fromHistory = false) => {
   inputSearch.value = name
   isSearchValueFromHistory.value = fromHistory
+}
+
+/** 清除歷史搜尋記錄 */
+const clearRecord = () => {
+  historySearch.clear()
 }
 
 /** 搜尋列展開與閉合 */
@@ -38,7 +51,7 @@ const switchSearch = () => {
 
 /** 監控搜尋框文字輸入 - inputSearch */
 watch(inputSearch, () => {
-  dramaList.filter((drama: any) => {
+  props.dramaList.filter((drama: any) => {
     if (inputSearch.value !== '') {
       const matchName = drama.name.match(inputSearch.value)
       const matchActor = drama.actor.filter((actor: string) =>
@@ -57,10 +70,6 @@ watch(inputSearch, () => {
     }
   })
   // console.log(filterInfos, searchInfo)
-})
-
-onMounted(async () => {
-  Object.assign(dramaList, (await getDramas()).data)
 })
 </script>
 
@@ -90,7 +99,8 @@ onMounted(async () => {
           "
         >
           <li class="auto_complete_header">
-            <span>搜尋記錄</span><button class="clear">清除記錄</button>
+            <span>搜尋記錄</span
+            ><button class="clear" @click="clearRecord">清除記錄</button>
           </li>
           <li
             class="auto_complete_item"

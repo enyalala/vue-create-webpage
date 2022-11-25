@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { reactive, onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
-import { useImageUrl } from '@/stores/GetImageUrl'
+import { reactive, onMounted, computed } from 'vue'
 import { useSearchItem } from '@/stores/SearchItem'
 import type { Drama } from '@/models/Drama'
 import { getDramas } from '@/apis/index'
+import NormalPage from '@/components/NormalPage.vue'
 
 const { searchItemInfo } = useSearchItem()
 
-const { getCoverUrl, getSideUrl } = useImageUrl()
-
 const selectDrama: any = reactive([])
 const dramaList: Drama[] = reactive([])
+const dramaFilter = computed(() => {
+  return selectDrama
+})
 
 onMounted(async () => {
   Object.assign(dramaList, (await getDramas()).data)
@@ -32,11 +32,7 @@ onMounted(async () => {
       <div class="collect_title_text">
         {{ searchItemInfo.selectItemName }} 的搜尋結果：
       </div>
-      <div v-for="(drama, index) in selectDrama" :key="index">
-        <router-link :to="'/dramalist/' + drama.id"
-          ><img :src="getCoverUrl(drama.id)"
-        /></router-link>
-      </div>
+      <NormalPage :dramaFilter="dramaFilter" />
     </div>
   </main>
 </template>

@@ -1,26 +1,37 @@
 <script setup lang="ts">
-import CommentDialog from '@/views/CommentDialog.vue'
+import CommentDialog from '@/components/CommentDialog.vue'
 import DramaCover from '@/components/DramaCover.vue'
 import ThreeButton from '@/components/ThreeButton.vue'
 import DramaGroupInfo from '@/components/DramaGroupInfo.vue'
 import HotComment from '@/components/HotComment.vue'
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { getOneDramas } from '@/apis/index'
+import {
+  getOneDramas,
+  patchScored,
+  patchCollect,
+  patchComment,
+} from '@/apis/index'
 import type { Drama } from '@/models/Drama'
 
-// Data ///////////////////////////////////////////////////////////////
 const dramaInfo: { data: Drama | null } = reactive({ data: null })
 const idOfDrama = Number(useRoute().params.dramaId)
 
-// Function //////////////////////////////////////////////////////////
-
 const comments: string[] = reactive([])
-const addCommentsCallback = (res: string) => {
+/** 加入評論 */
+const addComments = (res: string) => {
   comments.push(res)
+  patchComment(idOfDrama, comments).then(
+    (response) => (dramaInfo.data = response.data ?? null)
+  )
 }
-const removeCommentsCallback = (res: number) => {
+
+/** 移除評論 */
+const removeComments = (res: number) => {
   comments.splice(res, 1)
+  patchComment(idOfDrama, comments).then(
+    (response) => (dramaInfo.data = response.data ?? null)
+  )
 }
 
 const commentIsTrue = ref(false)
@@ -31,32 +42,48 @@ const hideModal = () => {
   commentIsTrue.value = false
 }
 
+/** 切換戲劇收藏 */
+const afterCollect = (res: boolean) => {
+  patchCollect(idOfDrama, res).then((response) => {
+    dramaInfo.data = response.data ?? null
+  })
+}
+
+/** 切換評分分數 */
+const afterScored = (score: number) => {
+  patchScored(idOfDrama, score).then((response) => {
+    dramaInfo.data = response.data ?? null
+  })
+}
+
 onMounted(async () => {
   dramaInfo.data = (await getOneDramas(idOfDrama)).data ?? null
-
-  console.log(dramaInfo)
 })
 </script>
 
 <template>
   <main>
     <div class="container">
-      <CommentDialog
-        v-if="commentIsTrue"
-        @addComments="addCommentsCallback"
-        @removeComments="removeCommentsCallback"
-        :dramaInfo="dramaInfo.data"
-      >
-        <template #close>
-          <div class="close_zone">
-            <div class="close" @click="hideModal">
-              <font-awesome-icon icon="fa-solid fa-xmark" />
-            </div></div></template
-      ></CommentDialog>
       <template v-if="dramaInfo.data">
+        <CommentDialog
+          v-if="commentIsTrue"
+          @addComments="addComments"
+          @removeComments="removeComments"
+          :dramaInfo="dramaInfo.data"
+        >
+          <template #close>
+            <div class="close_zone">
+              <div class="close" @click="hideModal">
+                <font-awesome-icon icon="fa-solid fa-xmark" />
+              </div></div></template
+        ></CommentDialog>
         <DramaCover :dramaInfo="dramaInfo.data" :idOfDrama="idOfDrama" />
         <div class="drama_info">
-          <ThreeButton :idOfDrama="idOfDrama" />
+          <ThreeButton
+            :dramaInfo="dramaInfo.data"
+            @afterCollect="afterCollect"
+            @afterScored="afterScored"
+          />
           <div class="group_info">
             <DramaGroupInfo :dramaInfo="dramaInfo.data" />
           </div>
@@ -74,7 +101,9 @@ onMounted(async () => {
             <button class="subtitle_text" @click="outputDialog">更多 ＞</button>
             <button class="comment_text" @click="outputDialog">我也要說</button>
           </div>
-          <div class="comment_content"><HotComment :comments="comments" /></div>
+          <div class="comment_content">
+            <HotComment :dramaInfo="dramaInfo.data" />
+          </div>
         </div>
       </template>
     </div>
