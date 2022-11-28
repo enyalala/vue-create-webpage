@@ -124,7 +124,10 @@ onMounted(async () => {
             <button class="comment_text" @click="outputDialog">我也要說</button>
           </div>
           <div class="comment_content">
-            <HotComment :dramaInfo="dramaInfo.data" />
+            <HotComment
+              :dramaInfo="dramaInfo.data"
+              @likeComment="likeComment"
+            />
           </div>
         </div>
       </template>

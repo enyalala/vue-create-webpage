@@ -64,11 +64,11 @@
         },
         {
           "sentence": "很讚",
-          "count": 0
+          "count": 1
         },
         {
           "sentence": "推薦",
-          "count": 1
+          "count": 0
         }
       ],
       "collect": false,

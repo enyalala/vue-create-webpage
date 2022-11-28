@@ -5,6 +5,12 @@ const props = defineProps({
     required: true,
   },
 })
+
+const emits = defineEmits(['likeComment'])
+
+const likeComment = (idx: number) => {
+  emits('likeComment', idx)
+}
 </script>
 
 <template>
@@ -13,13 +19,14 @@ const props = defineProps({
   </div>
   <div v-else>
     <button
-      v-for="comment in props.dramaInfo.comments"
-      :key="comment"
+      v-for="(eachComment, index) in props.dramaInfo.comments"
+      :key="eachComment"
       class="btn_allcomments"
+      @click="likeComment(index)"
     >
-      {{ comment.sentence
-      }}<span v-if="comment.count !== 0" class="count">{{
-        comment.count
+      {{ eachComment.sentence
+      }}<span v-if="eachComment.count !== 0" class="count">{{
+        eachComment.count
       }}</span>
     </button>
   </div>
