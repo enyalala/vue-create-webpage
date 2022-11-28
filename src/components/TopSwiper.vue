@@ -70,6 +70,10 @@ const getS1ImageUrl = (name: number) => {
 .mySwiper1.swiper {
   width: 100%;
   height: 380px;
+
+  --swiper-navigation-color: white;
+  --swiper-navigation-size: 30px;
+  --swiper-pagination-color: white;
 }
 
 .mySwiper1 .swiper-slide {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import HotComment from '@/components/HotComment.vue'
-import { ref, reactive, onUpdated } from 'vue'
+import { ref, onUpdated } from 'vue'
 
 const props = defineProps({
   dramaInfo: {
@@ -9,15 +9,13 @@ const props = defineProps({
   },
 })
 
-const emits = defineEmits(['addComments', 'removeComments'])
+const emits = defineEmits(['addComments', 'removeComments', 'likeComment'])
 const enteredComment = ref('')
-const comments: string[] = reactive([])
 const editIsTrue = ref(false)
 
 const addComment = () => {
   enteredComment.value.trim()
   if (enteredComment.value !== '') {
-    comments.push(enteredComment.value)
     emits('addComments', enteredComment.value)
     enteredComment.value = ''
   }
@@ -31,13 +29,16 @@ const editShow = () => {
   editIsTrue.value = false
 }
 
+const likeComment = (idx: number) => {
+  emits('likeComment', idx)
+}
+
 const removeComment = (idx: number) => {
-  comments.splice(idx, 1)
   emits('removeComments', idx)
 }
 
 onUpdated(() => {
-  if (comments.length === 0) {
+  if (props.dramaInfo.comments.length === 0) {
     editIsTrue.value = false
   }
 })
@@ -62,28 +63,34 @@ onUpdated(() => {
     <button
       class="btn_edit"
       @click="completeShow"
-      v-show="comments.length !== 0 && !editIsTrue"
+      v-show="props.dramaInfo.comments.length !== 0 && !editIsTrue"
     >
       編輯
     </button>
     <button
       class="btn_edit"
       @click="editShow"
-      v-show="comments.length !== 0 && editIsTrue"
+      v-show="props.dramaInfo.comments.length !== 0 && editIsTrue"
     >
       完成
     </button>
     <div class="inner_comment_title">
       <div class="hot_title">我的短評</div>
     </div>
-    <div v-if="comments.length === 0" style="color: white">目前尚無評論。</div>
+    <div v-if="props.dramaInfo.comments.length === 0" style="color: white">
+      目前尚無評論。
+    </div>
     <div v-else>
       <button
-        v-for="(comment, index) in comments"
+        v-for="(comment, index) in props.dramaInfo.comments"
         :key="comment"
         class="btn_allcomments"
+        @click="likeComment(index)"
       >
-        {{ comment }}
+        {{ comment.sentence
+        }}<span v-if="comment.count !== 0" class="count">{{
+          comment.count
+        }}</span>
         <button
           v-if="editIsTrue"
           @click="removeComment(index)"
@@ -102,6 +109,7 @@ onUpdated(() => {
 </template>
 
 <style lang="scss" scoped>
+@import '@/styles/variable';
 .modal {
   position: fixed;
   left: 30%;
@@ -140,7 +148,7 @@ onUpdated(() => {
       font-size: 14px;
 
       &:focus {
-        border: 1px solid rgb(240, 72, 110);
+        border: 1px solid $color-kktv-pink;
       }
     }
 
@@ -156,7 +164,7 @@ onUpdated(() => {
       color: white;
       font-size: 14px;
       border-radius: 4px;
-      background-color: rgb(240, 72, 110);
+      background-color: $color-kktv-pink;
     }
   }
 
@@ -193,7 +201,7 @@ onUpdated(() => {
   }
 
   .btn_edit:hover {
-    color: rgb(240, 72, 110);
+    color: $color-kktv-pink;
   }
 
   .btn_allcomments {
@@ -215,6 +223,10 @@ onUpdated(() => {
   }
 }
 
+.count {
+  color: white;
+  margin-left: 5px;
+}
 .overlay {
   position: fixed;
   top: 0;

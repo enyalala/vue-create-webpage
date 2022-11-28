@@ -138,6 +138,7 @@ watch(inputSearch, () => {
 </template>
 
 <style lang="scss" scoped>
+@import '@/styles/variable';
 .nav_right {
   display: flex;
   align-items: center;
@@ -157,7 +158,7 @@ watch(inputSearch, () => {
     color: white;
     transition: all 0.3s ease-out;
     &:hover {
-      color: rgb(240, 72, 110);
+      color: $color-kktv-pink;
     }
   }
   .search_content {
@@ -216,7 +217,7 @@ watch(inputSearch, () => {
         &:hover {
           background-color: rgba(75, 75, 75, 0.3);
           .auto_complete_text {
-            color: rgb(240, 72, 110);
+            color: $color-kktv-pink;
           }
         }
 

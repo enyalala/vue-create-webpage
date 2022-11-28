@@ -4,7 +4,7 @@ import DramaCover from '@/components/DramaCover.vue'
 import ThreeButton from '@/components/ThreeButton.vue'
 import DramaGroupInfo from '@/components/DramaGroupInfo.vue'
 import HotComment from '@/components/HotComment.vue'
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   getOneDramas,
@@ -13,14 +13,18 @@ import {
   patchComment,
 } from '@/apis/index'
 import type { Drama } from '@/models/Drama'
+import type { commentsAndCounts } from '@/models/SectionData'
+
+const commentIsTrue = ref(false)
 
 const dramaInfo: { data: Drama | null } = reactive({ data: null })
 const idOfDrama = Number(useRoute().params.dramaId)
 
-const comments: string[] = reactive([])
+const comments: commentsAndCounts[] = reactive([])
+
 /** 加入評論 */
 const addComments = (res: string) => {
-  comments.push(res)
+  comments.push({ sentence: res, count: 0 })
   patchComment(idOfDrama, comments).then(
     (response) => (dramaInfo.data = response.data ?? null)
   )
@@ -34,7 +38,23 @@ const removeComments = (res: number) => {
   )
 }
 
-const commentIsTrue = ref(false)
+/** 喜歡這則評論 */
+const likeComment = (res: number) => {
+  if (comments[res].count === 0) {
+    comments[res].count++
+  } else {
+    comments[res].count--
+  }
+  patchComment(idOfDrama, comments).then(
+    (response) => (dramaInfo.data = response.data ?? null)
+  )
+}
+const sortComments = computed(() => {
+  return dramaInfo.data?.comments.slice(0).sort(function (a, b) {
+    return b.count - a.count
+  })
+})
+console.log(sortComments)
 const outputDialog = () => {
   commentIsTrue.value = true
 }
@@ -58,6 +78,7 @@ const afterScored = (score: number) => {
 
 onMounted(async () => {
   dramaInfo.data = (await getOneDramas(idOfDrama)).data ?? null
+  Object.assign(comments, dramaInfo.data?.comments)
 })
 </script>
 
@@ -69,6 +90,7 @@ onMounted(async () => {
           v-if="commentIsTrue"
           @addComments="addComments"
           @removeComments="removeComments"
+          @likeComment="likeComment"
           :dramaInfo="dramaInfo.data"
         >
           <template #close>
@@ -142,7 +164,7 @@ onMounted(async () => {
 
   .comment_text {
     position: absolute;
-    color: rgb(240, 72, 110);
+    color: $color-kktv-pink;
     border: none;
     background: none;
     font-size: 16px;
@@ -154,7 +176,7 @@ onMounted(async () => {
     .subtitle_text {
       display: inline-block;
       &:hover {
-        color: rgb(240, 72, 110);
+        color: $color-kktv-pink;
       }
     }
   }
@@ -165,7 +187,7 @@ onMounted(async () => {
     .subtitle_text {
       display: inline-block;
       &:hover {
-        color: rgb(240, 72, 110);
+        color: $color-kktv-pink;
       }
     }
   }

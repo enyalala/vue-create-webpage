@@ -49,7 +49,28 @@
       "homestatus": "全新集數上架",
       "homedescription": "川口春奈X目黑蓮，重逢無聲世界的甜虐愛戀",
       "sidephotocount": 4,
-      "comments": [],
+      "comments": [
+        {
+          "sentence": "好看！",
+          "count": 0
+        },
+        {
+          "sentence": "不錯！",
+          "count": 1
+        },
+        {
+          "sentence": "推推",
+          "count": 1
+        },
+        {
+          "sentence": "很讚",
+          "count": 0
+        },
+        {
+          "sentence": "推薦",
+          "count": 1
+        }
+      ],
       "collect": false,
       "score": 4
     },

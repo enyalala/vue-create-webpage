@@ -155,7 +155,7 @@ onMounted(async () => {
         }
 
         .collect_icon {
-          color: rgb(240, 72, 110);
+          color: $color-kktv-pink;
           position: absolute;
           bottom: 5px;
           right: 10px;

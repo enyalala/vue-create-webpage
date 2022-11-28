@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { reactive, onMounted,ref } from 'vue'
+import { reactive, onMounted, ref } from 'vue'
 import type { NavData } from '@/models/SectionData'
 import { getDramas } from '@/apis/index'
 import type { Drama } from '@/models/Drama'
@@ -129,6 +129,10 @@ onMounted(async () => {
           height: 56px;
           line-height: 20px;
           color: #fff;
+
+          &:hover {
+            color: $color-kktv-pink;
+          }
         }
       }
     }

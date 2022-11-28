@@ -57,6 +57,7 @@ const groupInfoList = reactive<GroupInfoData[]>([
 </template>
 
 <style lang="scss" scoped>
+@import '@/styles/variable';
 .group_info_title {
   color: #999;
   font-size: 14px;
@@ -71,7 +72,7 @@ const groupInfoList = reactive<GroupInfoData[]>([
     transition: all 0.1s ease-out;
 
     &:hover {
-      color: rgb(240, 72, 110);
+      color: $color-kktv-pink;
     }
   }
 }

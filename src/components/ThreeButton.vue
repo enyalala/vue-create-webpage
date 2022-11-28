@@ -26,7 +26,7 @@ const collect = () => {
   isCollectClick.value = true
   emits('afterCollect', isCollect.value)
 }
-console.log(isCollectClick.value)
+
 const changeFiveStar = () => {
   hideStar.value = false
 }
@@ -140,6 +140,7 @@ const starStandard = (num: number) => {
 </template>
 
 <style lang="scss" scoped>
+@import '@/styles/variable';
 .btn_content {
   margin-top: 40px;
   display: flex;
@@ -148,7 +149,7 @@ const starStandard = (num: number) => {
   .collect_alert {
     position: absolute;
     top: -30px;
-    color: rgb(240, 72, 110);
+    color: $color-kktv-pink;
     font-size: 14px;
 
     animation-name: collectAlert;
@@ -202,7 +203,7 @@ const starStandard = (num: number) => {
     }
     &:hover {
       .btn_three_icon {
-        color: rgb(240, 72, 110);
+        color: $color-kktv-pink;
       }
     }
     .btn_three_icon {

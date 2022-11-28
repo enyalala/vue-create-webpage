@@ -133,6 +133,9 @@ const getRankUrl = (name: number) => {
   width: 100%;
   height: 280px;
   padding: 0px 75px;
+
+  --swiper-navigation-color: white;
+  --swiper-navigation-size: 30px;
 }
 
 .mySwiper3 .swiper-slide {

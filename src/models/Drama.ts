@@ -1,5 +1,5 @@
 export interface Drama {
-[x: string]: any
+  [x: string]: any
   id: number
   name: string
   classification: string[]
@@ -14,7 +14,7 @@ export interface Drama {
   homestatus: string
   homedescription: string
   sidephotocount: number
-  comments: string[]
+  comments: [{ sentenct: string; count: number }]
   collect: boolean
   score: number
   imageName?: string

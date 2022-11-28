@@ -27,3 +27,8 @@ export interface CollectData {
   condition: number[]
   dramaName: any
 }
+
+export interface commentsAndCounts {
+  sentence: string
+  count: number
+}

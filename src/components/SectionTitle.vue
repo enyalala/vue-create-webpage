@@ -19,6 +19,7 @@ const props = defineProps({
 </template>
 
 <style lang="scss" scoped>
+@import '@/styles/variable';
 .section_title_container {
   font-size: 30px;
 
@@ -44,7 +45,7 @@ const props = defineProps({
     display: none;
 
     &:hover {
-      color: rgb(240, 72, 110);
+      color: $color-kktv-pink;
     }
   }
 }

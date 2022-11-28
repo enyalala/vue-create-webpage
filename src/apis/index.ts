@@ -39,7 +39,7 @@ export const patchScored = async (id: number, value: number) => {
 }
 
 /** 評論 */
-export const patchComment = async (id: number, commentList: string[]) => {
+export const patchComment = async (id: number, commentList: Object) => {
   await dramaInfoRequest.patch(`/${id}`, {
     comments: commentList,
   })

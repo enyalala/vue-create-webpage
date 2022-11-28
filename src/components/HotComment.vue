@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
-
 const props = defineProps({
   dramaInfo: {
     type: Object,
     required: true,
   },
 })
-
 </script>
 
 <template>
@@ -20,7 +17,10 @@ const props = defineProps({
       :key="comment"
       class="btn_allcomments"
     >
-      {{ comment }}
+      {{ comment.sentence
+      }}<span v-if="comment.count !== 0" class="count">{{
+        comment.count
+      }}</span>
     </button>
   </div>
 </template>
@@ -41,6 +41,11 @@ const props = defineProps({
 
   &:hover {
     color: white;
+  }
+
+  .count {
+    color: white;
+    margin-left: 5px;
   }
 }
 </style>
