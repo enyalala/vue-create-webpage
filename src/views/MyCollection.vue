@@ -49,10 +49,9 @@ const lastShow = (row: number) => {
 //     })
 // }
 
-const unCollect = (id: number) => {
-  patchUnCollect(id).then((response) => {
-    Object.assign(dramaList, response.data)
-  })
+const unCollect = async (id: number) => {
+  const response = await patchUnCollect(id)
+  Object.assign(dramaList, response.data)
 }
 
 onMounted(async () => {

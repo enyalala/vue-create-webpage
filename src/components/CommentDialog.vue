@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import HotComment from '@/components/HotComment.vue'
-import { ref, onUpdated } from 'vue'
+import { ref, onUpdated, type PropType } from 'vue'
+import type { Drama } from '@/models/Drama'
+import type { Comment } from '@/models/Comment'
 
 const props = defineProps({
   dramaInfo: {
-    type: Object,
+    type: Object as PropType<Drama>,
+    required: true,
+  },
+  sortComments: {
+    type: Array<Comment>,
     required: true,
   },
 })
@@ -83,7 +89,7 @@ onUpdated(() => {
     <div v-else>
       <button
         v-for="(comment, index) in props.dramaInfo.comments"
-        :key="comment"
+        :key="index"
         class="btn_allcomments"
         @click="likeComment(index)"
       >

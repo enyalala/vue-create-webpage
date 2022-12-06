@@ -7,22 +7,18 @@ import NormalPage from '@/components/NormalPage.vue'
 
 const { searchItemInfo } = useSearchItem()
 
-const selectDrama: any = reactive([])
 const dramaList: Drama[] = reactive([])
 const dramaFilter = computed(() => {
-  return selectDrama
+  return dramaList.filter((drama) => {
+    return (
+      drama.name.includes(searchItemInfo.selectItemName) ||
+      drama.actor.includes(searchItemInfo.selectItemName)
+    )
+  })
 })
 
 onMounted(async () => {
   Object.assign(dramaList, (await getDramas()).data)
-  dramaList.forEach((drama) => {
-    if (
-      drama.name.includes(searchItemInfo.selectItemName) ||
-      drama.actor.includes(searchItemInfo.selectItemName)
-    ) {
-      selectDrama.push(drama)
-    }
-  })
 })
 </script>
 

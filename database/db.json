@@ -71,8 +71,8 @@
           "count": 0
         }
       ],
-      "collect": false,
-      "score": 4
+      "collect": true,
+      "score": 3
     },
     {
       "id": 1,

@@ -51,27 +51,25 @@ const list = computed(() => [
 
 onMounted(async () => {
   isLoading.value = true
-  await getDramas().then((res) => Object.assign(dramaList, res.data))
+  const res = await getDramas()
+  Object.assign(dramaList, res.data)
   isLoading.value = false
-  // Object.assign(dramaList, (await getDramas()).data)
 })
 </script>
 
 <template>
-  <div v-for="(data, index) in list" :key="index" :class="data.classes">
-    <SectionTitle
-      v-if="data.sectionData"
-      v-bind="data.sectionData"
-    ></SectionTitle
-    ><template v-if="dramaList">
-      <vueLoading v-if="isLoading" v-model:active="isLoading" color="white" />
-      <component
-        v-else
-        :is="data.component"
-        :propsData="data.propsData"
-      ></component
-    ></template>
-  </div>
+  <vueLoading v-if="isLoading" v-model:active="isLoading" color="white" />
+  <template v-else>
+    <div v-for="(data, index) in list" :key="index" :class="data.classes">
+      <SectionTitle
+        v-if="data.sectionData"
+        v-bind="data.sectionData"
+      ></SectionTitle
+      ><template v-if="dramaList">
+        <component :is="data.component" :propsData="data.propsData"></component
+      ></template>
+    </div>
+  </template>
 </template>
 
 <style lang="scss" scoped>

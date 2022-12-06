@@ -1,3 +1,5 @@
+import type { Comment } from '@/models/Comment'
+
 export interface Drama {
   [x: string]: any
   id: number
@@ -14,7 +16,7 @@ export interface Drama {
   homestatus: string
   homedescription: string
   sidephotocount: number
-  comments: [{ sentenct: string; count: number }]
+  comments: Comment[]
   collect: boolean
   score: number
   imageName?: string

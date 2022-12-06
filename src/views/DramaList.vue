@@ -13,48 +13,48 @@ import {
   patchComment,
 } from '@/apis/index'
 import type { Drama } from '@/models/Drama'
-import type { commentsAndCounts } from '@/models/SectionData'
+import type { Comment } from '@/models/Comment'
+import type { ReactiveObject } from '@/models/ReactiveData'
 
 const commentIsTrue = ref(false)
 
-const dramaInfo: { data: Drama | null } = reactive({ data: null })
+const dramaInfo: ReactiveObject<Drama> = reactive({ data: null })
 const idOfDrama = Number(useRoute().params.dramaId)
 
-const comments: commentsAndCounts[] = reactive([])
+const comments: Comment[] = reactive([])
 
 /** 加入評論 */
-const addComments = (res: string) => {
+const addComments = async (res: string) => {
   comments.push({ sentence: res, count: 0 })
-  patchComment(idOfDrama, comments).then(
-    (response) => (dramaInfo.data = response.data ?? null)
-  )
+  const response = await patchComment(idOfDrama, comments)
+  dramaInfo.data = response.data ?? null
 }
 
 /** 移除評論 */
-const removeComments = (res: number) => {
+const removeComments = async (res: number) => {
   comments.splice(res, 1)
-  patchComment(idOfDrama, comments).then(
-    (response) => (dramaInfo.data = response.data ?? null)
-  )
+  const response = await patchComment(idOfDrama, comments)
+  dramaInfo.data = response.data ?? null
 }
 
 /** 喜歡這則評論 */
-const likeComment = (res: number) => {
+const likeComment = async (res: number) => {
   if (comments[res].count === 0) {
     comments[res].count++
   } else {
     comments[res].count--
   }
-  patchComment(idOfDrama, comments).then(
-    (response) => (dramaInfo.data = response.data ?? null)
-  )
+  const response = await patchComment(idOfDrama, comments)
+  dramaInfo.data = response.data ?? null
 }
+
+/** 依熱門度排序評論 */
 const sortComments = computed(() => {
-  return dramaInfo.data?.comments.slice(0).sort(function (a, b) {
-    return b.count - a.count
-  })
+  return (
+    dramaInfo.data?.comments.slice(0).sort((a, b) => b.count - a.count) ?? []
+  )
 })
-console.log(sortComments)
+
 const outputDialog = () => {
   commentIsTrue.value = true
 }
@@ -63,17 +63,15 @@ const hideModal = () => {
 }
 
 /** 切換戲劇收藏 */
-const afterCollect = (res: boolean) => {
-  patchCollect(idOfDrama, res).then((response) => {
-    dramaInfo.data = response.data ?? null
-  })
+const afterCollect = async (res: boolean) => {
+  const response = await patchCollect(idOfDrama, res)
+  dramaInfo.data = response.data ?? null
 }
 
 /** 切換評分分數 */
-const afterScored = (score: number) => {
-  patchScored(idOfDrama, score).then((response) => {
-    dramaInfo.data = response.data ?? null
-  })
+const afterScored = async (score: number) => {
+  const response = await patchScored(idOfDrama, score)
+  dramaInfo.data = response.data ?? null
 }
 
 onMounted(async () => {
@@ -92,6 +90,7 @@ onMounted(async () => {
           @removeComments="removeComments"
           @likeComment="likeComment"
           :dramaInfo="dramaInfo.data"
+          :sortComments="sortComments"
         >
           <template #close>
             <div class="close_zone">
