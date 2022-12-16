@@ -1,9 +1,5 @@
-import axios from 'axios'
 import type { Drama } from '@/models/Drama'
-
-const dramaInfoRequest = axios.create({
-  baseURL: 'http://localhost:3000/dramaInfo',
-})
+import dramaInfoRequest from '@/apis/http'
 
 /** 讀取戲劇資訊 */
 export const getDramas = async () => {

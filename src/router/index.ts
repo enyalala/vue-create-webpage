@@ -29,13 +29,16 @@ const router = createRouter({
       path: '/mycollection',
       name: 'MyCollection',
       component: () => import('@/views/MyCollection.vue'),
-      props: true,
     },
     {
       path: '/search',
       name: 'SearchPage',
       component: () => import('@/views/SearchPage.vue'),
-      props: true,
+    },
+    {
+      path: '/login',
+      name: 'LoginPage',
+      component: () => import('@/views/LoginPage.vue'),
     },
     {
       path: '/:domin(.*)*',

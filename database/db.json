@@ -68,11 +68,15 @@
         },
         {
           "sentence": "推薦",
+          "count": 1
+        },
+        {
+          "sentence": "超讚",
           "count": 0
         }
       ],
-      "collect": true,
-      "score": 3
+      "collect": false,
+      "score": 5
     },
     {
       "id": 1,
@@ -119,7 +123,7 @@
       "sidephotocount": 1,
       "comments": [],
       "collect": false,
-      "score": 4
+      "score": 2
     },
     {
       "id": 2,
@@ -168,7 +172,7 @@
       "homedescription": "長澤雅美化身王牌主播追擊冤罪真相",
       "sidephotocount": 3,
       "comments": [],
-      "collect": false,
+      "collect": true,
       "score": 5
     },
     {
@@ -218,8 +222,8 @@
       "homedescription": "經典重開機！平野紫耀化身令和詐欺獵人",
       "sidephotocount": 1,
       "comments": [],
-      "collect": true,
-      "score": 0
+      "collect": false,
+      "score": 4
     },
     {
       "id": 4,
@@ -388,7 +392,12 @@
       "homestatus": "",
       "homedescription": "",
       "sidephotocount": 4,
-      "comments": [],
+      "comments": [
+        {
+          "sentence": "一定要看！",
+          "count": 0
+        }
+      ],
       "collect": false,
       "score": 0
     },

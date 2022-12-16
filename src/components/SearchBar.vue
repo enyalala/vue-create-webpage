@@ -133,7 +133,9 @@ watch(inputSearch, () => {
         </div>
       </ul>
     </div>
-    <img src="@/assets/img/kktv_member.svg" alt="photo" />
+    <router-link to="/login"
+      ><img src="@/assets/img/kktv_member.svg" alt="photo"
+    /></router-link>
   </div>
 </template>
 

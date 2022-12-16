@@ -3,11 +3,9 @@ import TopSwiper from '@/components/TopSwiper.vue'
 import SecSwiper from '@/components/SecSwiper.vue'
 import TrdSwiper from '@/components/TrdSwiper.vue'
 import SectionTitle from '@/components/SectionTitle.vue'
-import { ref, reactive, onMounted, computed } from 'vue'
-import { getDramas } from '@/apis/index'
+import { reactive, onMounted, computed } from 'vue'
+import { getDramas } from '@/apis/api'
 import type { Drama } from '@/models/Drama'
-
-const isLoading = ref(true)
 
 const dramaList: Drama[] = reactive([])
 
@@ -50,26 +48,22 @@ const list = computed(() => [
 ])
 
 onMounted(async () => {
-  isLoading.value = true
   const res = await getDramas()
   Object.assign(dramaList, res.data)
-  isLoading.value = false
+
 })
 </script>
 
 <template>
-  <vueLoading v-if="isLoading" v-model:active="isLoading" color="white" />
-  <template v-else>
-    <div v-for="(data, index) in list" :key="index" :class="data.classes">
-      <SectionTitle
-        v-if="data.sectionData"
-        v-bind="data.sectionData"
-      ></SectionTitle
-      ><template v-if="dramaList">
-        <component :is="data.component" :propsData="data.propsData"></component
-      ></template>
-    </div>
-  </template>
+  <div v-for="(data, index) in list" :key="index" :class="data.classes">
+    <SectionTitle
+      v-if="data.sectionData"
+      v-bind="data.sectionData"
+    ></SectionTitle
+    ><template v-if="dramaList">
+      <component :is="data.component" :propsData="data.propsData"></component
+    ></template>
+  </div>
 </template>
 
 <style lang="scss" scoped>

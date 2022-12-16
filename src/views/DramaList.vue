@@ -11,7 +11,7 @@ import {
   patchScored,
   patchCollect,
   patchComment,
-} from '@/apis/index'
+} from '@/apis/api'
 import type { Drama } from '@/models/Drama'
 import type { Comment } from '@/models/Comment'
 import type { ReactiveObject } from '@/models/ReactiveData'

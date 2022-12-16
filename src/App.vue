@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { reactive, onMounted, ref } from 'vue'
+import { reactive, onMounted } from 'vue'
 import type { NavData } from '@/models/SectionData'
-import { getDramas } from '@/apis/index'
 import type { Drama } from '@/models/Drama'
+import { getDramas } from '@/apis/api'
+import { isLoading } from '@/stores/Loading'
 import SearchBar from '@/components/SearchBar.vue'
 
 const dramaList: { data: Drama | null } = reactive({ data: null })
@@ -55,6 +56,8 @@ onMounted(async () => {
 </script>
 
 <template>
+  <vueLoading v-model:active="isLoading" />
+
   <div class="container">
     <div class="navbar">
       <div class="navbar_content">
@@ -81,7 +84,9 @@ onMounted(async () => {
       </div>
     </div>
     <div class="nav_box"></div>
+    <!-- <template v-if="isLoading === false"> -->
     <router-view />
+    <!-- </template> -->
   </div>
 </template>
 
@@ -130,6 +135,9 @@ onMounted(async () => {
           line-height: 20px;
           color: #fff;
 
+          &:focus {
+            border-bottom: 3px solid $color-kktv-pink;
+          }
           &:hover {
             color: $color-kktv-pink;
           }
