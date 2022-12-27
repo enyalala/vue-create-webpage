@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import loading from 'vue-loading-overlay'
+
 import 'vue-loading-overlay/dist/css/index.css'
 import './assets/main.css'
 
@@ -33,7 +34,8 @@ library.add(
   farHeart,
   fasHeart,
   farStar,
-  fasStar,faCircleCheck,
+  fasStar,
+  faCircleCheck,
   faCircleXmark,
   faXmark,
   faMagnifyingGlass

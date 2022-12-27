@@ -1,11 +1,34 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useUserInfo } from '@/stores/UserInfo'
+import { RouterLink } from 'vue-router'
 
 const { userInfo } = useUserInfo()
 console.log(userInfo[0].account)
-const accountInput = ref('')
-const passwordInput = ref('')
+
+const accountInput = ref('lena@gmail.com')
+const passwordInput = ref('a0000')
+const formIsVaild = ref(true)
+const mode = ref('login')
+
+const submitForm = () => {
+  formIsVaild.value = true
+  if (
+    accountInput.value === '' ||
+    !accountInput.value.includes('@') ||
+    passwordInput.value.length < 4
+  ) {
+    formIsVaild.value = false
+    return
+  }
+}
+const switchAuthMode = () => {
+  if (mode.value === 'login') {
+    mode.value = 'signup'
+  } else {
+    mode.value = 'login'
+  }
+}
 
 const userLogin = () => {
   if (
@@ -18,7 +41,7 @@ const userLogin = () => {
 </script>
 
 <template>
-  <main>
+  <form @submit.prevent="submitForm">
     <div class="container">
       <div class="login_box">
         <div class="title">
@@ -32,7 +55,7 @@ const userLogin = () => {
                 class="input_blank"
                 type="text"
                 placeholder="請輸入帳號"
-                v-model="accountInput"
+                v-model.trim="accountInput"
               />
             </div>
           </div>
@@ -43,15 +66,19 @@ const userLogin = () => {
                 class="input_blank"
                 type="text"
                 placeholder="請輸入帳號"
-                v-model="passwordInput"
+                v-model.trim="passwordInput"
               />
             </div>
           </div>
+          <p v-if="!formIsVaild" class="alert_text">帳號或密碼錯誤</p>
         </div>
-        <button class="btn-login" @click="userLogin">登入</button>
+        <div class="btn-loginpage">
+          <button class="btn-login" @click="userLogin">登入</button>
+          <button class="btn-login" @click="switchAuthMode">註冊</button>
+        </div>
       </div>
     </div>
-  </main>
+  </form>
 </template>
 
 <style lang="scss" scoped>
@@ -100,22 +127,31 @@ const userLogin = () => {
           border-bottom: 1px solid rgb(52, 51, 51);
         }
       }
-    }
 
-    .btn-login {
-      width: 60px;
-      height: 35px;
+      .alert_text {
+        font-size: 12px;
+        color: red;
+        font-weight: bold;
+      }
+    }
+    .btn-loginpage {
       position: absolute;
       top: 85%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 5px;
-      background-color: $color-kktv-pink;
-      border: none;
+      display: flex;
+      .btn-login {
+        width: 60px;
+        height: 35px;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 5px;
+        background-color: $color-kktv-pink;
+        border: none;
+        margin: 0 15px;
+      }
     }
   }
 }

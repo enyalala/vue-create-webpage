@@ -3,11 +3,14 @@ import { RouterLink, RouterView } from 'vue-router'
 import { reactive, onMounted } from 'vue'
 import type { NavData } from '@/models/SectionData'
 import type { Drama } from '@/models/Drama'
-import { getDramas } from '@/apis/api'
+import { getDramas } from '@/firebase/api'
 import { isLoading } from '@/stores/Loading'
 import SearchBar from '@/components/SearchBar.vue'
+import { collection, getDocs } from '@firebase/firestore'
+import { db } from '@/firebase/index'
 
 const dramaList: { data: Drama | null } = reactive({ data: null })
+
 const navlist = reactive<NavData[]>([
   {
     classes: '',
@@ -52,12 +55,39 @@ function getImgUrl(): string {
 
 onMounted(async () => {
   dramaList.data = (await getDramas()).data ?? null
+  console.log((await getDramas()).data)
+  const querySnapshot = await getDocs(collection(db, 'cities'))
+  console.log(querySnapshot)
+  // querySnapshot.forEach((doc) => {
+  //   // console.log(doc.id, ' => ', doc.data())
+  //   // Object.assign(test, doc.data())
+  //   const dramaData = {
+  //     id: doc.data().id,
+  //     name: doc.data().name,
+  //     classification: doc.data().classification,
+  //     year: doc.data().year,
+  //     actor: doc.data().actor,
+  //     director: doc.data().director,
+  //     screenwriter: doc.data().screenwriter,
+  //     type: doc.data().type,
+  //     label: doc.data().label,
+  //     highlight: doc.data().highlight,
+  //     description: doc.data().description,
+  //     homestatus: doc.data().homestatus,
+  //     homedescription: doc.data().homedescription,
+  //     sidephotocount: doc.data().sidephotocount,
+  //     comments: doc.data().comments,
+  //     collect: doc.data().collect,
+  //     score: doc.data().score,
+  //   }
+  //   dramaList.push(dramaData)
+  //   console.log(dramaList)
+  // })
 })
 </script>
 
 <template>
   <vueLoading v-model:active="isLoading" />
-
   <div class="container">
     <div class="navbar">
       <div class="navbar_content">

@@ -4,7 +4,7 @@ import SecSwiper from '@/components/SecSwiper.vue'
 import TrdSwiper from '@/components/TrdSwiper.vue'
 import SectionTitle from '@/components/SectionTitle.vue'
 import { reactive, onMounted, computed } from 'vue'
-import { getDramas } from '@/apis/api'
+import { getDramas } from '@/firebase/api'
 import type { Drama } from '@/models/Drama'
 
 const dramaList: Drama[] = reactive([])
@@ -50,7 +50,6 @@ const list = computed(() => [
 onMounted(async () => {
   const res = await getDramas()
   Object.assign(dramaList, res.data)
-
 })
 </script>
 
@@ -60,7 +59,7 @@ onMounted(async () => {
       v-if="data.sectionData"
       v-bind="data.sectionData"
     ></SectionTitle
-    ><template v-if="dramaList">
+    ><template v-if="dramaList.length">
       <component :is="data.component" :propsData="data.propsData"></component
     ></template>
   </div>

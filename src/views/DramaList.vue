@@ -11,7 +11,7 @@ import {
   patchScored,
   patchCollect,
   patchComment,
-} from '@/apis/api'
+} from '@/firebase/api'
 import type { Drama } from '@/models/Drama'
 import type { Comment } from '@/models/Comment'
 import type { ReactiveObject } from '@/models/ReactiveData'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
-import { patchUnCollect, getDramas } from '@/apis/api'
+import { patchUnCollect, getDramas } from '@/firebase/api'
 import { RouterLink } from 'vue-router'
 import { useImageUrl } from '@/stores/GetImageUrl'
 import { computed } from 'vue'

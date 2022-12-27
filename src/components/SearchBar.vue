@@ -47,6 +47,7 @@ const clearRecord = () => {
 /** 搜尋列展開與閉合 */
 const switchSearch = () => {
   searchShow.value = !searchShow.value
+  inputSearch.value = ''
 }
 
 /** 監控搜尋框文字輸入 - inputSearch */

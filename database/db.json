@@ -52,7 +52,7 @@
       "comments": [
         {
           "sentence": "好看！",
-          "count": 0
+          "count": 1
         },
         {
           "sentence": "不錯！",
@@ -76,7 +76,7 @@
         }
       ],
       "collect": false,
-      "score": 5
+      "score": 4
     },
     {
       "id": 1,
@@ -122,8 +122,8 @@
       "homedescription": "攜美妝技巧重返１７歲、克服初戀陰影",
       "sidephotocount": 1,
       "comments": [],
-      "collect": false,
-      "score": 2
+      "collect": true,
+      "score": 4
     },
     {
       "id": 2,
@@ -269,7 +269,12 @@
       "homestatus": "新上架",
       "homedescription": "那邊的帥哥，要不要當我女婿啊",
       "sidephotocount": 4,
-      "comments": [],
+      "comments": [
+        {
+          "sentence": "不錯",
+          "count": 0
+        }
+      ],
       "collect": true,
       "score": 0
     },
@@ -457,7 +462,7 @@
       "homedescription": "",
       "sidephotocount": 4,
       "comments": [],
-      "collect": true,
+      "collect": false,
       "score": 0
     },
     {

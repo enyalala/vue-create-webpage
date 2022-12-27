@@ -2,13 +2,16 @@
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
+import type { Drama } from '@/models/Drama'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { RouterLink } from 'vue-router'
 import { Autoplay, Pagination, Mousewheel, Keyboard, Navigation } from 'swiper'
 
 const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
 
-const props = defineProps({ propsData: { type: Object, required: true } })
+const props = defineProps({
+  propsData: { type: Array<Drama>, required: true },
+})
 
 const getS1ImageUrl = (name: number) => {
   return new URL(`../assets/img/homeS1P${name}.jpg`, import.meta.url).href
@@ -33,7 +36,7 @@ const getS1ImageUrl = (name: number) => {
     :modules="modules1"
     class="mySwiper1"
   >
-    <swiper-slide v-for="data in props.propsData" :key="data"
+    <swiper-slide v-for="data in props.propsData" :key="data.id"
       ><router-link :to="'/dramalist/' + data.id"
         ><img
           class="topswiper_img1"

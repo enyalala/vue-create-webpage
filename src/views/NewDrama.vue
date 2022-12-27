@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive, onMounted, computed } from 'vue'
-import { getDramas } from '@/apis/api'
+import { getDramas } from '@/firebase/api'
 import type { Drama } from '@/models/Drama'
 import NormalPage from '@/components/NormalPage.vue'
 
