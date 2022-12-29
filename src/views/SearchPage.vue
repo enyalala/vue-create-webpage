@@ -2,7 +2,7 @@
 import { reactive, onMounted, computed } from 'vue'
 import { useSearchItem } from '@/stores/SearchItem'
 import type { Drama } from '@/models/Drama'
-import { getDramas } from '@/firebase/api'
+import { getDramas } from '@/apis/api'
 import NormalPage from '@/components/NormalPage.vue'
 
 const { searchItemInfo } = useSearchItem()

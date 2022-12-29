@@ -19,5 +19,6 @@ export interface Drama {
   comments: Comment[]
   collect: boolean
   score: number
+  visitor: number
   imageName?: string
 }

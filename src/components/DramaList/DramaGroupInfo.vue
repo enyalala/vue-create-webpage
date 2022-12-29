@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { GroupInfoData } from '@/models/SectionData'
+import type { GroupInfoData } from '@/models/GroupInfoData'
 import { reactive } from 'vue'
 
 const props = defineProps({

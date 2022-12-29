@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import CommentDialog from '@/components/CommentDialog.vue'
-import DramaCover from '@/components/DramaCover.vue'
-import ThreeButton from '@/components/ThreeButton.vue'
-import DramaGroupInfo from '@/components/DramaGroupInfo.vue'
-import HotComment from '@/components/HotComment.vue'
+import CommentDialog from '@/components/DramaList/CommentDialog.vue'
+import DramaCover from '@/components/DramaList/DramaCover.vue'
+import ThreeButton from '@/components/DramaList/ThreeButton.vue'
+import DramaGroupInfo from '@/components/DramaList/DramaGroupInfo.vue'
+import HotComment from '@/components/DramaList/HotComment.vue'
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import {
@@ -11,7 +11,7 @@ import {
   patchScored,
   patchCollect,
   patchComment,
-} from '@/firebase/api'
+} from '@/apis/api'
 import type { Drama } from '@/models/Drama'
 import type { Comment } from '@/models/Comment'
 import type { ReactiveObject } from '@/models/ReactiveData'
@@ -77,6 +77,7 @@ const afterScored = async (score: number) => {
 onMounted(async () => {
   dramaInfo.data = (await getOneDramas(idOfDrama)).data ?? null
   Object.assign(comments, dramaInfo.data?.comments)
+  console.log(dramaInfo.data?.visitor)
 })
 </script>
 

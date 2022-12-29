@@ -22,6 +22,7 @@ import {
   faCircleCheck,
   faStar as fasStar,
   faHeart as fasHeart,
+  faFilter,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faHeart as farHeart,
@@ -38,7 +39,8 @@ library.add(
   faCircleCheck,
   faCircleXmark,
   faXmark,
-  faMagnifyingGlass
+  faMagnifyingGlass,
+  faFilter
 )
 
 const app = createApp(App)

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import TopSwiper from '@/components/TopSwiper.vue'
-import SecSwiper from '@/components/SecSwiper.vue'
-import TrdSwiper from '@/components/TrdSwiper.vue'
+import NewDramaSwiper from '@/components/NewDramaSwiper.vue'
+import HotDramaSwiper from '@/components/HotDramaSwiper.vue'
 import SectionTitle from '@/components/SectionTitle.vue'
 import { reactive, onMounted, computed } from 'vue'
-import { getDramas } from '@/firebase/api'
+import { getDramas } from '@/apis/api'
 import type { Drama } from '@/models/Drama'
 
 const dramaList: Drama[] = reactive([])
@@ -29,7 +29,7 @@ const list = computed(() => [
   },
   {
     classes: 'swiper-container swiper2',
-    component: SecSwiper,
+    component: NewDramaSwiper,
     propsData: secDramaList.value,
     sectionData: {
       sectionTitle: '新劇跟播中',
@@ -38,7 +38,7 @@ const list = computed(() => [
   },
   {
     classes: 'swiper-container swiper3',
-    component: TrdSwiper,
+    component: HotDramaSwiper,
     propsData: trdDramaList.value,
     sectionData: {
       sectionTitle: '熱播排行榜',

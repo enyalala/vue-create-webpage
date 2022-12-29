@@ -6,6 +6,9 @@ import type { Drama } from '@/models/Drama'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { RouterLink } from 'vue-router'
 import { Autoplay, Pagination, Mousewheel, Keyboard, Navigation } from 'swiper'
+import { useImageUrl } from '@/stores/GetImageUrl'
+
+const { getSideUrl } = useImageUrl()
 
 const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
 
@@ -40,11 +43,11 @@ const getS1ImageUrl = (name: number) => {
       ><router-link :to="'/dramalist/' + data.id"
         ><img
           class="topswiper_img1"
-          :src="getS1ImageUrl(data.id)"
+          :src="getSideUrl(data.id, 1)"
           alt="photo"
         /><img
           class="topswiper_img2"
-          :src="getS1ImageUrl(data.id)"
+          :src="getSideUrl(data.id, 1)"
           alt="photo"
         />
         <div v-if="data.name.length <= 11">

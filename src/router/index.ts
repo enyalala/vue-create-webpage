@@ -10,6 +10,12 @@ const router = createRouter({
       component: HomePage,
     },
     {
+      path: '/animation',
+      name: 'animation',
+      component: () => import('@/views/AnimationPage.vue'),
+    },
+
+    {
       path: '/newdrama',
       name: 'NewDrama',
       component: () => import('@/views/NewDrama.vue'),
@@ -18,6 +24,11 @@ const router = createRouter({
       path: '/hotdrama',
       name: 'HotDrama',
       component: () => import('@/views/HotDrama.vue'),
+    },
+    {
+      path: '/filter',
+      name: 'filter',
+      component: () => import('@/views/FilterPage.vue'),
     },
     {
       path: '/dramalist/:dramaId',

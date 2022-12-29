@@ -146,23 +146,23 @@ const getRankUrl = (name: number) => {
   transition: all 0.5s ease-out;
 
   &:hover {
-    width: 2 * $base-swiper3-width;
+    width: $extend-swiper3-width;
   }
 
   &:nth-child(2n) {
     &:hover {
-      width: 2 * $base-swiper3-width;
+      width: $extend-swiper3-width;
     }
   }
 
   &:nth-child(3n) {
     &:hover {
-      width: 2 * $base-swiper3-width;
+      width: $extend-swiper3-width;
     }
   }
 
   &:last-child:hover {
-    width: 2 * $base-swiper3-width;
+    width: $extend-swiper3-width;
   }
 
   .content {
@@ -170,6 +170,7 @@ const getRankUrl = (name: number) => {
     height: 100%;
     overflow: hidden;
     position: relative;
+
     .img_content {
       width: auto;
       overflow: hidden;
@@ -198,8 +199,13 @@ const getRankUrl = (name: number) => {
         }
       }
       .img2 {
-        height: 213px;
+        max-height: 100%;
+        width: auto;
+        height: auto;
         position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
     }
     .img_rank {

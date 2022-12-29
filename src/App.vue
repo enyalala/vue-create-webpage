@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { reactive, onMounted } from 'vue'
-import type { NavData } from '@/models/SectionData'
+import type { NavData } from '@/models/NavData'
 import type { Drama } from '@/models/Drama'
-import { getDramas } from '@/firebase/api'
+import { getDramas } from '@/apis/api'
 import { isLoading } from '@/stores/Loading'
 import SearchBar from '@/components/SearchBar.vue'
-import { collection, getDocs } from '@firebase/firestore'
+import { collection, getDocs } from 'firebase/firestore'
 import { db } from '@/firebase/index'
 
 const dramaList: { data: Drama | null } = reactive({ data: null })
 
-const navlist = reactive<NavData[]>([
+const navList = reactive<NavData[]>([
   {
     classes: '',
     to: '/',
-    navtitle: '',
+    navTitle: '',
     imgData: {
       imgClasses: 'navbar_logo',
       imgSrc: getImgUrl(),
@@ -25,27 +25,32 @@ const navlist = reactive<NavData[]>([
   {
     classes: 'navbar_link',
     to: '/',
-    navtitle: '戲劇',
+    navTitle: '精選',
   },
   {
     classes: 'navbar_link',
     to: '/',
-    navtitle: '動畫',
+    navTitle: '戲劇',
+  },
+  {
+    classes: 'navbar_link',
+    to: '/animation',
+    navTitle: '動畫',
   },
   {
     classes: 'navbar_link',
     to: '/',
-    navtitle: '娛樂',
+    navTitle: '娛樂',
   },
   {
     classes: 'navbar_link',
     to: '/',
-    navtitle: '更多',
+    navTitle: '更多',
   },
   {
     classes: 'navbar_link',
     to: '/mycollection',
-    navtitle: '我的收藏',
+    navTitle: '我的收藏',
   },
 ])
 
@@ -56,8 +61,8 @@ function getImgUrl(): string {
 onMounted(async () => {
   dramaList.data = (await getDramas()).data ?? null
   console.log((await getDramas()).data)
-  const querySnapshot = await getDocs(collection(db, 'cities'))
-  console.log(querySnapshot)
+  // const querySnapshot = await getDocs(collection(db, 'dramaInfo'))
+  // console.log(querySnapshot)
   // querySnapshot.forEach((doc) => {
   //   // console.log(doc.id, ' => ', doc.data())
   //   // Object.assign(test, doc.data())
@@ -94,7 +99,7 @@ onMounted(async () => {
         <ul class="nav_left">
           <li>
             <router-link
-              v-for="(data, index) in navlist"
+              v-for="(data, index) in navList"
               :key="index"
               :class="data.classes"
               :to="data.to"
@@ -104,7 +109,7 @@ onMounted(async () => {
                 :class="data.imgData.imgClasses"
                 :src="data.imgData.imgSrc"
                 :alt="data.imgData.imgAlt"
-              />{{ data.navtitle }}</router-link
+              />{{ data.navTitle }}</router-link
             >
           </li>
         </ul>
@@ -114,9 +119,7 @@ onMounted(async () => {
       </div>
     </div>
     <div class="nav_box"></div>
-    <!-- <template v-if="isLoading === false"> -->
     <router-view />
-    <!-- </template> -->
   </div>
 </template>
 

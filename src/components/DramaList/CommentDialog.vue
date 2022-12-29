@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import HotComment from '@/components/HotComment.vue'
+import HotComment from '@/components/DramaList/HotComment.vue'
 import { ref, onUpdated, type PropType } from 'vue'
 import type { Drama } from '@/models/Drama'
 import type { Comment } from '@/models/Comment'
