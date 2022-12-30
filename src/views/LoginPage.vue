@@ -45,7 +45,7 @@ const userLogin = () => {
     <div class="container">
       <div class="login_box">
         <div class="title">
-          <img src="@/assets/img/kktv_member.svg" alt="photo" />
+          <img src="@/assets/img/kktvImage/kktv_member.svg" alt="photo" />
         </div>
         <div class="input_content">
           <div class="input_text">

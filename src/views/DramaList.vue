@@ -11,6 +11,7 @@ import {
   patchScored,
   patchCollect,
   patchComment,
+  patchVisitor,
 } from '@/apis/api'
 import type { Drama } from '@/models/Drama'
 import type { Comment } from '@/models/Comment'
@@ -77,7 +78,11 @@ const afterScored = async (score: number) => {
 onMounted(async () => {
   dramaInfo.data = (await getOneDramas(idOfDrama)).data ?? null
   Object.assign(comments, dramaInfo.data?.comments)
-  console.log(dramaInfo.data?.visitor)
+  const addVisitorResponse = await patchVisitor(
+    idOfDrama,
+    dramaInfo.data.visitor
+  )
+  dramaInfo.data = addVisitorResponse.data ?? null
 })
 </script>
 

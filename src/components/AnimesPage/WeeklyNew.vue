@@ -1,14 +1,57 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
+import type { WeeklyList } from '@/models/WeeklyList'
 
-const weeklyList = reactive([
-  { classes: 'col col1_bg', japWeekName: '日曜', twWeekName: '星期日' },
-  { classes: 'col col2_bg', japWeekName: '月曜', twWeekName: '星期一' },
-  { classes: 'col col3_bg', japWeekName: '火曜', twWeekName: '星期二' },
-  { classes: 'col col4_bg', japWeekName: '水曜', twWeekName: '星期三' },
-  { classes: 'col col5_bg', japWeekName: '木曜', twWeekName: '星期四' },
-  { classes: 'col col6_bg', japWeekName: '金曜', twWeekName: '星期五' },
-  { classes: 'col col7_bg', japWeekName: '土曜', twWeekName: '星期六' },
+const weeklyList = reactive<WeeklyList[]>([
+  {
+    classes: 'col col1_bg',
+    japWeekName: '日曜',
+    twWeekName: '星期日',
+    enWeekName: 'sunday',
+    shortWeekName: '日',
+  },
+  {
+    classes: 'col col2_bg',
+    japWeekName: '月曜',
+    twWeekName: '星期一',
+    enWeekName: 'monday',
+    shortWeekName: '一',
+  },
+  {
+    classes: 'col col3_bg',
+    japWeekName: '火曜',
+    twWeekName: '星期二',
+    enWeekName: 'tuesday',
+    shortWeekName: '二',
+  },
+  {
+    classes: 'col col4_bg',
+    japWeekName: '水曜',
+    twWeekName: '星期三',
+    enWeekName: 'wednesday',
+    shortWeekName: '三',
+  },
+  {
+    classes: 'col col5_bg',
+    japWeekName: '木曜',
+    twWeekName: '星期四',
+    enWeekName: 'thursday',
+    shortWeekName: '四',
+  },
+  {
+    classes: 'col col6_bg',
+    japWeekName: '金曜',
+    twWeekName: '星期五',
+    enWeekName: 'friday',
+    shortWeekName: '五',
+  },
+  {
+    classes: 'col col7_bg',
+    japWeekName: '土曜',
+    twWeekName: '星期六',
+    enWeekName: 'saturday',
+    shortWeekName: '日',
+  },
 ])
 </script>
 
@@ -16,16 +59,16 @@ const weeklyList = reactive([
   <div class="week_box">
     <div class="week_title_text">2022 熱播動漫新番表</div>
     <div class="week_content">
-      <a
-        href=""
+      <router-link
         v-for="(day, index) in weeklyList"
+        :to="{ path: day.enWeekName + 'animes', query: weeklyList[index] }"
         :key="index"
         :class="day.classes"
       >
         <div class="jap_text">{{ day.japWeekName }}</div>
         <div class="line"></div>
         <div class="tw_text">{{ day.twWeekName }}</div>
-      </a>
+      </router-link>
     </div>
   </div>
 </template>

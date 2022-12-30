@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: '/animation',
       name: 'animation',
-      component: () => import('@/views/AnimationPage.vue'),
+      component: () => import('@/views/AnimesPage.vue'),
     },
 
     {
@@ -34,6 +34,12 @@ const router = createRouter({
       path: '/dramalist/:dramaId',
       name: 'DramaList',
       component: () => import('@/views/DramaList.vue'),
+      props: true,
+    },
+    {
+      path: '/:weeklyanimes',
+      name: 'WeeklyAnimes',
+      component: () => import('@/views/WeeklyAnimes.vue'),
       props: true,
     },
     {

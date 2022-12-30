@@ -11,14 +11,14 @@ const filterInfoList = reactive<FilterInfoData[]>([
     filterTitle: '類別 /',
     filterItem: [
       { filterItemTiTle: '戲劇', selected: false },
-      { filterItemTiTle: '動漫', selected: false },
+      { filterItemTiTle: '動漫', selected: true },
       { filterItemTiTle: '娛樂', selected: false },
     ],
   },
   {
     filterTitle: '排序 /',
     filterItem: [
-      { filterItemTiTle: '最新', selected: false },
+      { filterItemTiTle: '最新', selected: true },
       { filterItemTiTle: '熱門', selected: false },
       { filterItemTiTle: '好評', selected: false },
     ],
@@ -26,7 +26,7 @@ const filterInfoList = reactive<FilterInfoData[]>([
   {
     filterTitle: '地區 /',
     filterItem: [
-      { filterItemTiTle: '全部地區', selected: false },
+      { filterItemTiTle: '全部地區', selected: true },
       { filterItemTiTle: '韓國', selected: false },
       { filterItemTiTle: '日本', selected: false },
     ],
@@ -34,7 +34,7 @@ const filterInfoList = reactive<FilterInfoData[]>([
   {
     filterTitle: '類型 /',
     filterItem: [
-      { filterItemTiTle: '全部類型', selected: false },
+      { filterItemTiTle: '全部類型', selected: true },
       { filterItemTiTle: '奇幻冒險', selected: false },
       { filterItemTiTle: '校園戀愛', selected: false },
       { filterItemTiTle: '溫馨喜劇', selected: false },
@@ -52,8 +52,15 @@ const dramaFilter = computed(() => {
   )
 })
 
-const selectFilterItem = (row: number, col: number) => {
-  filterInfoList[row].filterItem[col].selected = true
+const selectFilterItem = (rowIndex: number, colIndex: number) => {
+  const selectedRow = filterInfoList[rowIndex].filterItem
+  selectedRow.filter((item, idx) => {
+    if (idx === colIndex) {
+      item.selected = true
+    } else {
+      item.selected = false
+    }
+  })
 }
 
 onMounted(async () => {
@@ -77,7 +84,7 @@ onMounted(async () => {
             v-for="(item, idx) in data.filterItem"
             :key="idx"
             class="filter_item_text"
-            :class="{ filter_item_text_selected: item.selected === true }"
+            :class="{ filter_item_text_selected: item.selected }"
             @click.prevent="selectFilterItem(index, idx)"
             >{{ item.filterItemTiTle }}</a
           >

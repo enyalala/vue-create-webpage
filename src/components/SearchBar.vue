@@ -30,6 +30,7 @@ const returnItem = (name: string, idx: number) => {
   selectItemIndex.value = idx
   historySearch.add(name)
   inputSearch.value = ''
+  searchShow.value = !searchShow.value
   emits('returnDramas')
 }
 
@@ -135,7 +136,7 @@ watch(inputSearch, () => {
       </ul>
     </div>
     <router-link to="/login"
-      ><img src="@/assets/img/kktv_member.svg" alt="photo"
+      ><img src="@/assets/img/kktvImage/kktv_member.svg" alt="photo"
     /></router-link>
   </div>
 </template>

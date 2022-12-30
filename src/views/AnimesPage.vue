@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TopSwiper from '@/components/TopSwiper.vue'
 import AnimationPage from '@/components/FilterButton.vue'
-import WeeklyNew from '@/components/AnimationPage/WeeklyNew.vue'
+import WeeklyNew from '@/components/AnimesPage/WeeklyNew.vue'
 import HotDramaSwiper from '@/components/HotDramaSwiper.vue'
 import SectionTitle from '@/components/SectionTitle.vue'
 

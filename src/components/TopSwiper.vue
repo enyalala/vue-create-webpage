@@ -15,10 +15,6 @@ const modules1: any = [Autoplay, Pagination, Mousewheel, Keyboard, Navigation]
 const props = defineProps({
   propsData: { type: Array<Drama>, required: true },
 })
-
-const getS1ImageUrl = (name: number) => {
-  return new URL(`../assets/img/homeS1P${name}.jpg`, import.meta.url).href
-}
 </script>
 
 <template>

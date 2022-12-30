@@ -42,3 +42,11 @@ export const patchComment = async (id: number, commentList: Object) => {
   })
   return dramaInfoRequest.get<Drama>(`/${id}`)
 }
+
+/** 記錄瀏覽人次 */
+export const patchVisitor = async (id: number, value: number) => {
+  await dramaInfoRequest.patch(`/${id}`, {
+    visitor: (value += 1),
+  })
+  return dramaInfoRequest.get<Drama>(`/${id}`)
+}

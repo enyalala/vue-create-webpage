@@ -55,7 +55,7 @@ const navList = reactive<NavData[]>([
 ])
 
 function getImgUrl(): string {
-  return new URL('./assets/img/kktv_logo.svg', import.meta.url).href
+  return new URL('./assets/img/kktvImage/kktv_logo.svg', import.meta.url).href
 }
 
 onMounted(async () => {
