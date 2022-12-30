@@ -6,8 +6,20 @@ import type { Drama } from '@/models/Drama'
 import { getDramas } from '@/apis/api'
 import { isLoading } from '@/stores/Loading'
 import SearchBar from '@/components/SearchBar.vue'
-import { collection, getDocs } from 'firebase/firestore'
-import { db } from '@/firebase/index'
+import { fakeDramas } from '@/fake/fakeDramas'
+import { fireStoreInstance } from '@/firebase'
+
+const generateDramaFakeData = () => {
+  fakeDramas.forEach((data) => {
+    fireStoreInstance.setDoc({
+      path: 'dramaInfo',
+      pathSegments: [`drama${data.id}`],
+      data,
+    })
+  })
+}
+
+generateDramaFakeData()
 
 const dramaList: { data: Drama | null } = reactive({ data: null })
 
