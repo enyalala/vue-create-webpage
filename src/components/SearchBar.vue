@@ -3,6 +3,9 @@ import { RouterLink } from 'vue-router'
 import { ref, reactive, watch } from 'vue'
 import { useSearchItem } from '@/stores/SearchItem'
 
+import { useUserInfo } from '@/stores/UserInfo'
+
+const { UserInfo } = useUserInfo()
 const { searchItemInfo } = useSearchItem()
 
 const emits = defineEmits(['returnDramas'])
@@ -135,9 +138,12 @@ watch(inputSearch, () => {
         </div>
       </ul>
     </div>
-    <router-link to="/login"
+    <router-link v-if="!UserInfo.data" to="/login"
       ><img src="@/assets/img/kktvImage/kktv_member.svg" alt="photo"
     /></router-link>
+    <span v-else>
+      {{ UserInfo.data.email }}
+    </span>
   </div>
 </template>
 

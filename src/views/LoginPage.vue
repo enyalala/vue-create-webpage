@@ -11,7 +11,7 @@ import {
 import { fireStoreInstance } from '@/firebase'
 
 const router = useRouter()
-const { UserInfo } = useUserInfo()
+const { UserInfo, setUserInfo } = useUserInfo()
 
 const errorMessageText = ref('')
 const mode = ref('login')
@@ -34,11 +34,18 @@ const changeMode = () => {
 }
 
 const userLoginRegister = () => {
+  if (mode.value === 'login' && auth.currentUser) {
+    setUserInfo(auth.currentUser)
+    router.push({ path: '/' })
+    return
+  }
+
   if (mode.value === 'login') {
     signInWithEmailAndPassword(auth, user.email, user.password)
-      .then(() => {
+      .then((response) => {
         console.log('登入成功')
-        Object.assign(UserInfo, auth.currentUser)
+        // console.log(response.user)
+        setUserInfo(response.user)
         router.push({ path: '/' })
 
         // console.log(UserInfo)

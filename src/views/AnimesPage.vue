@@ -8,7 +8,7 @@ import SectionTitle from '@/components/SectionTitle.vue'
 import { reactive, onMounted, computed } from 'vue'
 import type { Drama } from '@/models/Drama'
 import { fireStoreInstance } from '@/firebase'
-import { onSnapshot } from '@firebase/firestore'
+import { onSnapshot } from 'firebase/firestore'
 
 const dramaList: Drama[] = reactive([])
 

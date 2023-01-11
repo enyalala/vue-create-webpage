@@ -9,7 +9,7 @@ import { isLoading } from '@/stores/Loading'
 import { useUserInfo } from '@/stores/UserInfo'
 import { fakeDramas } from '@/fake/fakeDramas'
 import { fireStoreInstance } from '@/firebase'
-import { onSnapshot } from '@firebase/firestore'
+import { onSnapshot } from 'firebase/firestore'
 import { auth } from '@/firebase/config'
 import { onAuthStateChanged } from 'firebase/auth'
 
@@ -24,7 +24,15 @@ const generateDramaFakeData = () => {
 }
 // generateDramaFakeData()
 
-const { UserInfo } = useUserInfo()
+const { UserInfo, setUserInfo } = useUserInfo()
+
+const subscribe = onAuthStateChanged(auth, (user) => {
+  if (user) {
+    setUserInfo(user)
+  }
+})
+
+subscribe()
 
 // API:JSON SERVER
 // const dramaList: { data: Drama | null } = reactive({ data: null })
@@ -32,48 +40,50 @@ const { UserInfo } = useUserInfo()
 // API:Firebase
 const dramaList: Drama[] = reactive([])
 
-const navList = reactive<NavData[]>([
-  {
-    classes: '',
-    to: '/',
-    navTitle: '',
-    imgData: {
-      imgClasses: 'navbar_logo',
-      imgSrc: getImgUrl(),
-      imgAlt: 'photo',
+const navList = computed<NavData[]>(() => {
+  return [
+    {
+      classes: '',
+      to: '/',
+      navTitle: '',
+      imgData: {
+        imgClasses: 'navbar_logo',
+        imgSrc: getImgUrl(),
+        imgAlt: 'photo',
+      },
     },
-  },
-  {
-    classes: 'navbar_link',
-    to: '/',
-    navTitle: '精選',
-  },
-  {
-    classes: 'navbar_link',
-    to: '/',
-    navTitle: '戲劇',
-  },
-  {
-    classes: 'navbar_link',
-    to: '/animation',
-    navTitle: '動畫',
-  },
-  {
-    classes: 'navbar_link',
-    to: '/',
-    navTitle: '娛樂',
-  },
-  {
-    classes: 'navbar_link',
-    to: '/',
-    navTitle: '更多',
-  },
-  {
-    classes: 'navbar_link',
-    to: `/mycollection/${UserInfo.uid}`,
-    navTitle: '我的收藏',
-  },
-])
+    {
+      classes: 'navbar_link',
+      to: '/',
+      navTitle: '精選',
+    },
+    {
+      classes: 'navbar_link',
+      to: '/',
+      navTitle: '戲劇',
+    },
+    {
+      classes: 'navbar_link',
+      to: '/animation',
+      navTitle: '動畫',
+    },
+    {
+      classes: 'navbar_link',
+      to: '/',
+      navTitle: '娛樂',
+    },
+    {
+      classes: 'navbar_link',
+      to: '/',
+      navTitle: '更多',
+    },
+    {
+      classes: 'navbar_link',
+      to: `/mycollection/${UserInfo.data?.uid}`,
+      navTitle: '我的收藏',
+    },
+  ]
+})
 
 function getImgUrl(): string {
   return new URL('./assets/img/kktvImage/kktv_logo.svg', import.meta.url).href
