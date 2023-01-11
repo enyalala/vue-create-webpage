@@ -7,7 +7,7 @@ export const getDramas = async () => {
 }
 
 /** 讀取單筆戲劇資訊 */
-export const getOneDramas = async (id: number) => {
+export const getOneDrama = async (id: number) => {
   return dramaInfoRequest.get<Drama>(`/${id}`)
 }
 

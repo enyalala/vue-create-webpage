@@ -43,9 +43,10 @@ const router = createRouter({
       props: true,
     },
     {
-      path: '/mycollection',
+      path: '/mycollection/:userId',
       name: 'MyCollection',
       component: () => import('@/views/MyCollection.vue'),
+      meta: { requireAuth: true },
     },
     {
       path: '/search',
@@ -57,6 +58,7 @@ const router = createRouter({
       name: 'LoginPage',
       component: () => import('@/views/LoginPage.vue'),
     },
+
     {
       path: '/:domin(.*)*',
       name: 'NotFound',

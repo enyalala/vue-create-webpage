@@ -4,38 +4,41 @@ import DramaCover from '@/components/DramaList/DramaCover.vue'
 import ThreeButton from '@/components/DramaList/ThreeButton.vue'
 import DramaGroupInfo from '@/components/DramaList/DramaGroupInfo.vue'
 import HotComment from '@/components/DramaList/HotComment.vue'
+
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import {
-  getOneDramas,
-  patchScored,
-  patchCollect,
-  patchComment,
-  patchVisitor,
-} from '@/apis/api'
 import type { Drama } from '@/models/Drama'
 import type { Comment } from '@/models/Comment'
-import type { ReactiveObject } from '@/models/ReactiveData'
+import { fireStoreInstance } from '@/firebase'
+import { onSnapshot, QuerySnapshot, updateDoc } from '@firebase/firestore'
 
 const commentIsTrue = ref(false)
 
-const dramaInfo: ReactiveObject<Drama> = reactive({ data: null })
+const dramaInfo: { data: Drama | null } = reactive({ data: null })
+// const dramaInfo: Drama[] = reactive([])
+
 const idOfDrama = Number(useRoute().params.dramaId)
 
 const comments: Comment[] = reactive([])
 
 /** 加入評論 */
 const addComments = async (res: string) => {
-  comments.push({ sentence: res, count: 0 })
-  const response = await patchComment(idOfDrama, comments)
-  dramaInfo.data = response.data ?? null
+  comments.push({ id: comments.length, sentence: res, count: 0 })
+  fireStoreInstance.patchComment({
+    path: 'dramaInfo',
+    pathSegments: [`drama${idOfDrama}`],
+    data: comments,
+  })
 }
 
 /** 移除評論 */
 const removeComments = async (res: number) => {
   comments.splice(res, 1)
-  const response = await patchComment(idOfDrama, comments)
-  dramaInfo.data = response.data ?? null
+  fireStoreInstance.patchComment({
+    path: 'dramaInfo',
+    pathSegments: [`drama${idOfDrama}`],
+    data: comments,
+  })
 }
 
 /** 喜歡這則評論 */
@@ -45,8 +48,11 @@ const likeComment = async (res: number) => {
   } else {
     comments[res].count--
   }
-  const response = await patchComment(idOfDrama, comments)
-  dramaInfo.data = response.data ?? null
+  fireStoreInstance.patchComment({
+    path: 'dramaInfo',
+    pathSegments: [`drama${idOfDrama}`],
+    data: comments,
+  })
 }
 
 /** 依熱門度排序評論 */
@@ -65,24 +71,51 @@ const hideModal = () => {
 
 /** 切換戲劇收藏 */
 const afterCollect = async (res: boolean) => {
-  const response = await patchCollect(idOfDrama, res)
-  dramaInfo.data = response.data ?? null
+  fireStoreInstance.patchCollect({
+    path: 'dramaInfo',
+    pathSegments: [`drama${idOfDrama}`],
+    data: res,
+  })
 }
 
 /** 切換評分分數 */
 const afterScored = async (score: number) => {
-  const response = await patchScored(idOfDrama, score)
-  dramaInfo.data = response.data ?? null
+  fireStoreInstance.patchScored({
+    path: 'dramaInfo',
+    pathSegments: [`drama${idOfDrama}`],
+    data: score,
+  })
 }
 
 onMounted(async () => {
-  dramaInfo.data = (await getOneDramas(idOfDrama)).data ?? null
-  Object.assign(comments, dramaInfo.data?.comments)
-  const addVisitorResponse = await patchVisitor(
-    idOfDrama,
-    dramaInfo.data.visitor
+  // dramaInfo.data = (await getSingleData(idOfDrama)).data ?? null
+  // Object.assign(comments, dramaInfo.data?.comments)
+  // const addVisitorResponse = await patchVisitor(
+  //   idOfDrama,
+  //   dramaInfo.data.visitor
+  // )
+  // dramaInfo.data = addVisitorResponse.data ?? null
+
+  onSnapshot(
+    fireStoreInstance.getSingleData({
+      path: 'dramaInfo',
+      pathSegments: [`drama${idOfDrama}`],
+    }),
+    (querySnapshot) => {
+      dramaInfo.data = (querySnapshot.data() as Drama) ?? null
+      Object.assign(comments, dramaInfo.data?.comments)
+    }
   )
-  dramaInfo.data = addVisitorResponse.data ?? null
+  // const currentVisitor = dramaInfo.data.visitor + 1
+  // const addVisitor = () => {
+  //   // const currentVisitor = ref(dramaInfo.data?.visitor)
+  //   fireStoreInstance.patchVisitor({
+  //     path: 'dramaInfo',
+  //     pathSegments: [`drama${idOfDrama}`],
+  //     data: currentVisitor,
+  //   })
+  // }
+  // addVisitor()
 })
 </script>
 
@@ -131,6 +164,7 @@ onMounted(async () => {
           <div class="comment_content">
             <HotComment
               :dramaInfo="dramaInfo.data"
+              :sortComments="sortComments"
               @likeComment="likeComment"
             />
           </div>

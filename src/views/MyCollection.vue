@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
-import { patchUnCollect, getDramas } from '@/apis/api'
 import { RouterLink } from 'vue-router'
 import { useImageUrl } from '@/stores/GetImageUrl'
 import { computed } from 'vue'
 import type { Drama } from '@/models/Drama'
+import { fireStoreInstance } from '@/firebase'
+import { onSnapshot } from '@firebase/firestore'
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
 const lastIndex = ref(-1)
@@ -12,6 +13,7 @@ const selectIndex = ref(-1)
 const selectIdx = ref(-1)
 
 const dramaList: Drama[] = reactive([])
+
 const dramaRowList = computed(() => {
   return dramaList
     .filter(({ collect }) => collect)
@@ -37,25 +39,44 @@ const lastShow = (row: number) => {
   lastIndex.value = row
 }
 
-// const unCollect = (id: number) => {
-//   axios
-//     .patch(`http://localhost:3000/dramaInfo/${id}`, {
-//       collect: false,
-//     })
-//     .then(() => {
-//       axios.get('http://localhost:3000/dramaInfo').then((response) => {
-//         Object.assign(dramaList, response.data)
-//       })
-//     })
-// }
-
-const unCollect = async (id: number) => {
-  const response = await patchUnCollect(id)
-  Object.assign(dramaList, response.data)
+const unCollect = (id: number) => {
+  fireStoreInstance.patchUnCollect({
+    path: 'dramaInfo',
+    pathSegments: [`drama${id}`],
+  })
 }
 
 onMounted(async () => {
-  Object.assign(dramaList, (await getDramas()).data)
+  onSnapshot(
+    fireStoreInstance.getDramas({ path: 'dramaInfo' }),
+    (querySnapshot) => {
+      const res: Drama[] = reactive([])
+      querySnapshot.forEach((doc) => {
+        const dramaData = {
+          id: doc.data().id,
+          name: doc.data().name,
+          classification: doc.data().classification,
+          year: doc.data().year,
+          actor: doc.data().actor,
+          director: doc.data().director,
+          screenwriter: doc.data().screenwriter,
+          type: doc.data().type,
+          label: doc.data().label,
+          highlight: doc.data().highlight,
+          description: doc.data().description,
+          homestatus: doc.data().homestatus,
+          homedescription: doc.data().homedescription,
+          sidephotocount: doc.data().sidephotocount,
+          comments: doc.data().comments,
+          collect: doc.data().collect,
+          score: doc.data().score,
+          visitor: doc.data().visitor,
+        }
+        res.push(dramaData)
+      })
+      Object.assign(dramaList, res)
+    }
+  )
 })
 </script>
 

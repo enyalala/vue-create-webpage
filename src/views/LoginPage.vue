@@ -1,80 +1,141 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { UserData } from '@/models/UserData'
+import { reactive, ref } from 'vue'
 import { useUserInfo } from '@/stores/UserInfo'
-import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
+import { auth } from '@/firebase/config'
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from 'firebase/auth'
+import { fireStoreInstance } from '@/firebase'
 
-const { userInfo } = useUserInfo()
-console.log(userInfo[0].account)
+const router = useRouter()
+const { UserInfo } = useUserInfo()
 
-const accountInput = ref('lena@gmail.com')
-const passwordInput = ref('a0000')
-const formIsVaild = ref(true)
+const errorMessageText = ref('')
 const mode = ref('login')
+const registerDone = ref(false)
 
-const submitForm = () => {
-  formIsVaild.value = true
-  if (
-    accountInput.value === '' ||
-    !accountInput.value.includes('@') ||
-    passwordInput.value.length < 4
-  ) {
-    formIsVaild.value = false
-    return
-  }
-}
-const switchAuthMode = () => {
+const user: UserData = reactive({
+  email: 'test@gmail.com',
+  password: '111111',
+})
+
+const changeMode = () => {
+  errorMessageText.value = ''
+  user.email = ''
+  user.password = ''
   if (mode.value === 'login') {
-    mode.value = 'signup'
+    mode.value = 'register'
   } else {
     mode.value = 'login'
   }
 }
 
-const userLogin = () => {
-  if (
-    accountInput.value === userInfo[0].account &&
-    passwordInput.value === userInfo[0].password
-  ) {
-    console.log('hi')
+const userLoginRegister = () => {
+  if (mode.value === 'login') {
+    signInWithEmailAndPassword(auth, user.email, user.password)
+      .then(() => {
+        console.log('登入成功')
+        Object.assign(UserInfo, auth.currentUser)
+        router.push({ path: '/' })
+
+        // console.log(UserInfo)
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        if (errorCode === 'auth/wrong-password-email') {
+          errorMessageText.value = '輸入密碼錯誤。'
+        } else if (errorCode === 'auth/user-not-found') {
+          errorMessageText.value = '此帳號尚未被註冊'
+        } else {
+          errorMessageText.value = '請輸入正確格式之帳號或密碼。'
+        }
+        console.log('code:' + errorCode)
+        console.log('message:' + errorMessage)
+      })
+  } else {
+    createUserWithEmailAndPassword(auth, user.email, user.password)
+      .then((register) => {
+        console.log('註冊成功')
+        registerDone.value = true
+        fireStoreInstance.setDoc({
+          path: 'userInfo',
+          pathSegments: [`user${register.user.uid}`],
+          data: { id: register.user.uid, email: register.user.email },
+        })
+
+        setTimeout(() => {
+          mode.value = 'login'
+          user.email = ''
+          user.password = ''
+          registerDone.value = false
+        }, 3000)
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        if (errorCode === 'auth/email-already-in-use') {
+          errorMessageText.value = '該帳號已被註冊使用。'
+        } else if (errorCode === 'auth/weak-password') {
+          errorMessageText.value = '請輸入六位以上的密碼。'
+        } else {
+          errorMessageText.value = '請輸入正確格式之帳號或密碼。'
+        }
+        console.log('code:' + errorCode)
+        console.log('mes:' + errorMessage)
+      })
   }
 }
+
+// console.log(currentUser)
 </script>
 
 <template>
-  <form @submit.prevent="submitForm">
+  <form @submit.prevent>
     <div class="container">
       <div class="login_box">
         <div class="title">
-          <img src="@/assets/img/kktvImage/kktv_member.svg" alt="photo" />
+          <img
+            v-if="mode === 'login'"
+            src="@/assets/img/kktvImage/kktv_member.svg"
+            alt="photo"
+          />
+          <img v-else src="@/assets/img/kktvImage/kktv_logo.svg" alt="photo" />
         </div>
         <div class="input_content">
-          <div class="input_text">
-            帳號：
-            <div>
-              <input
-                class="input_blank"
-                type="text"
-                placeholder="請輸入帳號"
-                v-model.trim="accountInput"
-              />
-            </div>
+          <input
+            class="input_blank"
+            type="email"
+            placeholder="請輸入Email帳號"
+            v-model.trim="user.email"
+          />
+          <input
+            class="input_blank"
+            type="text"
+            placeholder="請輸入密碼"
+            v-model.trim="user.password"
+          />
+          <div class="alert_content">
+            <p class="alert_text">{{ errorMessageText }}</p>
           </div>
-          <div class="input_text">
-            密碼：
-            <div>
-              <input
-                class="input_blank"
-                type="text"
-                placeholder="請輸入帳號"
-                v-model.trim="passwordInput"
-              />
-            </div>
-          </div>
-          <p v-if="!formIsVaild" class="alert_text">帳號或密碼錯誤</p>
         </div>
         <div class="btn-loginpage">
-          <button class="btn-login" @click="userLogin">登入</button>
-          <button class="btn-login" @click="switchAuthMode">註冊</button>
+          <button class="btn_on" @click="userLoginRegister">
+            {{ mode === 'login' ? '登入' : '註冊' }}
+          </button>
+        </div>
+        <div class="btn-register">
+          <button class="btn_on">忘記密碼</button
+          ><button class="btn_on" @click="changeMode">
+            {{ mode === 'login' ? '註冊帳號' : '會員登入' }}
+          </button>
+        </div>
+        <div class="register_done" v-if="registerDone">
+          <font-awesome-icon icon="fa-solid fa-circle-check" />
+          <span> 會員註冊成功，請重新登入</span>
         </div>
       </div>
     </div>
@@ -94,7 +155,7 @@ const userLogin = () => {
 
   .login_box {
     width: 400px;
-    height: 330px;
+    height: 380px;
     position: relative;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 20px;
@@ -107,41 +168,41 @@ const userLogin = () => {
     }
 
     .input_content {
+      width: 205px;
       position: absolute;
-      top: 53%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
 
-      .input_text {
-        margin-bottom: 10px;
-        color: black;
-        font-size: 16px;
-        font-weight: bold;
-
-        .input_blank {
-          font-size: 14px;
-          height: 30px;
-          background: transparent;
-          outline: none;
-          border: none;
-          border-bottom: 1px solid rgb(52, 51, 51);
-        }
+      .input_blank {
+        margin: 10px 0;
+        padding-left: 10px;
+        font-size: 14px;
+        letter-spacing: 1px;
+        width: 200px;
+        height: 40px;
+        background: transparent;
+        outline: none;
+        border: 1px solid rgb(52, 51, 51, 0.5);
       }
+      .alert_content {
+        height: 20px;
 
-      .alert_text {
-        font-size: 12px;
-        color: red;
-        font-weight: bold;
+        .alert_text {
+          font-size: 12px;
+          color: red;
+          font-weight: bold;
+        }
       }
     }
     .btn-loginpage {
       position: absolute;
-      top: 85%;
+      top: 75%;
       left: 50%;
       transform: translate(-50%, -50%);
       display: flex;
-      .btn-login {
-        width: 60px;
+      .btn_on {
+        width: 200px;
         height: 35px;
         color: white;
         font-size: 16px;
@@ -150,7 +211,64 @@ const userLogin = () => {
         border-radius: 5px;
         background-color: $color-kktv-pink;
         border: none;
-        margin: 0 15px;
+      }
+    }
+
+    .btn-register {
+      position: absolute;
+      top: 90%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+
+      .btn_on {
+        color: gray;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+        margin-right: 10px;
+
+        &:hover {
+          color: $color-kktv-pink;
+        }
+      }
+    }
+
+    .register_done {
+      position: absolute;
+      top: -15%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 250px;
+      height: 80px;
+      text-align: center;
+      line-height: 80px;
+      border: 1px solid $color-kktv-pink;
+      background-color: white;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 16px;
+      color: $color-kktv-pink;
+
+      animation-name: collectAlert;
+      animation-duration: 3s;
+      animation-fill-mode: forwards;
+
+      @keyframes collectAlert {
+        0% {
+          opacity: 1;
+        }
+        10% {
+          opacity: 1;
+        }
+        85% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
       }
     }
   }

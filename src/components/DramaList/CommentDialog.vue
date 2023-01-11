@@ -109,7 +109,11 @@ onUpdated(() => {
     <div class="inner_comment_title">
       <div class="hot_title">熱門短評</div>
     </div>
-    <HotComment :dramaInfo="props.dramaInfo" @likeComment="likeComment" />
+    <HotComment
+      :dramaInfo="props.dramaInfo"
+      @likeComment="likeComment"
+      :sortComments="sortComments"
+    />
   </div>
   <div class="overlay"></div>
 </template>

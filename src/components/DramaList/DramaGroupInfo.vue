@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { GroupInfoData } from '@/models/GroupInfoData'
-import { reactive } from 'vue'
+import { reactive, type PropType } from 'vue'
+import type { Drama } from '@/models/Drama'
 
 const props = defineProps({
   dramaInfo: {
-    type: Object,
+    type: Object as PropType<Drama>,
     required: true,
   },
 })

@@ -74,9 +74,9 @@
           "count": 0
         }
       ],
-      "collect": false,
+      "collect": true,
       "score": 5,
-      "visitor": 6
+      "visitor": 7
     },
     {
       "id": 1,
@@ -224,7 +224,7 @@
       "comments": [],
       "collect": false,
       "score": 4,
-      "visitor": 1
+      "visitor": 3
     },
     {
       "id": 4,
@@ -698,7 +698,7 @@
       "comments": [],
       "collect": false,
       "score": 0,
-      "visitor": 0
+      "visitor": 6
     },
     {
       "id": 13,

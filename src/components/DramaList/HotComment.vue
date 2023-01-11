@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import type { Comment } from '@/models/Comment'
 const props = defineProps({
   dramaInfo: {
     type: Object,
+    required: true,
+  },
+  sortComments: {
+    type: Array<Comment>,
     required: true,
   },
 })
@@ -19,10 +24,10 @@ const likeComment = (idx: number) => {
   </div>
   <div v-else>
     <button
-      v-for="(eachComment, index) in props.dramaInfo.comments"
-      :key="eachComment"
+      v-for="eachComment in props.sortComments"
+      :key="eachComment.sentence"
       class="btn_allcomments"
-      @click="likeComment(index)"
+      @click="likeComment(eachComment.id)"
     >
       {{ eachComment.sentence
       }}<span v-if="eachComment.count !== 0" class="count">{{

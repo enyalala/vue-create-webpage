@@ -1,19 +1,20 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth'
 // import { getAnalytics } from 'firebase/analytics'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCNr1_BVjMRtr7TU7fZ9FEeIWiVsoAxtYc',
-  authDomain: 'vue-demo-2b277.firebaseapp.com',
-  projectId: 'vue-demo-2b277',
-  storageBucket: 'vue-demo-2b277.appspot.com',
-  messagingSenderId: '1053050153787',
-  appId: '1:1053050153787:web:7c90bdc7ea42edfbe9651e',
-  measurementId: 'G-JR11200ML4',
+  apiKey: 'AIzaSyDQEH5xf5mWjOzG6xTW-xCNJ-kGwO9mczY',
+  authDomain: 'vue-webpage-af35c.firebaseapp.com',
+  projectId: 'vue-webpage-af35c',
+  storageBucket: 'vue-webpage-af35c.appspot.com',
+  messagingSenderId: '532526742196',
+  appId: '1:532526742196:web:a026e07532e55a776ff5e1',
 }
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
+const auth = getAuth(app)
 const db = getFirestore(app)
 
-export { db }
+export { db, auth }

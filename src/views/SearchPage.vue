@@ -2,12 +2,15 @@
 import { reactive, onMounted, computed } from 'vue'
 import { useSearchItem } from '@/stores/SearchItem'
 import type { Drama } from '@/models/Drama'
-import { getDramas } from '@/apis/api'
+import { fireStoreInstance } from '@/firebase'
+import { onSnapshot } from '@firebase/firestore'
+
 import NormalPage from '@/components/NormalPage.vue'
 
 const { searchItemInfo } = useSearchItem()
 
 const dramaList: Drama[] = reactive([])
+
 const dramaFilter = computed(() => {
   return dramaList.filter((drama) => {
     return (
@@ -18,7 +21,36 @@ const dramaFilter = computed(() => {
 })
 
 onMounted(async () => {
-  Object.assign(dramaList, (await getDramas()).data)
+  onSnapshot(
+    fireStoreInstance.getDramas({ path: 'dramaInfo' }),
+    (querySnapshot) => {
+      const res: Drama[] = reactive([])
+      querySnapshot.forEach((doc) => {
+        const dramaData = {
+          id: doc.data().id,
+          name: doc.data().name,
+          classification: doc.data().classification,
+          year: doc.data().year,
+          actor: doc.data().actor,
+          director: doc.data().director,
+          screenwriter: doc.data().screenwriter,
+          type: doc.data().type,
+          label: doc.data().label,
+          highlight: doc.data().highlight,
+          description: doc.data().description,
+          homestatus: doc.data().homestatus,
+          homedescription: doc.data().homedescription,
+          sidephotocount: doc.data().sidephotocount,
+          comments: doc.data().comments,
+          collect: doc.data().collect,
+          score: doc.data().score,
+          visitor: doc.data().visitor,
+        }
+        res.push(dramaData)
+      })
+      Object.assign(dramaList, res)
+    }
+  )
 })
 </script>
 

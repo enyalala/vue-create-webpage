@@ -3,8 +3,9 @@ import NormalPage from '@/components/NormalPage.vue'
 
 import { reactive, onMounted, computed } from 'vue'
 import type { FilterInfoData } from '@/models/FilterInfoData'
-import { getDramas } from '@/apis/api'
 import type { Drama } from '@/models/Drama'
+import { fireStoreInstance } from '@/firebase'
+import { onSnapshot } from '@firebase/firestore'
 
 const filterInfoList = reactive<FilterInfoData[]>([
   {
@@ -45,9 +46,11 @@ const filterInfoList = reactive<FilterInfoData[]>([
   },
 ])
 
-const dramaList: { data: Drama | null } = reactive({ data: null })
+// API:Firebase
+const dramaList: Drama[] = reactive([])
+
 const dramaFilter = computed(() => {
-  return dramaList.data?.filter((drama: Drama) =>
+  return dramaList.filter((drama: Drama) =>
     drama.classification.includes('動畫')
   )
 })
@@ -64,7 +67,36 @@ const selectFilterItem = (rowIndex: number, colIndex: number) => {
 }
 
 onMounted(async () => {
-  dramaList.data = (await getDramas()).data ?? null
+  onSnapshot(
+    fireStoreInstance.getDramas({ path: 'dramaInfo' }),
+    (querySnapshot) => {
+      const res: Drama[] = reactive([])
+      querySnapshot.forEach((doc) => {
+        const dramaData = {
+          id: doc.data().id,
+          name: doc.data().name,
+          classification: doc.data().classification,
+          year: doc.data().year,
+          actor: doc.data().actor,
+          director: doc.data().director,
+          screenwriter: doc.data().screenwriter,
+          type: doc.data().type,
+          label: doc.data().label,
+          highlight: doc.data().highlight,
+          description: doc.data().description,
+          homestatus: doc.data().homestatus,
+          homedescription: doc.data().homedescription,
+          sidephotocount: doc.data().sidephotocount,
+          comments: doc.data().comments,
+          collect: doc.data().collect,
+          score: doc.data().score,
+          visitor: doc.data().visitor,
+        }
+        res.push(dramaData)
+      })
+      Object.assign(dramaList, res)
+    }
+  )
 })
 </script>
 

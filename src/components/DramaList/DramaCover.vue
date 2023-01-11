@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, type PropType } from 'vue'
 import type { Ref } from 'vue'
 import { useImageUrl } from '@/stores/GetImageUrl'
+import type { Drama } from '@/models/Drama';
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
 const num: Ref<number> = ref(1)
 
 const props = defineProps({
   dramaInfo: {
-    type: Object,
+    type: Object as PropType<Drama>,
     required: true,
   },
 })
