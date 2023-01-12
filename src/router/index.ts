@@ -43,7 +43,7 @@ const router = createRouter({
       props: true,
     },
     {
-      path: '/mycollection/:userId',
+      path: '/mycollection',
       name: 'MyCollection',
       component: () => import('@/views/MyCollection.vue'),
       meta: { requireAuth: true },
