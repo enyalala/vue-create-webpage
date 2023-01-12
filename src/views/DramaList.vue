@@ -10,7 +10,7 @@ import { useRoute } from 'vue-router'
 import type { Drama } from '@/models/Drama'
 import type { Comment } from '@/models/Comment'
 import { fireStoreInstance } from '@/firebase'
-import { onSnapshot, QuerySnapshot, updateDoc } from '@firebase/firestore'
+import { onSnapshot, QuerySnapshot, updateDoc } from 'firebase/firestore'
 
 const commentIsTrue = ref(false)
 

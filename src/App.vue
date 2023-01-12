@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import SearchBar from '@/components/SearchBar.vue'
-import { RouterLink, RouterView, useRouter, useRoute } from 'vue-router'
-import { ref, reactive, onMounted, computed, onUpdated } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import type { NavData } from '@/models/NavData'
 import type { Drama } from '@/models/Drama'
 // import { getDramas } from '@/apis/api'
@@ -9,7 +8,7 @@ import { isLoading } from '@/stores/Loading'
 import { useUserInfo } from '@/stores/UserInfo'
 import { fakeDramas } from '@/fake/fakeDramas'
 import { fireStoreInstance } from '@/firebase'
-import { onSnapshot } from '@firebase/firestore'
+import { onSnapshot } from 'firebase/firestore'
 import { auth } from '@/firebase/config'
 import { onAuthStateChanged } from 'firebase/auth'
 
@@ -24,7 +23,15 @@ const generateDramaFakeData = () => {
 }
 // generateDramaFakeData()
 
-const { UserInfo } = useUserInfo()
+// 重整不登出
+const { UserInfo, setCurrentUser } = useUserInfo()
+const subscribe = onAuthStateChanged(auth, (user) => {
+  if (user) {
+    setCurrentUser(user)
+  }
+})
+
+subscribe()
 
 // API:JSON SERVER
 // const dramaList: { data: Drama | null } = reactive({ data: null })
@@ -67,11 +74,6 @@ const navList = reactive<NavData[]>([
     classes: 'navbar_link',
     to: '/',
     navTitle: '更多',
-  },
-  {
-    classes: 'navbar_link',
-    to: `/mycollection/${UserInfo.uid}`,
-    navTitle: '我的收藏',
   },
 ])
 
@@ -137,7 +139,11 @@ onMounted(async () => {
               />{{ data.navTitle }}</router-link
             >
           </li>
-          <li></li>
+          <li v-if="UserInfo.data">
+            <router-link to="/mycollection/" class="navbar_link"
+              >我的收藏</router-link
+            >
+          </li>
         </ul>
         <template v-if="dramaList">
           <SearchBar :dramaList="dramaList"

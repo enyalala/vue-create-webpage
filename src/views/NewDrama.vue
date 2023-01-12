@@ -3,7 +3,7 @@ import { reactive, onMounted, computed } from 'vue'
 import type { Drama } from '@/models/Drama'
 import { fireStoreInstance } from '@/firebase'
 import NormalPage from '@/components/NormalPage.vue'
-import { onSnapshot } from '@firebase/firestore'
+import { onSnapshot } from 'firebase/firestore'
 
 // API:Firebase
 const dramaList: Drama[] = reactive([])

@@ -3,7 +3,7 @@ import { reactive, onMounted, computed } from 'vue'
 import { useSearchItem } from '@/stores/SearchItem'
 import type { Drama } from '@/models/Drama'
 import { fireStoreInstance } from '@/firebase'
-import { onSnapshot } from '@firebase/firestore'
+import { onSnapshot } from 'firebase/firestore'
 
 import NormalPage from '@/components/NormalPage.vue'
 

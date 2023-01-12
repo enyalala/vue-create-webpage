@@ -5,7 +5,7 @@ import { useImageUrl } from '@/stores/GetImageUrl'
 import { computed } from 'vue'
 import type { Drama } from '@/models/Drama'
 import { fireStoreInstance } from '@/firebase'
-import { onSnapshot } from '@firebase/firestore'
+import { onSnapshot } from 'firebase/firestore'
 
 const { getCoverUrl, getSideUrl } = useImageUrl()
 const lastIndex = ref(-1)

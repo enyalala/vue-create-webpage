@@ -11,7 +11,7 @@ import {
 import { fireStoreInstance } from '@/firebase'
 
 const router = useRouter()
-const { UserInfo } = useUserInfo()
+const { setCurrentUser } = useUserInfo()
 
 const errorMessageText = ref('')
 const mode = ref('login')
@@ -22,6 +22,7 @@ const user: UserData = reactive({
   password: '111111',
 })
 
+// 切換「登入」或「註冊」狀態
 const changeMode = () => {
   errorMessageText.value = ''
   user.email = ''
@@ -36,9 +37,9 @@ const changeMode = () => {
 const userLoginRegister = () => {
   if (mode.value === 'login') {
     signInWithEmailAndPassword(auth, user.email, user.password)
-      .then(() => {
+      .then((response) => {
         console.log('登入成功')
-        Object.assign(UserInfo, auth.currentUser)
+        setCurrentUser(response.user)
         router.push({ path: '/' })
 
         // console.log(UserInfo)
@@ -89,8 +90,6 @@ const userLoginRegister = () => {
       })
   }
 }
-
-// console.log(currentUser)
 </script>
 
 <template>

@@ -5,7 +5,7 @@ import { reactive, onMounted, computed } from 'vue'
 import type { FilterInfoData } from '@/models/FilterInfoData'
 import type { Drama } from '@/models/Drama'
 import { fireStoreInstance } from '@/firebase'
-import { onSnapshot } from '@firebase/firestore'
+import { onSnapshot } from 'firebase/firestore'
 
 const filterInfoList = reactive<FilterInfoData[]>([
   {

@@ -2,8 +2,12 @@
 import { RouterLink } from 'vue-router'
 import { ref, reactive, watch } from 'vue'
 import { useSearchItem } from '@/stores/SearchItem'
+import { useUserInfo } from '@/stores/UserInfo'
+import { auth } from '@/firebase/config'
+import { signOut } from 'firebase/auth'
 
 const { searchItemInfo } = useSearchItem()
+const { UserInfo } = useUserInfo()
 
 const emits = defineEmits(['returnDramas'])
 
@@ -16,6 +20,7 @@ const props = defineProps({
 
 const inputSearch = ref('')
 const searchShow = ref(false)
+const logoutShow = ref(false)
 /** 關鍵字搜尋的文字，是否從歷史記錄選取的 */
 const isSearchValueFromHistory = ref(false)
 const selectItemIndex = ref(-1)
@@ -51,6 +56,26 @@ const switchSearch = () => {
   inputSearch.value = ''
 }
 
+const callLogout = () => {
+  logoutShow.value = true
+}
+
+const hideLogout = () => {
+  logoutShow.value = false
+}
+
+const userLogout = () => {
+  signOut(auth)
+    .then(() => {
+      UserInfo.data = null
+      logoutShow.value = false
+      console.log('會員登出')
+    })
+    .catch((error) => {
+      console.log(error.code)
+    })
+}
+
 /** 監控搜尋框文字輸入 - inputSearch */
 watch(inputSearch, () => {
   props.dramaList.filter((drama: any) => {
@@ -71,7 +96,6 @@ watch(inputSearch, () => {
       filterInfos.clear()
     }
   })
-  // console.log(filterInfos, searchInfo)
 })
 </script>
 
@@ -135,9 +159,19 @@ watch(inputSearch, () => {
         </div>
       </ul>
     </div>
-    <router-link to="/login"
-      ><img src="@/assets/img/kktvImage/kktv_member.svg" alt="photo"
-    /></router-link>
+    <div class="user_content" @mouseleave="hideLogout">
+      <router-link to="/login" v-if="!UserInfo.data"
+        ><img src="@/assets/img/kktvImage/kktv_member.svg" alt="photo"
+      /></router-link>
+      <button v-else class="btn_logout" @mouseover="callLogout">
+        {{ UserInfo.data.email }}
+      </button>
+      <ul class="logout_list" v-show="logoutShow">
+        <li class="logout_item">
+          <button class="logout_text" @click="userLogout">登出</button>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -227,6 +261,56 @@ watch(inputSearch, () => {
 
         .auto_complete_text {
           color: #ccc;
+        }
+      }
+    }
+  }
+
+  .user_content {
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    display: flex;
+    .btn_logout {
+      height: 40px;
+      background-color: transparent;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0 10px;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        color: $color-kktv-pink;
+      }
+    }
+
+    .logout_list {
+      position: absolute;
+      background-color: #121212;
+      width: calc(100% - 40px);
+      top: 100%;
+      list-style: none;
+      padding: 0px;
+
+      .logout_item {
+        width: 100%;
+        line-height: 48px;
+        text-align: center;
+        &:hover {
+          background-color: rgba(75, 75, 75, 0.3);
+          .logout_text {
+            color: $color-kktv-pink;
+          }
+        }
+
+        .logout_text {
+          color: #ccc;
+          font-size: 14px;
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
         }
       }
     }
