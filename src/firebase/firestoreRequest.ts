@@ -6,10 +6,10 @@ import {
   updateDoc,
 } from 'firebase/firestore'
 
-interface SetDocOption {
+interface SetDocOption<T = any> {
   path: string
   pathSegments?: string[]
-  data?: any
+  data?: T
 }
 
 export class FirestoreRequest {
@@ -61,7 +61,7 @@ export class FirestoreRequest {
   }
 
   /** 記錄瀏覽人次 */
-  patchVisitor(option: SetDocOption) {
+  patchVisitor(option: SetDocOption<number>) {
     const { path, pathSegments = [], data } = option
     const ref = doc(this.db, path, ...pathSegments)
     updateDoc(ref, { visitor: data })

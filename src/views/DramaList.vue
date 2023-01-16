@@ -11,9 +11,10 @@ import type { Drama } from '@/models/Drama'
 import type { Comment } from '@/models/Comment'
 import { fireStoreInstance } from '@/firebase'
 import { onSnapshot, QuerySnapshot, updateDoc } from 'firebase/firestore'
-import { watch } from 'fs'
 
 const commentIsTrue = ref(false)
+const currentVisitor = ref(0)
+let isAddedVisitor = false
 
 const dramaInfo: { data: Drama | null } = reactive({ data: null })
 // const dramaInfo: Drama[] = reactive([])
@@ -88,12 +89,6 @@ const afterScored = async (score: number) => {
   })
 }
 
-const addVisitor = computed(() => {
-  const currentVisitor = ref(dramaInfo.data?.visitor)
-  return currentVisitor.value
-})
-
-console.log(addVisitor)
 onMounted(async () => {
   // dramaInfo.data = (await getSingleData(idOfDrama)).data ?? null
   // Object.assign(comments, dramaInfo.data?.comments)
@@ -112,24 +107,28 @@ onMounted(async () => {
     (querySnapshot) => {
       dramaInfo.data = (querySnapshot.data() as Drama) ?? null
       Object.assign(comments, dramaInfo.data?.comments)
-      // currentVisitor.value = dramaInfo.data?.visitor
-      // console.log(dramaInfo.data.visitor)
+      currentVisitor.value = dramaInfo.data?.visitor
+
+      if (!isAddedVisitor) {
+        isAddedVisitor = true
+        addVisitor()
+      }
     }
   )
-  // const addVisitor = () => {
-  //   if (currentVisitor.value) {
-  //     currentVisitor.value += 1
-  //     console.log(currentVisitor.value)
-  //     fireStoreInstance.patchVisitor({
-  //       path: 'dramaInfo',
-  //       pathSegments: [`drama${idOfDrama}`],
-  //       data: currentVisitor,
-  //     })
-  //   } else {
-  //     console.log('not working')
-  //   }
-  // }
-  // addVisitor()
+
+  const addVisitor = () => {
+    if (typeof currentVisitor.value === 'number') {
+      currentVisitor.value = currentVisitor.value + 1
+      console.log(currentVisitor.value)
+      fireStoreInstance.patchVisitor({
+        path: 'dramaInfo',
+        pathSegments: [`drama${idOfDrama}`],
+        data: currentVisitor.value,
+      })
+    } else {
+      console.log('not working')
+    }
+  }
 })
 </script>
 
