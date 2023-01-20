@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import SearchBar from '@/components/SearchBar.vue'
-import { ref, reactive, onMounted } from 'vue'
+import { reactive, onMounted } from 'vue'
 import type { NavData } from '@/models/NavData'
 import type { Drama } from '@/models/Drama'
-// import { getDramas } from '@/apis/api'
 import { isLoading } from '@/stores/Loading'
 import { useUserInfo } from '@/stores/UserInfo'
 import { fakeDramas } from '@/fake/fakeDramas'
-import { fireStoreInstance } from '@/firebase'
+import { dramaInfoApi, fireStoreInstance } from '@/firebase'
 import { onSnapshot } from 'firebase/firestore'
 import { auth } from '@/firebase/config'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -85,36 +84,10 @@ onMounted(async () => {
   // API:JSON SERVER
   // dramaList.data = (await getDramas()).data ?? null
 
-  onSnapshot(
-    fireStoreInstance.getDramas({ path: 'dramaInfo' }),
-    (querySnapshot) => {
-      const res: Drama[] = reactive([])
-      querySnapshot.forEach((doc) => {
-        const dramaData = {
-          id: doc.data().id,
-          name: doc.data().name,
-          classification: doc.data().classification,
-          year: doc.data().year,
-          actor: doc.data().actor,
-          director: doc.data().director,
-          screenwriter: doc.data().screenwriter,
-          type: doc.data().type,
-          label: doc.data().label,
-          highlight: doc.data().highlight,
-          description: doc.data().description,
-          homestatus: doc.data().homestatus,
-          homedescription: doc.data().homedescription,
-          sidephotocount: doc.data().sidephotocount,
-          comments: doc.data().comments,
-          collect: doc.data().collect,
-          score: doc.data().score,
-          visitor: doc.data().visitor,
-        }
-        res.push(dramaData)
-      })
-      Object.assign(dramaList, res)
-    }
-  )
+  onSnapshot(dramaInfoApi.getList(), (querySnapshot) => {
+    const dramas = querySnapshot.docs.map((doc) => doc.data())
+    Object.assign(dramaList, dramas)
+  })
 })
 </script>
 
